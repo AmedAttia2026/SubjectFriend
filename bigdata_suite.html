@@ -38,7 +38,7 @@
             min-height: 100vh;
             overflow-x: hidden;
             scroll-behavior: smooth;
-            padding-top: 195px; 
+            padding-top: 185px; 
             padding-bottom: 60px;
         }
 
@@ -59,18 +59,23 @@
         .orb-1 { width: 400px; height: 400px; background: var(--accent); top: -15%; left: -10%; }
         .orb-2 { width: 500px; height: 500px; background: var(--primary); bottom: -15%; right: -10%; animation-delay: -12s; }
 
-        /* --- بنية الهيدر المتطور الهجين الجديد --- */
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(80px, 60px) scale(1.15); }
+        }
+
         header {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
-            background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border-bottom: 1px solid var(--glass-border); box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .header-content {
             max-width: 1100px; margin: 0 auto; padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center; gap: 15px;
-            transition: padding 0.3s ease;
         }
 
         .brand-title {
@@ -78,16 +83,16 @@
             background: linear-gradient(to right, var(--primary), var(--accent));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             display: flex; align-items: center; gap: 8px; cursor: pointer;
-            transition: transform 0.3s;
         }
 
-        .header-badges-group { display: flex; align-items: center; gap: 10px; }
+        .header-badges-group {
+            display: flex; align-items: center; gap: 10px;
+        }
 
         .stats-badge {
             display: flex; align-items: center; gap: 8px;
             background: var(--glass-bg); border: 1px solid var(--glass-border);
             padding: 8px 16px; border-radius: 12px; font-weight: 800; font-size: 0.9rem;
-            transition: all 0.3s ease;
         }
         .stats-badge span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
 
@@ -104,10 +109,10 @@
         }
 
         .controls-header-row {
-            background: rgba(10, 15, 30, 0.5); border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            padding: 8px 20px; display: flex; justify-content: center; gap: 12px;
-            max-height: 100px; opacity: 1; overflow: hidden;
-            transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease;
+            background: rgba(10, 15, 30, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 8px 20px;
+            display: flex; justify-content: center; gap: 12px;
         }
 
         .action-btn {
@@ -116,14 +121,15 @@
             cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 6px;
             letter-spacing: 0.5px; white-space: nowrap; text-transform: uppercase;
         }
+        .action-btn svg { width: 14px; height: 14px; }
         .action-btn.mix { border-color: rgba(168, 85, 247, 0.4); color: var(--primary); }
         .action-btn.mix:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-glow); }
         .action-btn.retry { background: linear-gradient(135deg, var(--warning), #d97706); color: #000; font-weight: 900; border: none; }
 
         .sheet-navigator {
-            background: rgba(15, 23, 42, 0.3); border-bottom: 1px solid var(--glass-border);
+            background: rgba(15, 23, 42, 0.3);
+            border-bottom: 1px solid var(--glass-border);
             display: flex; justify-content: center; overflow-x: auto; scrollbar-width: none;
-            max-height: 100px; opacity: 1; transition: max-height 0.35s ease, opacity 0.3s ease;
         }
 
         .tab-btn {
@@ -136,29 +142,12 @@
         .tab-btn.active { color: var(--primary); }
         .tab-btn.active::after {
             content: ''; position: absolute; bottom: 0; left: 15%; width: 70%; height: 3px;
-            background: var(--primary); border-radius: 3px 3px 0 0; box-shadow: 0 0 10px var(--primary-glow);
+            background: var(--primary); border-radius: 3px 3px 0 0;
+            box-shadow: 0 0 10px var(--primary-glow);
         }
 
         .progress-container { width: 100%; height: 3px; background: rgba(255,255,255,0.03); position: relative; }
         .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--primary)); transition: width 0.5s ease; box-shadow: 0 0 15px var(--primary-glow); }
-
-        /* --- فئات تجميد وتقليص الهيدر أثناء النزول --- */
-        header.minimized-cradle .controls-header-row,
-        header.minimized-cradle .sheet-navigator {
-            max-height: 0 !important;
-            padding: 0 !important;
-            opacity: 0 !important;
-            pointer-events: none;
-        }
-        header.minimized-cradle .header-content {
-            padding: 6px 20px !important;
-        }
-        header.minimized-cradle .brand-title {
-            transform: scale(0.9);
-        }
-        header.minimized-cradle .stats-badge {
-            opacity: 0; pointer-events: none; width: 0; padding: 0; margin: 0; border: none; overflow: hidden;
-        }
 
         .mode-selection-deck {
             display: flex; justify-content: center; gap: 12px; margin: 25px auto 25px;
@@ -170,12 +159,35 @@
             padding: 14px 24px; border-radius: 14px; cursor: pointer;
             font-size: 0.95rem; font-weight: 800; color: var(--text-option);
             letter-spacing: 0.5px; text-transform: uppercase;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex: 1; min-width: 150px; justify-content: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+            display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex: 1; min-width: 150px; justify-content: center;
         }
+
+        .mode-select-card:hover { border-color: rgba(255,255,255,0.15); color: #fff; transform: translateY(-2px); }
         .mode-select-card.active-tf { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
         .mode-select-card.active-mcq { color: #db2777; border-color: #db2777; background: rgba(219, 39, 119, 0.12); box-shadow: 0 0 20px rgba(219, 39, 119, 0.15); }
         .mode-select-card.active-blank { color: var(--warning); border-color: var(--warning); background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
+
+        .bottom-nav-replica-title {
+            text-align: center; font-size: 0.85rem; font-weight: 800; letter-spacing: 2px;
+            color: var(--text-muted); text-transform: uppercase; margin: 40px 0 15px;
+        }
+        .bottom-navigator-deck {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 16px; padding: 10px; display: flex; justify-content: center;
+            gap: 10px; flex-wrap: wrap; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .bottom-nav-btn {
+            background: rgba(255,255,255,0.02); color: var(--text-option); border: 1px solid var(--glass-border);
+            padding: 10px 18px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;
+            cursor: pointer; transition: all 0.25s ease; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .bottom-nav-btn:hover { border-color: var(--primary); color: #fff; }
+        .bottom-nav-btn.active {
+            background: var(--primary-dim); color: var(--primary); border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.1); font-weight: 900;
+        }
 
         .container { max-width: 850px; margin: 15px auto 40px; padding: 0 15px; }
         .assignment-sheet { display: none; }
@@ -191,7 +203,8 @@
         .card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
         
         .card.focused-by-peer {
-            border-color: var(--primary) !important; box-shadow: 0 0 35px var(--primary-glow) !important;
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 35px var(--primary-glow) !important;
             background: rgba(168, 85, 247, 0.04) !important;
         }
 
@@ -229,7 +242,8 @@
         .blank-input-wrapper { margin: 15px 0; width: 100%; }
         .inference-input {
             width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
-            padding: 14px 18px; border-radius: 12px; color: #fff; font-size: 1.05rem; font-weight: 600; transition: all 0.3s;
+            padding: 14px 18px; border-radius: 12px; color: #fff; font-size: 1.05rem;
+            font-family: 'Outfit', sans-serif; font-weight: 600; transition: all 0.3s;
         }
         .inference-input:focus { border-color: var(--warning); background: rgba(245, 158, 11, 0.03); box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); }
         .inference-input:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -248,7 +262,8 @@
         .check-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
         .result-box {
-            margin-top: 15px; padding: 12px; border-radius: 10px; text-align: center; font-weight: 800; font-size: 0.95rem; opacity: 0; height: 0; overflow: hidden; transition: all 0.3s;
+            margin-top: 15px; padding: 12px; border-radius: 10px; text-align: center; font-weight: 800;
+            font-size: 0.95rem; opacity: 0; height: 0; overflow: hidden; transition: all 0.3s;
             display: flex; align-items: center; justify-content: center; gap: 6px;
         }
 
@@ -273,7 +288,7 @@
             display: none; background: var(--glass-bg); border: 1px solid var(--glass-border);
             border-radius: 20px; padding: 40px 25px; text-align: center; margin-top: 30px;
         }
-        .score-board.active { display: block; animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15); }
+        .score-board.active { display: block; }
     </style>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
@@ -282,6 +297,10 @@
 <div class="bg-grid"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
+
+<button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
 
 <header id="mainHeader">
     <div class="header-content">
@@ -450,6 +469,15 @@
     let currentSheetIndex = 0;
     let currentGlobalMode = 'tf'; 
     let lastScrollTop = 0;
+
+    function formatNumber(num) {
+        return num < 10 ? '0' + num : num;
+    }
+
+    function initSuite() {
+        switchSheet(0);
+        globalSwitchMode('tf');
+    }
 
     function switchSheet(index, sendToServer = false) {
         currentSheetIndex = index;
@@ -819,17 +847,9 @@
     async function sendStateToBackend(cardId, selectedIdx, status, inputValue = "", extraFields = {}) {
         if (!roomName || isSyncingFromServer) return;
         try {
-            const payload = {
-                room: roomName,
-                cardId: cardId,
-                selectedIdx: selectedIdx,
-                status: status,
-                inputValue: inputValue,
-                ...extraFields
-            };
             await fetch(`${BACKEND_URL}/update`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({ room: roomName, cardId: cardId, selectedIdx: selectedIdx, status: status, inputValue: inputValue, ...extraFields })
             });
         } catch (error) {}
     }
@@ -851,24 +871,23 @@
     });
 
     // =========================================================================
-    // --- محرك محادثات الصوت الجماعية الحية المستقرة والتلقائية بالكامل ---
+    // --- محرك محادثات الصوت الجماعية الحية المستقرة (Signaling Mesh Network) ---
     // =========================================================================
     let localAudioStream = null;
     let peerInstance = null;
-    let activeCallsList = {};
+    let connectedVoicePeersList = new Set();
 
     function initializeVoiceEngine() {
         const btn = document.getElementById('micToggleBtn');
-        const audioConstraints = { echoCancellation: true, noiseSuppression: true, backgroundBlur: true };
-
-        navigator.mediaDevices.getUserMedia({ audio: audioConstraints, video: false })
+        
+        navigator.mediaDevices.getUserMedia({ audio: true, video: false })
             .then(stream => {
                 localAudioStream = stream;
-                localVoicePeerId = `voice-${roomName}-${Math.floor(10000 + Math.random() * 90000)}`;
+                localVoicePeerId = `peer-${roomName}-${Math.floor(100000 + Math.random() * 900000)}`;
                 peerInstance = new Peer(localVoicePeerId, { debug: 1 });
 
                 peerInstance.on('open', (id) => {
-                    console.log(`[VoiceEngine] Active. My Voice Peer ID: ${id}`);
+                    console.log(`[VoiceEngine] My Peer ID: ${id}`);
                     btn.classList.add('active-streaming');
                     btn.innerText = "🎙️ MIC ACTIVE (LIVE)";
                     if (roomName) startAdaptiveSyncLoop();
@@ -879,36 +898,36 @@
                     call.on('stream', (remoteStream) => {
                         handleRemoteAudioPlayback(call.peer, remoteStream);
                     });
-                    activeCallsList[call.peer] = call;
                 });
             })
             .catch(err => {
-                console.error("[VoiceEngine] Microphone access denied:", err);
+                console.error("[VoiceEngine] Access Denied:", err);
                 btn.style.background = "var(--danger)";
                 btn.innerText = "⚠️ MIC BLOCKED (GRANT PERMISSION)";
                 if (roomName) startAdaptiveSyncLoop();
             });
     }
 
-    function handleAudioMeshSignaling(serverPeersList) {
-        serverPeersList.forEach(remotePeerId => {
-            if (remotePeerId !== localVoicePeerId && !activeCallsList[remotePeerId]) {
-                console.log(`[VoiceEngine] Building audio link channel to: ${remotePeerId}`);
+    function handleAudioMeshSignaling(serverPeers) {
+        serverPeers.forEach(remotePeerId => {
+            if (remotePeerId !== localVoicePeerId && !connectedVoicePeersList.has(remotePeerId)) {
+                connectedVoicePeersList.add(remotePeerId);
+                console.log(`[VoiceEngine] Calling new user: ${remotePeerId}`);
+                
                 const call = peerInstance.call(remotePeerId, localAudioStream);
                 if (call) {
                     call.on('stream', (remoteStream) => {
                         handleRemoteAudioPlayback(remotePeerId, remoteStream);
                     });
-                    activeCallsList[remotePeerId] = call;
                 }
             }
         });
     }
 
     function handleRemoteAudioPlayback(peerId, remoteStream) {
-        let audioNode = document.getElementById(`audio_${peerId}`);
-        if (audioNode) return;
-        audioNode = document.createElement('audio');
+        if (document.getElementById(`audio_${peerId}`)) return;
+        
+        const audioNode = document.createElement('audio');
         audioNode.id = `audio_${peerId}`;
         audioNode.srcObject = remoteStream;
         audioNode.autoplay = true;
@@ -936,21 +955,7 @@
         }
     }
 
-    // --- نظام المراقبة الديناميكي لتقليص وإخفاء الـ NAV وأزرار التحكم عدا المايك عند السكرول ---
-    window.addEventListener('scroll', () => {
-        const headerElement = document.getElementById('mainHeader');
-        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (currentScroll > lastScrollTop && currentScroll > 120) {
-            // تفعيل فئة التقليص لإخفاء العناصر وتقليص الحجم عدا زر الصوت والبراند
-            headerElement.classList.add('minimized-cradle');
-        } else if (currentScroll < lastScrollTop) {
-            // إرجاع الحجم الأصلي وإظهار الـ NAV فوراً عند الرفع للأعلى
-            headerElement.classList.remove('minimized-cradle');
-        }
-        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-    });
-
+    // تهيئة محركات الصوت والتسجيل والتشغيل التلقائي المبدئي بنجاح
     initializeVoiceEngine();
     initSuite();
 </script>
