@@ -398,6 +398,7 @@
                 { q: "Encryption is part of the security layer in Big Data architecture.", options: ["True", "False"], ans: 0 }
             ],
             mcq: [
+                { q: "Which layer is responsible for storing large volumes of data?", options: ["Ingestion", "Storage", "Analytics", "Monitoring"], ans: 1 },
                 { q: "Which of the following is an example of streaming ingestion tool?", options: ["Power BI", "Apache Kafka", "MySQL", "Excel"], ans: 1 },
                 { q: "Which storage option is commonly used in Hadoop ecosystems?", options: ["HDFS", "FTP", "HTML", "SMTP"], ans: 0 },
                 { q: "ELT differs from ETL because transformation happens:", options: ["Before loading", "During ingestion", "After loading", "Outside the system"], ans: 2 },
@@ -655,7 +656,7 @@
         if (typeof triggerUserActionBurst === 'function') triggerUserActionBurst();
         
         setTimeout(() => {
-            // تحديث السيرفر بحالة السؤال الحالي فقط دون إجبار الشاشة على الانتقال للسؤال التالي تلقائياً
+            // تحديث السؤال الحالي فقط على السيرفر لضمان ثبات الصفحة تماماً ومنع القفز
             sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
                 currentGlobalMode === 'blank' ? document.getElementById(`${card.id}-input`).value.trim() : ""
             );
@@ -822,7 +823,7 @@
                         const t = document.getElementById(data.active_card_id); 
                         if (t) { 
                             t.classList.add('focused-by-peer'); 
-                            // تم إزالة scrollIntoView نهائياً لضمان عدم اهتزاز الشاشة أو قفزها
+                            // تم إزالة سطر scrollIntoView من هنا نهائياً لمنع أي قفز أو تحرك عشوائي للشاشة
                         } 
                     }, 200);
                 }
