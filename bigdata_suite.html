@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Big Data & Analytics Workspace - Fixed Audio Stable Edition</title>
+    <title>Big Data & Analytics Workspace - Total User Control Edition</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800;900&family=Cairo:wght@400;700;900&display=swap');
 
@@ -73,7 +73,6 @@
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* كلاس الاختفاء التلقائي السلس للهيدر دون المساس بالمايك */
         header.nav-hidden {
             transform: translateY(-100%);
         }
@@ -92,7 +91,6 @@
 
         .header-badges-group {
             display: flex; align-items: center; gap: 10px;
-            /* ترك مساحة مستقرة على اليمين حتى لا يغطي الهيدر على مكان المايك الثابت */
             padding-right: 180px; 
         }
 
@@ -110,12 +108,11 @@
         }
         .stats-badge span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
 
-        /* تعديل المايك ليكون ثابتاً ومستقراً تماماً في زاوية الشاشة منذ البداية لتفادي أي تعليق في الصوت */
         .voice-mic-btn {
             position: fixed;
             top: 15px;
             right: 20px;
-            z-index: 1000; /* أعلى من الهيدر دائماً ليبقى ظاهراً عند نزول الصفحة */
+            z-index: 1000;
             background: rgba(244, 63, 94, 0.1); 
             border: 1px solid var(--danger);
             color: var(--danger); padding: 10px 16px; border-radius: 12px;
@@ -496,20 +493,14 @@
     let currentGlobalMode = 'tf'; 
     let lastScrollTop = 0;
 
-    // =========================================================================
-    // --- محرك مراقبة التمرير المستقر والآمن (إخفاء وإظهار الهيدر فقط) ---
-    // =========================================================================
     const mainHeader = document.getElementById('mainHeader');
 
     window.addEventListener('scroll', () => {
         let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-        
         if (currentScroll > 60) { 
-            // التمرير لأسفل: يختفي الهيدر بسلاسة تامة، والمايك لا يتأثر لأنه مستقل تماماً
             if (currentScroll > lastScrollTop) {
                 mainHeader.classList.add('nav-hidden');
             } else {
-                // التمرير لأعلى: يظهر الهيدر من جديد
                 mainHeader.classList.remove('nav-hidden');
             }
         } else {
@@ -517,7 +508,6 @@
         }
         lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     }, { passive: true });
-
 
     function formatNumber(num) {
         return num < 10 ? '0' + num : num;
@@ -812,7 +802,7 @@
 
 <script>
     // =========================================================================
-    // --- محرك الاستقبال التكيفي ذو الكفاءة العالية الموفر للسيرفر ---
+    // --- محرك الاستقبال التكيفي الذكي (ثبات كامل للمستخدم دون تنقل إجباري) ---
     // =========================================================================
     let urlParams = new URLSearchParams(window.location.search);
     let roomName = urlParams.get('room');
@@ -845,8 +835,8 @@
                 isSyncingFromServer = true;
                 let structuralChanged = false;
 
-                if (data.current_sheet !== undefined && data.current_sheet !== currentSheetIndex) { switchSheet(data.current_sheet); structuralChanged = true; }
-                if (data.current_mode !== undefined && data.current_mode !== currentGlobalMode) { globalSwitchMode(data.current_mode); structuralChanged = true; }
+                // [إصلاح حاسم]: إيقاف التنقل التلقائي الإجباري بين الشيتات بناء على إشارة السيرفر لضمان ثبات شاشتك
+                // تم مسح دالة switchSheet التلقائية القادمة من زملائك هنا لتبقى في مكانك دائماً.
 
                 const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
                 if (currentContainer && currentContainer.innerHTML === "") {
@@ -876,16 +866,21 @@
                     handleAudioMeshSignaling(data.voice_peers);
                 }
 
+                // [إصلاح حاسم]: التركيز والإضاءة وملاحقة السؤال (scroll) تعمل فقط وفقط إذا كان السؤال يخص نفس الشيت الحالي الذي تتصفحه
                 if (data.active_card_id && (data.active_card_id !== lastActiveCardId || structuralChanged)) {
                     lastActiveCardId = data.active_card_id;
                     document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
-                    setTimeout(() => { 
-                        const t = document.getElementById(data.active_card_id); 
-                        if (t) { 
-                            t.classList.add('focused-by-peer'); 
-                            t.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
-                        } 
-                    }, 200);
+                    
+                    // تحقق أن السؤال الجديد يخص نفس الشيت المفتوح أمامك الآن
+                    if (data.active_card_id.startsWith(`sheet-${currentSheetIndex}-`)) {
+                        setTimeout(() => { 
+                            const t = document.getElementById(data.active_card_id); 
+                            if (t) { 
+                                t.classList.add('focused-by-peer'); 
+                                t.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+                            } 
+                        }, 200);
+                    }
                 }
                 updateProgress(); isSyncingFromServer = false;
             }
@@ -926,7 +921,7 @@
     });
 
     // =========================================================================
-    // --- محرك محادثات الصوت الجماعية الحية المستقرة والتلقائية بدون تعليق ---
+    // --- محرك محادثات الصوت الجماعية الحية ---
     // =========================================================================
     let localAudioStream = null;
     let peerInstance = null;
