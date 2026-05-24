@@ -201,7 +201,7 @@
             cursor: pointer;
         }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: all 0.4s; }
-        .card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .card:hover { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
         
         .card.focused-by-peer {
             border-color: var(--primary) !important;
@@ -533,10 +533,10 @@
             card.dataset.index = index;
             card.style.animationDelay = `${index * 0.04}s`;
             
-            // عند الضغط على الكارت بالماوس: يتم تنشيطه وتمريره لمنتصف الشاشة بشكل ذكي ومحكوم
+            // الضغط على الكارت نفسه يدويًا هو فقط ما يحركه لمنتصف الشاشة
             card.addEventListener('click', (e) => {
-                // نمنع التمرير المتكرر إذا كان الضغط تم على الراديو أو الأزرار الداخلية لعدم التشتيت
-                if (e.target.tagName !== 'INPUT' && !e.target.classList.contains('check-btn')) {
+                // إذا كان الضغط على خيار أو مدخل أو زرار النتيجة، لا تحرك الشاشة مطلقًا لمنع القفز المفاجئ
+                if (e.target.tagName !== 'INPUT' && !e.target.closest('.option-label') && !e.target.classList.contains('check-btn')) {
                     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
                 triggerUserActionBurst();
@@ -654,7 +654,7 @@
         triggerGroupNextScroll(card);
     }
 
-    // محرك الانتقال والتمرير الذكي: يتحرك فوراً بعد الضغط على Compute Inference بـ 600ms
+    // الانتقال الذكي جداً والمثالي: يحدث فقط بعد ضغط زر حساب النتيجة وإظهارها للمستخدم بـ 600ms
     function triggerGroupNextScroll(card) {
         const currentIndex = parseInt(card.dataset.index);
         const nextIndex = currentIndex + 1;
@@ -665,7 +665,6 @@
         
         setTimeout(() => {
             if (nextCardExists) {
-                // تمرير الشاشة ذكياً وبسلاسة إلى السؤال القادم لأن المستخدم أتم حل السؤال الحالي
                 nextCardExists.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 
                 sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
@@ -840,7 +839,6 @@
                         const t = document.getElementById(data.active_card_id); 
                         if (t) { 
                             t.classList.add('focused-by-peer'); 
-                            // تم إزالة أمر scrollIntoView التلقائي من هنا تماماً لمنع قفز الشاشة العشوائي الناتج عن التزامن الخلفي
                         } 
                     }, 200);
                 }
