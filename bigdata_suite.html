@@ -38,7 +38,7 @@
             min-height: 100vh;
             overflow-x: hidden;
             scroll-behavior: smooth;
-            padding-top: 195px; 
+            padding-top: 185px; 
             padding-bottom: 60px;
         }
 
@@ -53,23 +53,16 @@
         }
 
         .orb {
-            position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1; opacity: 0.2;
+            position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1; opacity: 0.25;
             animation: float 25s infinite alternate ease-in-out;
         }
         .orb-1 { width: 400px; height: 400px; background: var(--accent); top: -15%; left: -10%; }
         .orb-2 { width: 500px; height: 500px; background: var(--primary); bottom: -15%; right: -10%; animation-delay: -12s; }
 
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(80px, 60px) scale(1.15); }
-        }
-
         header {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
-            background: rgba(2, 6, 23, 0.85);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border-bottom: 1px solid var(--glass-border);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border); box-shadow: 0 10px 40px rgba(0,0,0,0.7);
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -85,9 +78,7 @@
             display: flex; align-items: center; gap: 8px; cursor: pointer;
         }
 
-        .header-badges-group {
-            display: flex; align-items: center; gap: 10px;
-        }
+        .header-badges-group { display: flex; align-items: center; gap: 10px; }
 
         .stats-badge {
             display: flex; align-items: center; gap: 8px;
@@ -96,7 +87,6 @@
         }
         .stats-badge span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
 
-        /* --- تصميم زرار كتم وتفعيل المايك الاحترافي --- */
         .voice-mic-btn {
             background: var(--danger-dim); border: 1px solid var(--danger);
             color: var(--danger); padding: 8px 14px; border-radius: 12px;
@@ -110,10 +100,8 @@
         }
 
         .controls-header-row {
-            background: rgba(10, 15, 30, 0.5);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            padding: 8px 20px;
-            display: flex; justify-content: center; gap: 12px;
+            background: rgba(10, 15, 30, 0.5); border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 8px 20px; display: flex; justify-content: center; gap: 12px;
         }
 
         .action-btn {
@@ -127,8 +115,7 @@
         .action-btn.retry { background: linear-gradient(135deg, var(--warning), #d97706); color: #000; font-weight: 900; border: none; }
 
         .sheet-navigator {
-            background: rgba(15, 23, 42, 0.3);
-            border-bottom: 1px solid var(--glass-border);
+            background: rgba(15, 23, 42, 0.3); border-bottom: 1px solid var(--glass-border);
             display: flex; justify-content: center; overflow-x: auto; scrollbar-width: none;
         }
 
@@ -142,8 +129,7 @@
         .tab-btn.active { color: var(--primary); }
         .tab-btn.active::after {
             content: ''; position: absolute; bottom: 0; left: 15%; width: 70%; height: 3px;
-            background: var(--primary); border-radius: 3px 3px 0 0;
-            box-shadow: 0 0 10px var(--primary-glow);
+            background: var(--primary); border-radius: 3px 3px 0 0; box-shadow: 0 0 10px var(--primary-glow);
         }
 
         .progress-container { width: 100%; height: 3px; background: rgba(255,255,255,0.03); position: relative; }
@@ -160,34 +146,11 @@
             font-size: 0.95rem; font-weight: 800; color: var(--text-option);
             letter-spacing: 0.5px; text-transform: uppercase;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.25);
-            display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex: 1; min-width: 150px; justify-content: center;
+            display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex: 1; min-width: 150px; justify-content: center;
         }
-
-        .mode-select-card:hover { border-color: rgba(255,255,255,0.15); color: #fff; transform: translateY(-2px); }
         .mode-select-card.active-tf { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
         .mode-select-card.active-mcq { color: #db2777; border-color: #db2777; background: rgba(219, 39, 119, 0.12); box-shadow: 0 0 20px rgba(219, 39, 119, 0.15); }
         .mode-select-card.active-blank { color: var(--warning); border-color: var(--warning); background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
-
-        .bottom-nav-replica-title {
-            text-align: center; font-size: 0.85rem; font-weight: 800; letter-spacing: 2px;
-            color: var(--text-muted); text-transform: uppercase; margin: 40px 0 15px;
-        }
-        .bottom-navigator-deck {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            border-radius: 16px; padding: 10px; display: flex; justify-content: center;
-            gap: 10px; flex-wrap: wrap; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-        .bottom-nav-btn {
-            background: rgba(255,255,255,0.02); color: var(--text-option); border: 1px solid var(--glass-border);
-            padding: 10px 18px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;
-            cursor: pointer; transition: all 0.25s ease; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .bottom-nav-btn:hover { border-color: var(--primary); color: #fff; }
-        .bottom-nav-btn.active {
-            background: var(--primary-dim); color: var(--primary); border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.1); font-weight: 900;
-        }
 
         .container { max-width: 850px; margin: 15px auto 40px; padding: 0 15px; }
         .assignment-sheet { display: none; }
@@ -197,14 +160,12 @@
             background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border); border-radius: 18px; padding: 25px; margin-bottom: 25px;
             position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
         }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: all 0.4s; }
         .card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
         
         .card.focused-by-peer {
-            border-color: var(--primary) !important;
-            box-shadow: 0 0 35px var(--primary-glow) !important;
+            border-color: var(--primary) !important; box-shadow: 0 0 35px var(--primary-glow) !important;
             background: rgba(168, 85, 247, 0.04) !important;
         }
 
@@ -242,8 +203,7 @@
         .blank-input-wrapper { margin: 15px 0; width: 100%; }
         .inference-input {
             width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
-            padding: 14px 18px; border-radius: 12px; color: #fff; font-size: 1.05rem;
-            font-family: 'Outfit', sans-serif; font-weight: 600; transition: all 0.3s;
+            padding: 14px 18px; border-radius: 12px; color: #fff; font-size: 1.05rem; font-weight: 600; transition: all 0.3s;
         }
         .inference-input:focus { border-color: var(--warning); background: rgba(245, 158, 11, 0.03); box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); }
         .inference-input:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -251,7 +211,7 @@
             display: none; background: rgba(16, 185, 129, 0.1); border: 1px dashed var(--success);
             padding: 12px 16px; border-radius: 10px; font-size: 0.95rem; margin-top: 10px; color: #fff; text-align: left;
         }
-        .card.wrong .expected-answer-box { display: block; animation: slideUp 0.3s ease; }
+        .card.wrong .expected-answer-box { display: block; }
 
         .check-btn {
             background: rgba(255,255,255,0.02); color: var(--text-main); border: 1px solid var(--glass-border);
@@ -283,13 +243,11 @@
         .card.wrong .custom-radio::after { background: var(--danger); }
         .card.wrong .inference-input { border-color: var(--danger); background: var(--danger-dim); }
 
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } }
-
         .score-board {
             display: none; background: var(--glass-bg); border: 1px solid var(--glass-border);
             border-radius: 20px; padding: 40px 25px; text-align: center; margin-top: 30px;
         }
-        .score-board.active { display: block; animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15); }
+        .score-board.active { display: block; }
     </style>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
@@ -299,10 +257,6 @@
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 
-<button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
-</button>
-
 <header id="mainHeader">
     <div class="header-content">
         <div class="brand-title" onclick="window.location.href='index.html' + window.location.search">
@@ -311,7 +265,7 @@
         </div>
         <div class="header-badges-group">
             <button class="voice-mic-btn" id="micToggleBtn" onclick="toggleLocalMicrophone()">
-                🎤 CONNECTING AUDIO...
+                🎤 INITIALIZING AUDIO...
             </button>
             <div class="stats-badge">EVALUATED: <span id="live-score">00 / 00</span></div>
         </div>
@@ -428,7 +382,7 @@
                 { q: "Which of the following is a limitation of RDBMS in Big Data?", options: ["High scalability", "Low cost storage", "Limited scalability", "Built-in fault tolerance"], ans: 2 },
                 { q: "Hadoop mainly solves problems related to:", options: ["Small datasets", "Distributed storage and processing", "Desktop computing", "Word processing"], ans: 1 },
                 { q: "Which tool belongs to the Hadoop ingestion layer?", options: ["Hive", "Spark", "Flume", "HDFS"], ans: 2 },
-                { q: "Which component is used for distributed storage?", options: ["HDFS", "Pig", "Hive", "Oozie"], ans: 0 },
+                { q: "Component used for distributed storage is called:", options: ["HDFS", "Pig", "Hive", "Oozie"], ans: 0 },
                 { q: "MapReduce primarily processes data in:", options: ["Real-time memory", "Distributed batch mode", "Manual mode", "Local spreadsheets"], ans: 1 },
                 { q: "Which language is commonly used with Hive?", options: ["SQL", "HQL", "Python", "C++"], ans: 1 },
                 { q: "HBase is best described as:", options: ["Relational database", "NoSQL wide-column database", "Visualization tool", "Monitoring tool"], ans: 1 },
@@ -470,25 +424,13 @@
     let currentGlobalMode = 'tf'; 
     let lastScrollTop = 0;
 
-    function formatNumber(num) { return num < 10 ? '0' + num : num; }
-
-    function initSuite() {
-        switchSheet(0);
-        globalSwitchMode('tf');
-    }
-
     function switchSheet(index, sendToServer = false) {
         currentSheetIndex = index;
         document.querySelectorAll('#topSheetNav .tab-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
         document.querySelectorAll('#bottomSheetNav .bottom-nav-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
-        
-        document.querySelectorAll('.assignment-sheet').forEach((sheet, i) => {
-            sheet.classList.toggle('active', i === index);
-        });
-        
+        document.querySelectorAll('.assignment-sheet').forEach((sheet, i) => sheet.classList.toggle('active', i === index));
         document.getElementById('score-board').classList.remove('active');
         renderCurrentView();
-        
         if(sendToServer) {
             triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_sheet: index, active_card_id: `sheet-${index}-${currentGlobalMode}-q-0` });
@@ -500,10 +442,8 @@
         document.getElementById('card-btn-tf').classList.toggle('active-tf', mode === 'tf');
         document.getElementById('card-btn-mcq').classList.toggle('active-mcq', mode === 'mcq');
         document.getElementById('card-btn-blank').classList.toggle('active-blank', mode === 'blank');
-        
         document.getElementById('score-board').classList.remove('active');
         renderCurrentView();
-        
         if(sendToServer) {
             triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_mode: mode, active_card_id: `sheet-${currentSheetIndex}-${mode}-q-0` });
@@ -532,7 +472,6 @@
             card.id = cardId;
             card.dataset.correct = item.ans;
             card.dataset.index = index;
-            card.style.animationDelay = `${index * 0.04}s`;
             
             card.addEventListener('click', () => {
                 triggerUserActionBurst();
@@ -656,7 +595,7 @@
         const nextCardId = `sheet-${currentSheetIndex}-${currentGlobalMode}-q-${nextIndex}`;
         const nextCardExists = document.getElementById(nextCardId);
         
-        if (typeof triggerUserActionBurst === 'function') triggerUserActionBurst();
+        triggerUserActionBurst();
         
         setTimeout(() => {
             if (nextCardExists) {
@@ -675,7 +614,7 @@
     function updateProgress() {
         const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
         if (!currentContainer) return;
-        const cards = Array.from(currentContainer.querySelectorAll('.card'));
+        const cards = Array.from(currentContainer.querySelectorAll('.card')).filter(c => c.style.display !== 'none');
         const total = cards.length;
         if(total === 0) return;
         const correct = cards.filter(c => c.classList.contains('correct')).length;
@@ -734,7 +673,9 @@
             currentContainer.appendChild(card);
         });
     }
+</script>
 
+<script>
     // =========================================================================
     // --- محرك الاستقبال التكيفي ذو الكفاءة العالية الموفر للسيرفر ---
     // =========================================================================
@@ -743,10 +684,7 @@
     const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost:5000' ? 'http://127.0.0.1:5000/api' : '/api';
 
     let isSyncingFromServer = false, lastActiveCardId = "", currentIntervalDelay = 2000, syncIntervalId = null, burstCountdown = 0;
-
-    if (roomName) {
-        startAdaptiveSyncLoop();
-    }
+    let localVoicePeerId = "";
 
     function startAdaptiveSyncLoop() {
         if (syncIntervalId) clearInterval(syncIntervalId);
@@ -764,7 +702,9 @@
     async function fetchRoomState() {
         if (!roomName || isSyncingFromServer) return;
         try {
-            const response = await fetch(`${BACKEND_URL}/state?room=${roomName}`);
+            // تمرير الـ localVoicePeerId الحقيقي للسيرفر ليقوم بتوزيعه على الشبكة
+            const url = `${BACKEND_URL}/state?room=${roomName}&peer_id=${localVoicePeerId}`;
+            const response = await fetch(url);
             if (!response.ok) return;
             const data = await response.json();
             if (data) {
@@ -796,6 +736,11 @@
                         if (state.status === 'correct' && !card.classList.contains('correct')) executeRemoteFreeze(card, cardId, true, state.inputValue || "");
                         else if (state.status === 'wrong' && !card.classList.contains('wrong')) executeRemoteFreeze(card, cardId, false, state.inputValue || "");
                     });
+                }
+
+                // استقبال ومعالجة شبكة الصوت المفتوحة للجروب بالكامل
+                if (data.voice_peers && data.voice_peers.length > 0) {
+                    handleAudioMeshSignaling(data.voice_peers);
                 }
 
                 if (data.active_card_id && (data.active_card_id !== lastActiveCardId || structuralChanged)) {
@@ -842,74 +787,70 @@
     });
 
     // =========================================================================
-    // --- محرك محادثات الصوت الجماعية الحية الحرة المستقرة (WebRTC Architecture) ---
+    // --- محرك محادثات الصوت الجماعية الحية المستقرة (Signaling Mesh Network) ---
     // =========================================================================
     let localAudioStream = null;
     let peerInstance = null;
-    let activeVoiceCalls = {};
+    let connectedVoicePeersList = new Set();
 
-    // تهيئة الصوت والاتصال فور تحميل الصفحة
     function initializeVoiceEngine() {
         const btn = document.getElementById('micToggleBtn');
         
-        // طلب صلاحية المايك من الطالب فورا وبث الصوت
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
             .then(stream => {
                 localAudioStream = stream;
                 
-                // توليد ID صوتي فريد لكل طالب داخل نفس الغرفة المشتركة
-                const peerId = `${roomName}_user_${Math.floor(1000 + Math.random() * 9000)}`;
-                peerInstance = new Peer(peerId, { debug: 1 });
+                // توليد ID فريد عشوائي لكل جهاز متصل بالـ Room
+                localVoicePeerId = `peer-${roomName}-${Math.floor(100000 + Math.random() * 900000)}`;
+                peerInstance = new Peer(localVoicePeerId, { debug: 1 });
 
                 peerInstance.on('open', (id) => {
-                    console.log(`[VoiceEngine] Connected. Audio Mesh ID: ${id}`);
+                    console.log(`[VoiceEngine] My Peer ID: ${id}`);
                     btn.classList.add('active-streaming');
                     btn.innerText = "🎙️ MIC ACTIVE (LIVE)";
                     
-                    // البحث الفوري عن زملائي المتصلين صوتياً للربط معهم تلقائياً
-                    autoConnectPeerAudioMesh();
+                    // تشغيل حلقة استقبال ومراقبة السيرفر
+                    if (roomName) startAdaptiveSyncLoop();
                 });
 
-                // استقبال المكالمات الصوتية القادمة من الزملاء وتمرير الصوت للمتصفح
+                // استقبال المكالمات الصوتية الواردة من بقية زملائك في الجروب فورا
                 peerInstance.on('call', (call) => {
                     call.answer(localAudioStream);
                     call.on('stream', (remoteStream) => {
                         handleRemoteAudioPlayback(call.peer, remoteStream);
                     });
-                    activeVoiceCalls[call.peer] = call;
                 });
             })
             .catch(err => {
                 console.error("[VoiceEngine] Access Denied:", err);
                 btn.style.background = "var(--danger)";
                 btn.innerText = "⚠️ MIC BLOCKED (GRANT PERMISSION)";
+                // تشغيل مزامنة الأسئلة حتى لو تم رفض المايك
+                if (roomName) startAdaptiveSyncLoop();
             });
     }
 
-    // تشبيك شبكة الصوت (Audio Mesh) بين الطلاب عبر قراءة معرفات الغرف النشطة
-    async function autoConnectPeerAudioMesh() {
-        try {
-            const response = await fetch(`${BACKEND_URL}/rooms`);
-            if (!response.ok) return;
-            const result = await response.json();
-            
-            // ربط الصوت تلقائياً مع أي زميل يمتلك نفس بادئة الغرفة
-            if (result && result.rooms) {
-                // نمرر حلقة اتصال بكل أقران الصوت النشطين
-                // ملاحظة: PeerJS يتعرف على الأجهزة المتصلة على نفس الشبكة المفتوحة
+    // خوارزمية الربط الهيكلي الصوتي القسري لجميع شاشات الجروب
+    function handleAudioMeshSignaling(serverPeers) {
+        serverPeers.forEach(remotePeerId => {
+            // شروط الاتصال: ألا يكون هذا الـ ID الخاص بجهازي، وألا أكون قد اتصلت به مسبقاً
+            if (remotePeerId !== localVoicePeerId && !connectedVoicePeersList.has(remotePeerId)) {
+                connectedVoicePeersList.add(remotePeerId);
+                console.log(`[VoiceEngine] Calling new user: ${remotePeerId}`);
+                
+                const call = peerInstance.call(remotePeerId, localAudioStream);
+                if (call) {
+                    call.on('stream', (remoteStream) => {
+                        handleRemoteAudioPlayback(remotePeerId, remoteStream);
+                    });
+                }
             }
-            
-            // فحص إضافي: عند تشغيل النظام، أي جهاز جديد ينضم يطلق طلب اتصال لباقي الغرفة
-            // السيرفر مبرمج يستقبل الـ POST لتحديث الغرفة، لذا نكتفي بالانتظار لاستقبال اتصالات الطلاب الجدد تلقائياً
-        } catch (e) {
-             console.log("[VoiceEngine] Mesh Discovery standby.");
-        }
+        });
     }
 
     function handleRemoteAudioPlayback(peerId, remoteStream) {
         if (document.getElementById(`audio_${peerId}`)) return;
         
-        // إنشاء مشغل صوت خفي لتمرير صوت الزميل في سماعات المتصفح
         const audioNode = document.createElement('audio');
         audioNode.id = `audio_${peerId}`;
         audioNode.srcObject = remoteStream;
@@ -918,7 +859,6 @@
         document.body.appendChild(audioNode);
     }
 
-    // دالة زرار كتم وتفعيل المايك (Mute / Unmute)
     function toggleLocalMicrophone() {
         if (!localAudioStream) return;
         const btn = document.getElementById('micToggleBtn');
@@ -930,7 +870,7 @@
             btn.style.background = "var(--glass-bg)";
             btn.style.borderColor = "var(--warning)";
             btn.style.color = "var(--warning)";
-            btn.innerText = "🔇 MIC MUTED";
+            btn.innerText = "¼ MIC MUTED";
         } else {
             audioTrack.enabled = true;
             btn.classList.add('active-streaming');
@@ -939,9 +879,10 @@
         }
     }
 
-    // بدء محرك الصوت فوراً
+    // تشغيل الصوت الفوري أولاً، وهو بدوره سيطلق الـ Sync Loop بنجاح
     initializeVoiceEngine();
-    initSuite();
+    switchSheet(0);
+    globalSwitchMode('tf');
 </script>
 </body>
 </html>
