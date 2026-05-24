@@ -11,25 +11,19 @@
             --bg-dark: #020617;
             --glass-bg: rgba(15, 23, 42, 0.45);
             --glass-border: rgba(255, 255, 255, 0.06);
-            
             --primary: #00f2fe;
             --primary-dim: rgba(0, 242, 254, 0.12);
             --primary-glow: rgba(0, 242, 254, 0.5);
-            
             --accent: #3b82f6;
             --accent-dim: rgba(59, 130, 246, 0.12);
             --accent-glow: rgba(59, 130, 246, 0.5);
-
             --success: #10b981;
             --success-dim: rgba(16, 185, 129, 0.15);
             --success-glow: rgba(16, 185, 129, 0.5);
-            
             --danger: #f43f5e;
             --danger-dim: rgba(244, 63, 94, 0.15);
             --danger-glow: rgba(244, 63, 94, 0.5);
-
             --warning: #f59e0b;
-
             --text-main: #f8fafc;
             --text-option: #cbd5e1;
             --text-muted: #64748b;
@@ -48,7 +42,6 @@
             padding-bottom: 60px;
         }
 
-        /* --- Background Effects --- */
         .bg-grid {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
             background-image: 
@@ -71,7 +64,6 @@
             100% { transform: translate(80px, 60px) scale(1.15); }
         }
 
-        /* --- Main Header Architecture --- */
         header {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
             background: rgba(2, 6, 23, 0.85);
@@ -100,7 +92,6 @@
         }
         .stats-badge span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
 
-        /* --- Control Actions Deck --- */
         .controls-header-row {
             background: rgba(10, 15, 30, 0.5);
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
@@ -145,7 +136,6 @@
         .progress-container { width: 100%; height: 3px; background: rgba(255,255,255,0.03); position: relative; }
         .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--primary)); transition: width 0.5s ease; box-shadow: 0 0 15px var(--primary-glow); }
 
-        /* --- Mode Selection Cards Deck --- */
         .mode-selection-deck {
             display: flex; justify-content: center; gap: 12px; margin: 25px auto 25px;
             max-width: 900px; padding: 0 15px; flex-wrap: wrap;
@@ -166,7 +156,6 @@
         .mode-select-card.active-mcq { color: #a855f7; border-color: #a855f7; background: rgba(168, 85, 247, 0.12); box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
         .mode-select-card.active-blank { color: var(--warning); border-color: var(--warning); background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
 
-        /* --- Replicated Navigation Titles & Decks --- */
         .bottom-nav-replica-title {
             text-align: center; font-size: 0.85rem; font-weight: 800; letter-spacing: 2px;
             color: var(--text-muted); text-transform: uppercase; margin: 40px 0 15px;
@@ -187,7 +176,6 @@
             box-shadow: 0 0 15px rgba(0, 242, 254, 0.1); font-weight: 900;
         }
 
-        /* --- Scroll To Top Button --- */
         .scroll-top-btn {
             position: fixed; bottom: 25px; right: 25px; width: 48px; height: 48px;
             background: var(--glass-bg); border: 1px solid var(--glass-border);
@@ -202,12 +190,10 @@
         .scroll-top-btn svg { width: 22px; height: 22px; transition: transform 0.3s; }
         .scroll-top-btn:hover svg { transform: translateY(-2px); }
 
-        /* --- Main Layout Systems --- */
         .container { max-width: 850px; margin: 15px auto 40px; padding: 0 15px; }
         .assignment-sheet { display: none; }
         .assignment-sheet.active { display: block; }
 
-        /* --- Node Cards --- */
         .card {
             background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border); border-radius: 18px; padding: 25px; margin-bottom: 25px;
@@ -216,6 +202,12 @@
         }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: all 0.4s; }
         .card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        
+        .card.focused-by-peer {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 35px var(--primary-glow) !important;
+            background: rgba(0, 242, 254, 0.04) !important;
+        }
 
         .question-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
         .q-number {
@@ -224,7 +216,6 @@
         }
         .question-text { font-size: 1.15rem; font-weight: 600; line-height: 1.5; color: #fff; }
 
-        /* --- Options Grid --- */
         .options-grid { display: flex; flex-direction: column; gap: 10px; }
         .option-label {
             position: relative; display: flex; align-items: center; background: rgba(255,255,255,0.03);
@@ -248,7 +239,6 @@
         .option-label.selected .custom-radio { border-color: var(--primary); }
         .option-label.selected .custom-radio::after { transform: scale(1); }
 
-        /* --- Direct Input Layout --- */
         .blank-input-wrapper { margin: 15px 0; width: 100%; }
         .inference-input {
             width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
@@ -263,7 +253,6 @@
         }
         .card.wrong .expected-answer-box { display: block; animation: slideUp 0.3s ease; }
 
-        /* --- Verification Actions --- */
         .check-btn {
             background: rgba(255,255,255,0.02); color: var(--text-main); border: 1px solid var(--glass-border);
             width: 100%; padding: 14px; border-radius: 12px; font-size: 0.9rem; font-weight: 800; letter-spacing: 1.5px;
@@ -272,7 +261,6 @@
         .check-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(255,255,255,0.04); }
         .check-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        /* --- Result States --- */
         .result-box {
             margin-top: 15px; padding: 12px; border-radius: 10px; text-align: center; font-weight: 800;
             font-size: 0.95rem; opacity: 0; height: 0; overflow: hidden; transition: all 0.3s;
@@ -299,19 +287,17 @@
 
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } }
 
-        /* --- Score Board Module --- */
         .score-board {
             display: none; background: var(--glass-bg); backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border); border-radius: 20px; padding: 40px 25px;
             text-align: center; box-shadow: 0 20px 45px rgba(0,0,0,0.6);
         }
         .score-board.active { display: block; animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15); }
-        @keyframes scaleUp { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
         .score-circle {
             width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 25px;
             display: flex; align-items: center; justify-content: center;
-            background: conic-gradient(var(--primary) 0%, rgba(255,255,255,0.04) 0%);
+            background: conic-gradient(var(--primary) 0%, rgba(255,255,255,0.03) 0%);
         }
         .score-circle-inner {
             width: 96px; height: 96px; border-radius: 50%; background: var(--bg-dark);
@@ -327,22 +313,6 @@
         .stat-val.wrong-text { color: var(--danger); }
         .stat-lbl { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
         .score-msg { font-size: 1.05rem; font-weight: 600; color: var(--text-option); }
-
-        /* --- Responsiveness System --- */
-        @media (max-width: 600px) {
-            body { padding-top: 195px; }
-            .header-content { flex-direction: column; gap: 8px; padding: 10px; }
-            .controls-header-row { padding: 6px; gap: 8px; }
-            .action-btn { padding: 5px 10px; font-size: 0.65rem; }
-            .container { margin-top: 15px; padding: 0 10px; }
-            .mode-selection-deck { gap: 10px; flex-direction: row; padding: 0 10px; margin-bottom: 20px;}
-            .mode-select-card { padding: 12px 10px; font-size: 0.8rem; flex: 1; min-width: 90px; text-align: center; }
-            .card { padding: 20px 15px; }
-            .question-text { font-size: 1.05rem; }
-            .option-label { padding: 12px 14px; font-size: 0.95rem; }
-            .scroll-top-btn { bottom: 15px; right: 15px; width: 42px; height: 42px; }
-            .bottom-nav-btn { padding: 8px 12px; font-size: 0.75rem; }
-        }
     </style>
 </head>
 <body>
@@ -378,25 +348,25 @@
     </div>
 
     <div class="sheet-navigator" id="topSheetNav">
-        <button class="tab-btn active" onclick="switchSheet(0)">Sheet 1</button>
-        <button class="tab-btn" onclick="switchSheet(1)">Sheet 2</button>
-        <button class="tab-btn" onclick="switchSheet(2)">Sheet 3</button>
-        <button class="tab-btn" onclick="switchSheet(3)">Sheet 4 (P1)</button>
-        <button class="tab-btn" onclick="switchSheet(4)">Sheet 4 (P2)</button>
+        <button class="tab-btn active" onclick="switchSheet(0, true)">Sheet 1</button>
+        <button class="tab-btn" onclick="switchSheet(1, true)">Sheet 2</button>
+        <button class="tab-btn" onclick="switchSheet(2, true)">Sheet 3</button>
+        <button class="tab-btn" onclick="switchSheet(3, true)">Sheet 4 (P1)</button>
+        <button class="tab-btn" onclick="switchSheet(4, true)">Sheet 4 (P2)</button>
     </div>
     <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
 </header>
 
 <div class="mode-selection-deck">
-    <div class="mode-select-card active-tf" id="card-btn-tf" onclick="globalSwitchMode('tf')">
+    <div class="mode-select-card active-tf" id="card-btn-tf" onclick="globalSwitchMode('tf', true)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
         True / False
     </div>
-    <div class="mode-select-card" id="card-btn-mcq" onclick="globalSwitchMode('mcq')">
+    <div class="mode-select-card" id="card-btn-mcq" onclick="globalSwitchMode('mcq', true)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
         MCQ
     </div>
-    <div class="mode-select-card" id="card-btn-blank" onclick="globalSwitchMode('blank')">
+    <div class="mode-select-card" id="card-btn-blank" onclick="globalSwitchMode('blank', true)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="4" y1="20" x2="20" y2="20"></line><polyline points="14 4 20 10 8 22 2 22 2 16 14 4"></polyline></svg>
         وا اكمل
     </div>
@@ -411,15 +381,15 @@
 
     <div class="bottom-nav-replica-title">Quick Mode Switcher</div>
     <div class="mode-selection-deck" style="margin: 10px auto 25px;">
-        <div class="mode-select-card active-tf" id="bottom-card-btn-tf" onclick="globalSwitchMode('tf')">
+        <div class="mode-select-card active-tf" id="bottom-card-btn-tf" onclick="globalSwitchMode('tf', true)">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
             True / False
         </div>
-        <div class="mode-select-card" id="bottom-card-btn-mcq" onclick="globalSwitchMode('mcq')">
+        <div class="mode-select-card" id="bottom-card-btn-mcq" onclick="globalSwitchMode('mcq', true)">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
             MCQ
         </div>
-        <div class="mode-select-card" id="bottom-card-btn-blank" onclick="globalSwitchMode('blank')">
+        <div class="mode-select-card" id="bottom-card-btn-blank" onclick="globalSwitchMode('blank', true)">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="4" y1="20" x2="20" y2="20"></line><polyline points="14 4 20 10 8 22 2 22 2 16 14 4"></polyline></svg>
             وا اكمل
         </div>
@@ -427,11 +397,11 @@
 
     <div class="bottom-nav-replica-title">Quick Sheet Switcher</div>
     <div class="bottom-navigator-deck" id="bottomSheetNav">
-        <button class="bottom-nav-btn active" onclick="switchSheet(0)">Sheet 1</button>
-        <button class="bottom-nav-btn" onclick="switchSheet(1)">Sheet 2</button>
-        <button class="bottom-nav-btn" onclick="switchSheet(2)">Sheet 3</button>
-        <button class="bottom-nav-btn" onclick="switchSheet(3)">Sheet 4 (P1)</button>
-        <button class="bottom-nav-btn" onclick="switchSheet(4)">Sheet 4 (P2)</button>
+        <button class="bottom-nav-btn active" onclick="switchSheet(0, true)">Sheet 1</button>
+        <button class="bottom-nav-btn" onclick="switchSheet(1, true)">Sheet 2</button>
+        <button class="bottom-nav-btn" onclick="switchSheet(2, true)">Sheet 3</button>
+        <button class="bottom-nav-btn" onclick="switchSheet(3, true)">Sheet 4 (P1)</button>
+        <button class="bottom-nav-btn" onclick="switchSheet(4, true)">Sheet 4 (P2)</button>
     </div>
 
     <div id="score-board" class="score-board">
@@ -609,45 +579,35 @@
         const scrollBtn = document.getElementById('scrollTopBtn');
         let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
         
-        if (currentScroll > 250) {
-            scrollBtn.classList.add('visible');
-        } else {
-            scrollBtn.classList.remove('visible');
-        }
+        if (currentScroll > 250) scrollBtn.classList.add('visible');
+        else scrollBtn.classList.remove('visible');
 
-        if (currentScroll > lastScrollTop && currentScroll > 150) {
-            headerElement.style.transform = 'translateY(-100%)'; 
-        } else {
-            headerElement.style.transform = 'translateY(0)'; 
-        }
+        if (currentScroll > lastScrollTop && currentScroll > 150) headerElement.style.transform = 'translateY(-100%)'; 
+        else headerElement.style.transform = 'translateY(0)'; 
         lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     });
 
-    function scrollToTop() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function initSuite() {
-        renderCurrentView();
-    }
-
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
     function formatNumber(num) { return num < 10 ? `0${num}` : num; }
 
-    function switchSheet(index) {
+    function initSuite() { renderCurrentView(); }
+
+    function switchSheet(index, sendToServer = false) {
         currentSheetIndex = index;
-        
         document.querySelectorAll('#topSheetNav .tab-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
         document.querySelectorAll('#bottomSheetNav .bottom-nav-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
         document.querySelectorAll('.assignment-sheet').forEach((sheet, i) => sheet.classList.toggle('active', i === index));
         
         document.getElementById('score-board').classList.remove('active');
         renderCurrentView();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        if(sendToServer) {
+            sendStateToBackend(null, null, null, "", { current_sheet: index, active_card_id: `sheet-${index}-${currentGlobalMode}-q-0` });
+        }
     }
 
-    function globalSwitchMode(mode) {
+    function globalSwitchMode(mode, sendToServer = false) {
         currentGlobalMode = mode;
-        
         document.getElementById('card-btn-tf').classList.toggle('active-tf', mode === 'tf');
         document.getElementById('card-btn-mcq').classList.toggle('active-mcq', mode === 'mcq');
         document.getElementById('card-btn-blank').classList.toggle('active-blank', mode === 'blank');
@@ -660,7 +620,10 @@
 
         document.getElementById('score-board').classList.remove('active');
         renderCurrentView();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        if(sendToServer) {
+            sendStateToBackend(null, null, null, "", { current_mode: mode, active_card_id: `sheet-${currentSheetIndex}-${mode}-q-0` });
+        }
     }
 
     function renderCurrentView() {
@@ -684,7 +647,12 @@
             card.className = 'card';
             card.id = cardId;
             card.dataset.correct = item.ans;
+            card.dataset.index = index;
             card.style.animationDelay = `${index * 0.04}s`;
+            
+            card.addEventListener('click', () => {
+                sendStateToBackend(null, null, null, "", { active_card_id: cardId });
+            });
             
             let html = `
                 <div class="question-header">
@@ -696,10 +664,9 @@
             if (currentGlobalMode === 'blank') {
                 const exactCorrectText = item.options[item.ans];
                 card.dataset.correctString = exactCorrectText.toLowerCase().trim();
-
                 html += `
                     <div class="blank-input-wrapper">
-                        <input type="text" class="inference-input" placeholder="Type your full exact answer here (Or leave empty to reveal)..." id="${cardId}-input" autocomplete="off">
+                        <input type="text" class="inference-input" placeholder="Type your full exact answer here..." id="${cardId}-input" autocomplete="off">
                         <div class="expected-answer-box"><b>Correct Answer Model:</b> ${exactCorrectText}</div>
                     </div>
                     <button class="check-btn" onclick="checkBlankAnswer('${cardId}')">COMPUTE INFERENCE</button>
@@ -707,17 +674,15 @@
             } else {
                 html += `<div class="options-grid">`;
                 item.options.forEach((opt, i) => {
-                    const optLetters = ['A', 'B', 'C', 'D'];
                     html += `
                         <label class="option-label" onclick="selectOption('${cardId}', ${i})">
                             <input type="radio" name="${cardId}" value="${i}">
                             <div class="custom-radio"></div>
-                            <span><b>${currentGlobalMode === 'tf' ? opt : optLetters[i] + '. ' + opt}</b></span>
+                            <span><b>${currentGlobalMode === 'tf' ? opt : ['A', 'B', 'C', 'D'][i] + '. ' + opt}</b></span>
                         </label>
                     `;
                 });
-                html += `</div>
-                <button class="check-btn" onclick="checkRadioAnswer('${cardId}')">COMPUTE INFERENCE</button>`;
+                html += `</div><button class="check-btn" onclick="checkRadioAnswer('${cardId}')">COMPUTE INFERENCE</button>`;
             }
             
             html += `<div class="result-box"></div>`;
@@ -728,7 +693,7 @@
 
     function selectOption(cardId, optionIndex) {
         const card = document.getElementById(cardId);
-        if(card.classList.contains('correct') || card.classList.contains('wrong')) return;
+        if(!card || card.classList.contains('correct') || card.classList.contains('wrong')) return;
 
         card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
         const selectedInput = card.querySelector(`input[value="${optionIndex}"]`);
@@ -764,9 +729,8 @@
             card.classList.add('wrong');
             resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
         }
-        
         updateProgress();
-        triggerAutoscroll(card);
+        triggerGroupNextScroll(card);
     }
 
     function checkBlankAnswer(cardId) {
@@ -778,12 +742,12 @@
         const targetValue = card.dataset.correctString;
 
         if (userValue === '') {
-            btn.disabled = true; 
-            btn.innerText = "SKIPPED / REVEALED";
+            btn.disabled = true; btn.innerText = "SKIPPED / REVEALED";
             inputField.disabled = true;
             card.classList.add('wrong'); 
             resultBox.innerHTML = `NODE REVEALED`;
             updateProgress();
+            triggerGroupNextScroll(card);
             return; 
         }
 
@@ -797,29 +761,21 @@
             card.classList.add('wrong');
             resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
         }
-
         updateProgress();
+        triggerGroupNextScroll(card);
     }
 
-    function triggerAutoscroll(card) {
-        if (currentGlobalMode === 'blank') return; 
+    function triggerGroupNextScroll(card) {
+        const currentIndex = parseInt(card.dataset.index);
+        const nextIndex = currentIndex + 1;
+        const nextCardId = `sheet-${currentSheetIndex}-${currentGlobalMode}-q-${nextIndex}`;
         
         setTimeout(() => {
-            let nextCard = card.nextElementSibling;
-            while(nextCard) {
-                if (nextCard.classList.contains('card') && nextCard.style.display !== 'none') {
-                    window.scrollTo({ top: nextCard.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
-                    break;
-                }
-                nextCard = nextCard.nextElementSibling;
+            const nextCardExists = document.getElementById(nextCardId);
+            if (nextCardExists) {
+                sendStateToBackend(null, null, null, "", { active_card_id: nextCardId });
             }
-            if(!nextCard) {
-                const scoreBoard = document.getElementById('score-board');
-                if(scoreBoard.classList.contains('active')) {
-                    window.scrollTo({ top: scoreBoard.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
-                }
-            }
-        }, 350);
+        }, 800); 
     }
 
     function updateProgress() {
@@ -835,84 +791,32 @@
         const pct = total === 0 ? 0 : (solved / total) * 100;
         document.getElementById('progressBar').style.width = `${pct}%`;
         document.getElementById('live-score').innerText = `${formatNumber(correct)} / ${total}`;
-
-        const scoreBoard = document.getElementById('score-board');
-        if (solved === total && total > 0) {
-            scoreBoard.classList.add('active');
-            document.getElementById('stat-correct').innerText = correct;
-            document.getElementById('stat-wrong').innerText = wrong;
-            
-            const accuracy = Math.round((correct / total) * 100);
-            document.getElementById('score-pct').innerText = `${accuracy}%`;
-            
-            const circle = document.getElementById('score-circle');
-            let ringColor = accuracy >= 80 ? 'var(--success)' : accuracy >= 50 ? 'var(--warning)' : 'var(--danger)';
-            circle.style.background = `conic-gradient(${ringColor} ${accuracy}%, rgba(255,255,255,0.03) 0%)`;
-            document.getElementById('score-pct').style.color = ringColor;
-            
-            const msgBox = document.getElementById('score-msg');
-            if(accuracy === 100) msgBox.innerText = "Generalization Perfect. Block evaluation weights optimized completely.";
-            else if(accuracy >= 80) msgBox.innerText = "Validation Metrics Passed. Satisfactory prediction precision.";
-            else msgBox.innerText = "High cost variance error! Underfitting detected in layout processing.";
-        } else {
-            scoreBoard.classList.remove('active');
-        }
     }
 
     function retryMode() {
         const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
-        const cards = currentContainer.querySelectorAll('.card');
-        let hiddenCount = 0;
-        let firstWrongCard = null;
-
-        cards.forEach(card => {
-            if (card.classList.contains('correct')) {
-                card.style.display = 'none';
-                hiddenCount++;
-            } else if (card.classList.contains('wrong')) {
-                card.style.display = 'block';
-                card.style.animation = 'slideUp 0.4s ease';
-                resetCardState(card);
-                if (!firstWrongCard) firstWrongCard = card;
-            } else {
-                card.style.display = 'block';
-            }
-        });
-
-        if (hiddenCount === cards.length) {
-            alert("All block metrics validated dynamically.");
-            cards.forEach(c => { c.style.display = 'block'; resetCardState(c); });
-        } else {
-            document.getElementById('score-board').classList.remove('active');
-            updateProgress();
-            if (firstWrongCard) {
-                setTimeout(() => {
-                    window.scrollTo({ top: firstWrongCard.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
-                }, 100);
-            }
-        }
+        currentContainer.querySelectorAll('.card').forEach(c => { c.style.display = 'block'; resetCardState(c); });
+        document.getElementById('score-board').classList.remove('active');
+        updateProgress();
+        sendStateToBackend(null, null, null, "", { active_card_id: `sheet-${currentSheetIndex}-${currentGlobalMode}-q-0` });
     }
 
     function resetCardState(card) {
         card.classList.remove('wrong', 'correct');
         const btn = card.querySelector('.check-btn');
-        btn.disabled = false;
-        btn.innerText = "COMPUTE INFERENCE";
-        card.querySelector('.result-box').innerHTML = '';
+        if(btn) { btn.disabled = false; btn.innerText = "COMPUTE INFERENCE"; }
+        const rb = card.querySelector('.result-box');
+        if(rb) rb.innerHTML = '';
         
         if (currentGlobalMode === 'blank') {
             const inputField = card.querySelector('.inference-input');
-            inputField.disabled = false;
-            inputField.value = '';
+            if(inputField) { inputField.disabled = false; inputField.value = ''; }
         } else {
             card.querySelectorAll('.option-label').forEach(lbl => {
                 lbl.classList.remove('selected', 'true-answer');
                 lbl.style.pointerEvents = 'auto';
             });
-            card.querySelectorAll('input').forEach(inp => {
-                inp.disabled = false;
-                inp.checked = false;
-            });
+            card.querySelectorAll('input').forEach(inp => { inp.disabled = false; inp.checked = false; });
         }
     }
 
@@ -924,19 +828,7 @@
             [cards[i], cards[j]] = [cards[j], cards[i]];
         }
         currentContainer.innerHTML = '';
-        cards.forEach((card, index) => {
-            card.style.animation = 'none';
-            card.offsetHeight;
-            card.style.animation = `slideUp 0.4s ${index * 0.02}s backwards`;
-            
-            const qNumElement = card.querySelector('.q-number');
-            if (qNumElement) {
-                qNumElement.innerText = `${formatNumber(index + 1)} / ${cards.length}`;
-            }
-            
-            currentContainer.appendChild(card);
-        });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        cards.forEach(card => currentContainer.appendChild(card));
     }
 
     function mixOptions() {
@@ -945,41 +837,40 @@
         currentContainer.querySelectorAll('.card').forEach(card => {
             const grid = card.querySelector('.options-grid');
             const labels = Array.from(grid.querySelectorAll('.option-label'));
-            
             for (let i = labels.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [labels[i], labels[j]] = [labels[j], labels[i]];
             }
-            
             grid.innerHTML = '';
-            const optLetters = ['A', 'B', 'C', 'D'];
-            labels.forEach((lbl, index) => {
-                const spanTag = lbl.querySelector('span b');
-                if(spanTag) {
-                    const exactText = spanTag.innerText.substring(3);
-                    spanTag.innerText = optLetters[index] + '. ' + exactText;
-                }
-                grid.appendChild(lbl);
-            });
+            labels.forEach(lbl => grid.appendChild(lbl));
         });
     }
 
     initSuite();
 
     // =========================================================================
-    // --- نظام البث والمزامنة الجماعي المتزامن التلقائي عبر السيرفر ---
+    // --- محرك الفرض الهيكلي والزمني اللحظي المطور ---
     // =========================================================================
-    const urlParams = new URLSearchParams(window.location.search);
-    const roomName = urlParams.get('room');
-    const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    let urlParams = new URLSearchParams(window.location.search);
+    let roomName = urlParams.get('room');
+
+    if (!roomName) {
+        const randomId = Math.floor(1000 + Math.random() * 9000);
+        roomName = `batu_${randomId}`;
+        urlParams.set('room', roomName);
+        window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
+    }
+
+    const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost:5000'
         ? 'http://127.0.0.1:5000/api' 
         : '/api';
 
     let isSyncingFromServer = false;
+    let lastActiveCardId = "";
 
     if (roomName) {
-        console.log(`%c[SyncEngine] Room Connected: ${roomName}`, "color: #00f2fe; font-weight: bold; font-size: 1.1rem;");
-        setInterval(fetchRoomState, 2000);
+        console.log(`%c[SyncEngine] High Frequency Engine Online. Room: ${roomName}`, "color: #00f2fe; font-weight: bold;");
+        setInterval(fetchRoomState, 300); 
     }
 
     async function fetchRoomState() {
@@ -989,39 +880,60 @@
             if (!response.ok) return;
             const data = await response.json();
             
-            if (data && data.answers) {
+            if (data) {
                 isSyncingFromServer = true;
-                
-                Object.keys(data.answers).forEach(cardId => {
-                    if (!cardId.startsWith(`sheet-${currentSheetIndex}-${currentGlobalMode}-`)) return;
-                    
-                    const card = document.getElementById(cardId);
-                    if (!card) return;
+                let structuralChanged = false;
 
-                    const state = data.answers[cardId];
+                if (data.current_sheet !== undefined && data.current_sheet !== currentSheetIndex) {
+                    switchSheet(data.current_sheet, false);
+                    structuralChanged = true;
+                }
+                if (data.current_mode !== undefined && data.current_mode !== currentGlobalMode) {
+                    globalSwitchMode(data.current_mode, false);
+                    structuralChanged = true;
+                }
 
-                    if (state.selectedIdx !== null && !card.classList.contains('correct') && !card.classList.contains('wrong')) {
-                        if (currentGlobalMode === 'blank') {
-                            const inputField = document.getElementById(`${cardId}-input`);
-                            if (inputField && state.inputValue && inputField.value !== state.inputValue) {
-                                inputField.value = state.inputValue;
-                            }
-                        } else {
-                            const radioInput = card.querySelector(`input[value="${state.selectedIdx}"]`);
-                            if (radioInput && !radioInput.checked) {
-                                card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
-                                radioInput.checked = true;
-                                radioInput.parentElement.classList.add('selected');
+                if (data.answers) {
+                    Object.keys(data.answers).forEach(cardId => {
+                        if (!cardId.startsWith(`sheet-${currentSheetIndex}-${currentGlobalMode}-`)) return;
+                        
+                        const card = document.getElementById(cardId);
+                        if (!card) return;
+
+                        const state = data.answers[cardId];
+
+                        if (state.selectedIdx !== null && !card.classList.contains('correct') && !card.classList.contains('wrong')) {
+                            if (currentGlobalMode === 'blank') {
+                                const inputField = document.getElementById(`${cardId}-input`);
+                                if (inputField && state.inputValue && inputField.value !== state.inputValue) {
+                                    inputField.value = state.inputValue;
+                                }
+                            } else {
+                                selectOption(cardId, state.selectedIdx);
                             }
                         }
-                    }
 
-                    if (state.status === 'correct' && !card.classList.contains('correct')) {
-                        executeRemoteFreeze(card, cardId, true, state.inputValue || "");
-                    } else if (state.status === 'wrong' && !card.classList.contains('wrong')) {
-                        executeRemoteFreeze(card, cardId, false, state.inputValue || "");
-                    }
-                });
+                        if (state.status === 'correct' && !card.classList.contains('correct')) {
+                            executeRemoteFreeze(card, cardId, true, state.inputValue || "");
+                        } else if (state.status === 'wrong' && !card.classList.contains('wrong')) {
+                            executeRemoteFreeze(card, cardId, false, state.inputValue || "");
+                        }
+                    });
+                }
+
+                if (data.active_card_id && (data.active_card_id !== lastActiveCardId || structuralChanged)) {
+                    lastActiveCardId = data.active_card_id;
+                    
+                    document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
+                    
+                    setTimeout(() => {
+                        const targetCard = document.getElementById(data.active_card_id);
+                        if (targetCard) {
+                            targetCard.classList.add('focused-by-peer');
+                            targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }, 200); 
+                }
                 
                 updateProgress();
                 isSyncingFromServer = false;
@@ -1036,17 +948,11 @@
         const resultBox = card.querySelector('.result-box');
         const correctAns = parseInt(card.dataset.correct);
 
-        if(btn) {
-            btn.disabled = true;
-            btn.innerText = currentGlobalMode === 'blank' ? "SKIPPED / REVEALED" : "WEIGHTS FROZEN";
-        }
+        if(btn) { btn.disabled = true; btn.innerText = "WEIGHTS FROZEN"; }
 
         if (currentGlobalMode === 'blank') {
             const inputField = document.getElementById(`${cardId}-input`);
-            if (inputField) {
-                inputField.disabled = true;
-                if (remoteInputValue) inputField.value = remoteInputValue;
-            }
+            if (inputField) { inputField.disabled = true; if (remoteInputValue) inputField.value = remoteInputValue; }
         } else {
             card.querySelectorAll('input').forEach(inp => inp.disabled = true);
             card.querySelectorAll('.option-label').forEach(lbl => {
@@ -1060,33 +966,35 @@
             if(resultBox) resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
         } else {
             card.classList.add('wrong');
-            if(resultBox) resultBox.innerHTML = currentGlobalMode === 'blank' && !remoteInputValue ? `NODE REVEALED` : `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
+            if(resultBox) resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
         }
     }
 
-    async function sendStateToBackend(cardId, selectedIdx, status, inputValue = "") {
+    async function sendStateToBackend(cardId, selectedIdx, status, inputValue = "", extraFields = {}) {
         if (!roomName || isSyncingFromServer) return;
         try {
+            const payload = {
+                room: roomName,
+                cardId: cardId,
+                selectedIdx: selectedIdx,
+                status: status,
+                inputValue: inputValue,
+                ...extraFields
+            };
             await fetch(`${BACKEND_URL}/update`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    room: roomName,
-                    cardId: cardId,
-                    selectedIdx: selectedIdx,
-                    status: status,
-                    inputValue: inputValue
-                })
+                body: JSON.stringify(payload)
             });
         } catch (error) {
-            console.error("[SyncEngine] Broadcast Error:", error);
+            console.error("[SyncEngine] Sync failure:", error);
         }
     }
 
     const originalSelectOption = selectOption;
     selectOption = function(cardId, optionIndex) {
         originalSelectOption(cardId, optionIndex);
-        sendStateToBackend(cardId, optionIndex, 'selected');
+        sendStateToBackend(cardId, optionIndex, 'selected', "", { active_card_id: cardId });
     };
 
     const originalCheckRadioAnswer = checkRadioAnswer;
@@ -1097,7 +1005,7 @@
             if (selectedInput) {
                 const correctAns = parseInt(card.dataset.correct);
                 const isCorrect = parseInt(selectedInput.value) === correctAns;
-                sendStateToBackend(cardId, parseInt(selectedInput.value), isCorrect ? 'correct' : 'wrong');
+                sendStateToBackend(cardId, parseInt(selectedInput.value), isCorrect ? 'correct' : 'wrong', "", { active_card_id: cardId });
             }
         }
         originalCheckRadioAnswer(cardId);
@@ -1110,13 +1018,8 @@
         if (card && inputField) {
             const userValue = inputField.value.trim().toLowerCase();
             const targetValue = card.dataset.correctString;
-            
-            if (userValue === '') {
-                sendStateToBackend(cardId, null, 'wrong', '');
-            } else {
-                const isCorrect = (userValue === targetValue || targetValue.includes(userValue) && userValue.length > 3);
-                sendStateToBackend(cardId, 0, isCorrect ? 'correct' : 'wrong', inputField.value.trim());
-            }
+            const isCorrect = (userValue === targetValue || targetValue.includes(userValue) && userValue.length > 3);
+            sendStateToBackend(cardId, 0, isCorrect ? 'correct' : 'wrong', inputField.value.trim(), { active_card_id: cardId });
         }
         originalCheckBlankAnswer(cardId);
     };
@@ -1125,7 +1028,7 @@
         if (roomName && e.target && e.target.classList.contains('inference-input')) {
             const inputId = e.target.id;
             const cardId = inputId.replace('-input', '');
-            sendStateToBackend(cardId, 0, 'selected', e.target.value);
+            sendStateToBackend(cardId, 0, 'selected', e.target.value, { active_card_id: cardId });
         }
     });
 </script>
