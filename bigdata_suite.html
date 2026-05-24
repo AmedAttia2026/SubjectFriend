@@ -198,6 +198,7 @@
             border: 1px solid var(--glass-border); border-radius: 18px; padding: 25px; margin-bottom: 25px;
             position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+            cursor: pointer;
         }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: all 0.4s; }
         .card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
@@ -297,10 +298,6 @@
 <div class="bg-grid"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
-
-<button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
-</button>
 
 <header id="mainHeader">
     <div class="header-content">
@@ -536,7 +533,12 @@
             card.dataset.index = index;
             card.style.animationDelay = `${index * 0.04}s`;
             
-            card.addEventListener('click', () => {
+            // عند الضغط على الكارت بالماوس: يتم تنشيطه وتمريره لمنتصف الشاشة بشكل ذكي ومحكوم
+            card.addEventListener('click', (e) => {
+                // نمنع التمرير المتكرر إذا كان الضغط تم على الراديو أو الأزرار الداخلية لعدم التشتيت
+                if (e.target.tagName !== 'INPUT' && !e.target.classList.contains('check-btn')) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
                 triggerUserActionBurst();
                 sendStateToBackend(null, null, null, "", { active_card_id: cardId });
             });
@@ -652,14 +654,29 @@
         triggerGroupNextScroll(card);
     }
 
+    // محرك الانتقال والتمرير الذكي: يتحرك فوراً بعد الضغط على Compute Inference بـ 600ms
     function triggerGroupNextScroll(card) {
+        const currentIndex = parseInt(card.dataset.index);
+        const nextIndex = currentIndex + 1;
+        const nextCardId = `sheet-${currentSheetIndex}-${currentGlobalMode}-q-${nextIndex}`;
+        const nextCardExists = document.getElementById(nextCardId);
+        
         if (typeof triggerUserActionBurst === 'function') triggerUserActionBurst();
         
         setTimeout(() => {
-            // تحديث السؤال الحالي فقط على السيرفر لضمان ثبات الصفحة تماماً ومنع القفز
-            sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
-                currentGlobalMode === 'blank' ? document.getElementById(`${card.id}-input`).value.trim() : ""
-            );
+            if (nextCardExists) {
+                // تمرير الشاشة ذكياً وبسلاسة إلى السؤال القادم لأن المستخدم أتم حل السؤال الحالي
+                nextCardExists.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
+                    currentGlobalMode === 'blank' ? document.getElementById(`${card.id}-input`).value.trim() : "", 
+                    { active_card_id: nextCardId }
+                );
+            } else {
+                sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
+                    currentGlobalMode === 'blank' ? document.getElementById(`${card.id}-input`).value.trim() : ""
+                );
+            }
         }, 600); 
     }
 
@@ -823,7 +840,7 @@
                         const t = document.getElementById(data.active_card_id); 
                         if (t) { 
                             t.classList.add('focused-by-peer'); 
-                            // تم إزالة سطر scrollIntoView من هنا نهائياً لمنع أي قفز أو تحرك عشوائي للشاشة
+                            // تم إزالة أمر scrollIntoView التلقائي من هنا تماماً لمنع قفز الشاشة العشوائي الناتج عن التزامن الخلفي
                         } 
                     }, 200);
                 }
