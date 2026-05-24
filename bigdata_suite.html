@@ -861,7 +861,13 @@
                 if (data.active_card_id && (data.active_card_id !== lastActiveCardId || structuralChanged)) {
                     lastActiveCardId = data.active_card_id;
                     document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
-                    setTimeout(() => { const t = document.getElementById(data.active_card_id); if (t) { t.classList.add('focused-by-peer'); t.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }, 200);
+                    setTimeout(() => { 
+                        const t = document.getElementById(data.active_card_id); 
+                        if (t) { 
+                            t.classList.add('focused-by-peer'); 
+                            // تم تعطيل الـ scrollIntoView هنا لمنع تحرك الشاشة تلقائياً نهائياً
+                        } 
+                    }, 200);
                 }
                 updateProgress(); isSyncingFromServer = false;
             }
