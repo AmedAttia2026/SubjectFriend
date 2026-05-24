@@ -164,7 +164,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex: 1; min-width: 150px; justify-content: center;
         }
 
-        .mode-select-card:hover { border-color: rgba(255,255,255,0.15); color: #fff; transform: translateY(-2px); }
+        .mode-select-card:hover { border-color: rgba(255, 255, 255, 0.15); color: #fff; transform: translateY(-2px); }
         .mode-select-card.active-tf { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
         .mode-select-card.active-mcq { color: #db2777; border-color: #db2777; background: rgba(219, 39, 119, 0.12); box-shadow: 0 0 20px rgba(219, 39, 119, 0.15); }
         .mode-select-card.active-blank { color: var(--warning); border-color: var(--warning); background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
@@ -198,10 +198,9 @@
             border: 1px solid var(--glass-border); border-radius: 18px; padding: 25px; margin-bottom: 25px;
             position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
-            cursor: pointer;
         }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: all 0.4s; }
-        .card:hover { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
         
         .card.focused-by-peer {
             border-color: var(--primary) !important;
@@ -467,6 +466,10 @@
     let currentGlobalMode = 'tf'; 
     let lastScrollTop = 0;
 
+    // متقفي الرندرة الحالية لضمان عدم تجميد المتصفح
+    let lastRenderedSheet = null;
+    let lastRenderedMode = null;
+
     function formatNumber(num) {
         return num < 10 ? '0' + num : num;
     }
@@ -510,15 +513,25 @@
     }
 
     function renderCurrentView() {
+        // حماية هامة جداً: نمنع إعادة رندرة عناصر الدوم وتدميرها إن كان الرندر الحالي متطابقاً بالفعل
+        const needsRender = (currentSheetIndex !== lastRenderedSheet || currentGlobalMode !== lastRenderedMode);
+
         assignmentsConfig.forEach(sheet => {
             const container = document.getElementById(`sheet-${sheet.id}`);
             if (sheet.id === currentSheetIndex) {
-                const targetData = (currentGlobalMode === 'mcq') ? sheet.mcq : sheet.tf; 
-                renderBlock(container, sheet.id, targetData);
+                if (needsRender || container.innerHTML === "") {
+                    const targetData = (currentGlobalMode === 'mcq') ? sheet.mcq : sheet.tf; 
+                    renderBlock(container, sheet.id, targetData);
+                }
             } else {
                 container.innerHTML = ''; 
             }
         });
+
+        if (needsRender) {
+            lastRenderedSheet = currentSheetIndex;
+            lastRenderedMode = currentGlobalMode;
+        }
         updateProgress();
     }
 
@@ -533,12 +546,7 @@
             card.dataset.index = index;
             card.style.animationDelay = `${index * 0.04}s`;
             
-            // الضغط على الكارت نفسه يدويًا هو فقط ما يحركه لمنتصف الشاشة
-            card.addEventListener('click', (e) => {
-                // إذا كان الضغط على خيار أو مدخل أو زرار النتيجة، لا تحرك الشاشة مطلقًا لمنع القفز المفاجئ
-                if (e.target.tagName !== 'INPUT' && !e.target.closest('.option-label') && !e.target.classList.contains('check-btn')) {
-                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+            card.addEventListener('click', () => {
                 triggerUserActionBurst();
                 sendStateToBackend(null, null, null, "", { active_card_id: cardId });
             });
@@ -654,7 +662,6 @@
         triggerGroupNextScroll(card);
     }
 
-    // الانتقال الذكي جداً والمثالي: يحدث فقط بعد ضغط زر حساب النتيجة وإظهارها للمستخدم بـ 600ms
     function triggerGroupNextScroll(card) {
         const currentIndex = parseInt(card.dataset.index);
         const nextIndex = currentIndex + 1;
@@ -665,8 +672,6 @@
         
         setTimeout(() => {
             if (nextCardExists) {
-                nextCardExists.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                
                 sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
                     currentGlobalMode === 'blank' ? document.getElementById(`${card.id}-input`).value.trim() : "", 
                     { active_card_id: nextCardId }
@@ -705,6 +710,7 @@
         document.getElementById('score-board').classList.remove('active');
         updateProgress();
         triggerUserActionBurst();
+        lastSentState.activeCardId = `sheet-${currentSheetIndex}-${currentGlobalMode}-q-0`;
         sendStateToBackend(null, null, null, "", { active_card_id: `sheet-${currentSheetIndex}-${currentGlobalMode}-q-0` });
     }
 
@@ -774,39 +780,75 @@
     let roomName = urlParams.get('room');
     const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost:5000' ? 'http://127.0.0.1:5000/api' : '/api';
 
-    let isSyncingFromServer = false, lastActiveCardId = "", currentIntervalDelay = 2000, syncIntervalId = null, burstCountdown = 0;
+    // معرف فريد للمتصفح الحالي لتفادي تداخل العمليات والمزامنة المتكررة لنفس المستخدم
+    const myClientId = 'client-' + Math.random().toString(36).substring(2, 9);
+    
+    // متتبع آخر حالة مرسلة محلياً لعدم إثارة حركة المزامنة مع الذات
+    let lastSentState = {
+        sheet: null,
+        mode: null,
+        activeCardId: null
+    };
+
+    let isSyncingFromServer = false, lastActiveCardId = "", currentIntervalDelay = 2500, syncIntervalId = null, burstCountdown = 0;
     let localVoicePeerId = "";
 
     function startAdaptiveSyncLoop() {
         if (syncIntervalId) clearInterval(syncIntervalId);
         syncIntervalId = setInterval(async () => {
             await fetchRoomState();
-            if (burstCountdown > 0) { burstCountdown--; if (burstCountdown === 0) { currentIntervalDelay = 2000; startAdaptiveSyncLoop(); } }
+            if (burstCountdown > 0) { 
+                burstCountdown--; 
+                if (burstCountdown === 0) { 
+                    currentIntervalDelay = 2500; 
+                    startAdaptiveSyncLoop(); 
+                } 
+            }
         }, currentIntervalDelay);
     }
 
+    // تقليل معدل الاستنزاف عند حدوث فعل تفاعلي لتفادي حظر الشبكة
     function triggerUserActionBurst() {
-        burstCountdown = 15;
-        if (currentIntervalDelay !== 300) { currentIntervalDelay = 300; startAdaptiveSyncLoop(); }
+        burstCountdown = 10;
+        if (currentIntervalDelay !== 800) { 
+            currentIntervalDelay = 800; 
+            startAdaptiveSyncLoop(); 
+        }
+    }
+
+    // دالة محدد المهل والحد من التكرار عند الكتابة (Debounce) لتقليص الضغط عند إدخال النص
+    function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
     }
 
     async function fetchRoomState() {
         if (!roomName || isSyncingFromServer) return;
         try {
+            isSyncingFromServer = true;
             const url = `${BACKEND_URL}/state?room=${roomName}&peer_id=${localVoicePeerId}`;
             const response = await fetch(url);
-            if (!response.ok) return;
+            if (!response.ok) { isSyncingFromServer = false; return; }
             const data = await response.json();
             if (data) {
-                isSyncingFromServer = true;
                 let structuralChanged = false;
 
-                if (data.current_sheet !== undefined && data.current_sheet !== currentSheetIndex) { switchSheet(data.current_sheet); structuralChanged = true; }
-                if (data.current_mode !== undefined && data.current_mode !== currentGlobalMode) { globalSwitchMode(data.current_mode); structuralChanged = true; }
+                if (data.current_sheet !== undefined && data.current_sheet !== currentSheetIndex) { 
+                    switchSheet(data.current_sheet); 
+                    structuralChanged = true; 
+                }
+                if (data.current_mode !== undefined && data.current_mode !== currentGlobalMode) { 
+                    globalSwitchMode(data.current_mode); 
+                    structuralChanged = true; 
+                }
 
                 const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
                 if (currentContainer && currentContainer.innerHTML === "") {
                     structuralChanged = true;
+                    renderCurrentView();
                 }
 
                 if (data.answers) {
@@ -814,10 +856,16 @@
                         if (!cardId.startsWith(`sheet-${currentSheetIndex}-${currentGlobalMode}-`)) return;
                         const card = document.getElementById(cardId); if (!card) return;
                         const state = data.answers[cardId];
+                        const isFrozen = card.classList.contains('correct') || card.classList.contains('wrong');
 
-                        if (state.selectedIdx !== null && !card.classList.contains('correct') && !card.classList.contains('wrong')) {
-                            if (currentGlobalMode === 'blank') { const i = document.getElementById(`${cardId}-input`); if (i && state.inputValue) i.value = state.inputValue; }
-                            else {
+                        if (!isFrozen && state.selectedIdx !== null) {
+                            if (currentGlobalMode === 'blank') { 
+                                const i = document.getElementById(`${cardId}-input`); 
+                                // نمنع الكتابة التلقائية وتحديث النص إن كان هذا المستخدم يركز في الحقل ويكتب حالياً
+                                if (i && state.inputValue !== undefined && document.activeElement !== i) {
+                                    i.value = state.inputValue; 
+                                }
+                            } else {
                                 card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
                                 const targetInp = card.querySelector(`input[value="${state.selectedIdx}"]`);
                                 if(targetInp) { targetInp.checked = true; targetInp.parentElement.classList.add('selected'); }
@@ -835,15 +883,21 @@
                 if (data.active_card_id && (data.active_card_id !== lastActiveCardId || structuralChanged)) {
                     lastActiveCardId = data.active_card_id;
                     document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
-                    setTimeout(() => { 
-                        const t = document.getElementById(data.active_card_id); 
-                        if (t) { 
-                            t.classList.add('focused-by-peer'); 
-                        } 
-                    }, 200);
+                    
+                    const t = document.getElementById(data.active_card_id); 
+                    if (t) { 
+                        t.classList.add('focused-by-peer'); 
+                        // الميزة الذكية: نمنع تحريك الكاميرا والشاشة قسرياً إن كان هذا التحديث ناجم عن فعل المستخدم ذاته
+                        if (data.active_card_id !== lastSentState.activeCardId) {
+                            setTimeout(() => { 
+                                t.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+                            }, 100);
+                        }
+                    } 
                 }
-                updateProgress(); isSyncingFromServer = false;
+                updateProgress();
             }
+            isSyncingFromServer = false;
         } catch (error) { isSyncingFromServer = false; }
     }
 
@@ -855,11 +909,26 @@
     }
 
     async function sendStateToBackend(cardId, selectedIdx, status, inputValue = "", extraFields = {}) {
-        if (!roomName || isSyncingFromServer) return;
+        if (!roomName) return;
+
+        // تسجيل البيانات محلياً قبل إرسالها لتفادي تعارض الكاميرا
+        if (cardId) lastSentState.activeCardId = cardId;
+        if (extraFields.active_card_id) lastSentState.activeCardId = extraFields.active_card_id;
+        if (extraFields.current_sheet !== undefined) lastSentState.sheet = extraFields.current_sheet;
+        if (extraFields.current_mode !== undefined) lastSentState.mode = extraFields.current_mode;
+
         try {
             await fetch(`${BACKEND_URL}/update`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ room: roomName, cardId: cardId, selectedIdx: selectedIdx, status: status, inputValue: inputValue, ...extraFields })
+                body: JSON.stringify({ 
+                    room: roomName, 
+                    cardId: cardId, 
+                    selectedIdx: selectedIdx, 
+                    status: status, 
+                    inputValue: inputValue, 
+                    senderId: myClientId, 
+                    ...extraFields 
+                })
             });
         } catch (error) {}
     }
@@ -871,12 +940,17 @@
         sendStateToBackend(cardId, optionIndex, 'selected', "", { active_card_id: cardId });
     };
 
+    // حماية الإدخال النصي مع تفعيل تأخير الإرسال لمنع تراكم الطلبات (Debounce)
+    const debouncedSendInput = debounce((cardId, value) => {
+        sendStateToBackend(cardId, 0, 'selected', value, { active_card_id: cardId });
+    }, 400);
+
     document.addEventListener('input', function(e) {
         if (roomName && e.target && e.target.classList.contains('inference-input')) {
             const inputId = e.target.id;
             const cardId = inputId.replace('-input', '');
             triggerUserActionBurst();
-            sendStateToBackend(cardId, 0, 'selected', e.target.value, { active_card_id: cardId });
+            debouncedSendInput(cardId, e.target.value);
         }
     });
 
@@ -908,6 +982,10 @@
                     call.on('stream', (remoteStream) => {
                         handleRemoteAudioPlayback(call.peer, remoteStream);
                     });
+                });
+
+                peerInstance.on('error', (err) => {
+                    console.error("[VoiceEngine] PeerJS Connection Error:", err);
                 });
             })
             .catch(err => {
