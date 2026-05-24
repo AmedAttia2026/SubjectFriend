@@ -164,7 +164,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex: 1; min-width: 150px; justify-content: center;
         }
 
-        .mode-select-card:hover { border-color: rgba(255, 255, 255, 0.15); color: #fff; transform: translateY(-2px); }
+        .mode-select-card:hover { border-color: rgba(255,255,255,0.15); color: #fff; transform: translateY(-2px); }
         .mode-select-card.active-tf { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
         .mode-select-card.active-mcq { color: #db2777; border-color: #db2777; background: rgba(219, 39, 119, 0.12); box-shadow: 0 0 20px rgba(219, 39, 119, 0.15); }
         .mode-select-card.active-blank { color: var(--warning); border-color: var(--warning); background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
@@ -297,6 +297,10 @@
 <div class="bg-grid"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
+
+<button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
 
 <header id="mainHeader">
     <div class="header-content">
@@ -826,14 +830,7 @@
                 if (data.active_card_id && (data.active_card_id !== lastActiveCardId || structuralChanged)) {
                     lastActiveCardId = data.active_card_id;
                     document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
-                    setTimeout(() => { 
-                        const t = document.getElementById(data.active_card_id); 
-                        if (t) { 
-                            t.classList.add('focused-by-peer'); 
-                            // التمرير التلقائي الفوري والانسيابي إلى منتصف الشاشة مع المستخدم
-                            t.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
-                        } 
-                    }, 200);
+                    setTimeout(() => { const t = document.getElementById(data.active_card_id); if (t) { t.classList.add('focused-by-peer'); t.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }, 200);
                 }
                 updateProgress(); isSyncingFromServer = false;
             }
