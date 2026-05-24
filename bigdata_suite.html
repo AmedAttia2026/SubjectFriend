@@ -38,7 +38,7 @@
             min-height: 100vh;
             overflow-x: hidden;
             scroll-behavior: smooth;
-            padding-top: 185px; 
+            padding-top: 195px; 
             padding-bottom: 60px;
         }
 
@@ -59,16 +59,18 @@
         .orb-1 { width: 400px; height: 400px; background: var(--accent); top: -15%; left: -10%; }
         .orb-2 { width: 500px; height: 500px; background: var(--primary); bottom: -15%; right: -10%; animation-delay: -12s; }
 
+        /* --- بنية الهيدر المتطور الهجين الجديد --- */
         header {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
             background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border-bottom: 1px solid var(--glass-border); box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .header-content {
             max-width: 1100px; margin: 0 auto; padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center; gap: 15px;
+            transition: padding 0.3s ease;
         }
 
         .brand-title {
@@ -76,6 +78,7 @@
             background: linear-gradient(to right, var(--primary), var(--accent));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             display: flex; align-items: center; gap: 8px; cursor: pointer;
+            transition: transform 0.3s;
         }
 
         .header-badges-group { display: flex; align-items: center; gap: 10px; }
@@ -84,6 +87,7 @@
             display: flex; align-items: center; gap: 8px;
             background: var(--glass-bg); border: 1px solid var(--glass-border);
             padding: 8px 16px; border-radius: 12px; font-weight: 800; font-size: 0.9rem;
+            transition: all 0.3s ease;
         }
         .stats-badge span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
 
@@ -102,6 +106,8 @@
         .controls-header-row {
             background: rgba(10, 15, 30, 0.5); border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             padding: 8px 20px; display: flex; justify-content: center; gap: 12px;
+            max-height: 100px; opacity: 1; overflow: hidden;
+            transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease;
         }
 
         .action-btn {
@@ -117,6 +123,7 @@
         .sheet-navigator {
             background: rgba(15, 23, 42, 0.3); border-bottom: 1px solid var(--glass-border);
             display: flex; justify-content: center; overflow-x: auto; scrollbar-width: none;
+            max-height: 100px; opacity: 1; transition: max-height 0.35s ease, opacity 0.3s ease;
         }
 
         .tab-btn {
@@ -135,6 +142,24 @@
         .progress-container { width: 100%; height: 3px; background: rgba(255,255,255,0.03); position: relative; }
         .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--primary)); transition: width 0.5s ease; box-shadow: 0 0 15px var(--primary-glow); }
 
+        /* --- فئات تجميد وتقليص الهيدر أثناء النزول --- */
+        header.minimized-cradle .controls-header-row,
+        header.minimized-cradle .sheet-navigator {
+            max-height: 0 !important;
+            padding: 0 !important;
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+        header.minimized-cradle .header-content {
+            padding: 6px 20px !important;
+        }
+        header.minimized-cradle .brand-title {
+            transform: scale(0.9);
+        }
+        header.minimized-cradle .stats-badge {
+            opacity: 0; pointer-events: none; width: 0; padding: 0; margin: 0; border: none; overflow: hidden;
+        }
+
         .mode-selection-deck {
             display: flex; justify-content: center; gap: 12px; margin: 25px auto 25px;
             max-width: 900px; padding: 0 15px; flex-wrap: wrap;
@@ -145,7 +170,7 @@
             padding: 14px 24px; border-radius: 14px; cursor: pointer;
             font-size: 0.95rem; font-weight: 800; color: var(--text-option);
             letter-spacing: 0.5px; text-transform: uppercase;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex: 1; min-width: 150px; justify-content: center;
         }
         .mode-select-card.active-tf { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
@@ -257,10 +282,6 @@
 <div class="bg-grid"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
-
-<button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
-</button>
 
 <header id="mainHeader">
     <div class="header-content">
@@ -609,7 +630,7 @@
         const nextCardId = `sheet-${currentSheetIndex}-${currentGlobalMode}-q-${nextIndex}`;
         const nextCardExists = document.getElementById(nextCardId);
         
-        triggerUserActionBurst();
+        if (typeof triggerUserActionBurst === 'function') triggerUserActionBurst();
         
         setTimeout(() => {
             if (nextCardExists) {
@@ -798,9 +819,17 @@
     async function sendStateToBackend(cardId, selectedIdx, status, inputValue = "", extraFields = {}) {
         if (!roomName || isSyncingFromServer) return;
         try {
+            const payload = {
+                room: roomName,
+                cardId: cardId,
+                selectedIdx: selectedIdx,
+                status: status,
+                inputValue: inputValue,
+                ...extraFields
+            };
             await fetch(`${BACKEND_URL}/update`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ room: roomName, cardId: cardId, selectedIdx: selectedIdx, status: status, inputValue: inputValue, ...extraFields })
+                body: JSON.stringify(payload)
             });
         } catch (error) {}
     }
@@ -830,19 +859,11 @@
 
     function initializeVoiceEngine() {
         const btn = document.getElementById('micToggleBtn');
-        
-        // إعداد فلاتر الصوت لمنع الصدى والتغذية العكسية (Echo Cancellation)
-        const audioConstraints = {
-            echoCancellation: true,
-            noiseSuppression: true,
-            backgroundBlur: true
-        };
+        const audioConstraints = { echoCancellation: true, noiseSuppression: true, backgroundBlur: true };
 
         navigator.mediaDevices.getUserMedia({ audio: audioConstraints, video: false })
             .then(stream => {
                 localAudioStream = stream;
-                
-                // توليد ID عشوائي فريد لكل متصفح وطالب يدخل الغرفة
                 localVoicePeerId = `voice-${roomName}-${Math.floor(10000 + Math.random() * 90000)}`;
                 peerInstance = new Peer(localVoicePeerId, { debug: 1 });
 
@@ -850,12 +871,9 @@
                     console.log(`[VoiceEngine] Active. My Voice Peer ID: ${id}`);
                     btn.classList.add('active-streaming');
                     btn.innerText = "🎙️ MIC ACTIVE (LIVE)";
-                    
-                    // تشغيل حلقة استقبال ومزامنة الأسئلة بعد التأكد من ربط محرك الصوت
                     if (roomName) startAdaptiveSyncLoop();
                 });
 
-                // استقبال المكالمات الصوتية تلقائياً من الأطراف الأخرى وتمرير الصوت
                 peerInstance.on('call', (call) => {
                     call.answer(localAudioStream);
                     call.on('stream', (remoteStream) => {
@@ -868,18 +886,14 @@
                 console.error("[VoiceEngine] Microphone access denied:", err);
                 btn.style.background = "var(--danger)";
                 btn.innerText = "⚠️ MIC BLOCKED (GRANT PERMISSION)";
-                // تشغيل مزامنة الحركات والأسئلة حتى لو المايك معطل
                 if (roomName) startAdaptiveSyncLoop();
             });
     }
 
-    // هندسة شبكة الربط الصوتي التلقائي الكامل (Mesh Network Base Routing)
     function handleAudioMeshSignaling(serverPeersList) {
         serverPeersList.forEach(remotePeerId => {
-            // الاتصال القسري ثنائي الاتجاه: إذا لم يكن جهازي، ولم أتصل به مسبقاً
             if (remotePeerId !== localVoicePeerId && !activeCallsList[remotePeerId]) {
                 console.log(`[VoiceEngine] Building audio link channel to: ${remotePeerId}`);
-                
                 const call = peerInstance.call(remotePeerId, localAudioStream);
                 if (call) {
                     call.on('stream', (remoteStream) => {
@@ -894,7 +908,6 @@
     function handleRemoteAudioPlayback(peerId, remoteStream) {
         let audioNode = document.getElementById(`audio_${peerId}`);
         if (audioNode) return;
-        
         audioNode = document.createElement('audio');
         audioNode.id = `audio_${peerId}`;
         audioNode.srcObject = remoteStream;
@@ -923,7 +936,21 @@
         }
     }
 
-    // إطلاق محركات التشغيل المبدئية بالترتيب الصحيح الحاسم
+    // --- نظام المراقبة الديناميكي لتقليص وإخفاء الـ NAV وأزرار التحكم عدا المايك عند السكرول ---
+    window.addEventListener('scroll', () => {
+        const headerElement = document.getElementById('mainHeader');
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (currentScroll > lastScrollTop && currentScroll > 120) {
+            // تفعيل فئة التقليص لإخفاء العناصر وتقليص الحجم عدا زر الصوت والبراند
+            headerElement.classList.add('minimized-cradle');
+        } else if (currentScroll < lastScrollTop) {
+            // إرجاع الحجم الأصلي وإظهار الـ NAV فوراً عند الرفع للأعلى
+            headerElement.classList.remove('minimized-cradle');
+        }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    });
+
     initializeVoiceEngine();
     initSuite();
 </script>
