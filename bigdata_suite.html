@@ -845,6 +845,13 @@
         
         setTimeout(() => {
             if (nextCardExists) {
+                // ميزة التمرير التلقائي الفوري للمستخدم الحالي محلياً لتسريع الاستجابة
+                nextCardExists.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // تظليل الكارد النشط الحالي فوراً لتنبيهه بالانتقال
+                document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
+                nextCardExists.classList.add('focused-by-peer');
+
                 sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
                     currentGlobalMode === 'blank' ? document.getElementById(`${card.id}-input`).value.trim() : "", 
                     { active_card_id: nextCardId }
@@ -1012,11 +1019,11 @@
 
                 // لا نقوم بتحديث الملاحة أو الصفحات قسرياً إن كان هناك كولداون نشط على نفس الجهاز منعاً للتعارض
                 if (!isCooldownActive) {
-                    if (data.current_sheet !== undefined && data.current_sheet !== currentSheetIndex) { 
+                    if (data.current_sheet !== undefined && data.current_sheet !== null && data.current_sheet !== currentSheetIndex) { 
                         switchSheet(data.current_sheet); 
                         structuralChanged = true; 
                     }
-                    if (data.current_mode !== undefined && data.current_mode !== currentGlobalMode) { 
+                    if (data.current_mode !== undefined && data.current_mode !== null && data.current_mode !== currentGlobalMode) { 
                         globalSwitchMode(data.current_mode); 
                         structuralChanged = true; 
                     }
@@ -1103,6 +1110,9 @@
                     status: status, 
                     inputValue: inputValue, 
                     senderId: myClientId, 
+                    // نرسل دائماً رقم الصفحة الحالية والنمط الحالي مع كل طلب تعديل تجنباً لمسحها في قاعدة البيانات!
+                    current_sheet: currentSheetIndex,
+                    current_mode: currentGlobalMode,
                     ...extraFields 
                 })
             });
