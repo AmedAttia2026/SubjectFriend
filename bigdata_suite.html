@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Big Data & Analytics Workspace - Fullscreen Optimization</title>
+    <title>Big Data & Analytics Workspace - Premium Edition</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800;900&family=Cairo:wght@400;700;900&display=swap');
 
         :root {
             --bg-dark: #020617;
-            --glass-bg: rgba(15, 23, 42, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.06);
+            --glass-bg: rgba(15, 23, 42, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --primary: #a855f7;
-            --primary-dim: rgba(168, 85, 247, 0.12);
-            --primary-glow: rgba(168, 85, 247, 0.5);
+            --primary-dim: rgba(168, 85, 247, 0.15);
+            --primary-glow: rgba(168, 85, 247, 0.6);
             --accent: #ec4899;
-            --accent-dim: rgba(236, 72, 153, 0.12);
-            --accent-glow: rgba(236, 72, 153, 0.5);
+            --accent-dim: rgba(236, 72, 153, 0.15);
+            --accent-glow: rgba(236, 72, 153, 0.6);
             --success: #10b981;
-            --success-dim: rgba(16, 185, 129, 0.15);
-            --success-glow: rgba(16, 185, 129, 0.5);
+            --success-dim: rgba(16, 185, 129, 0.2);
+            --success-glow: rgba(16, 185, 129, 0.6);
             --danger: #f43f5e;
-            --danger-dim: rgba(244, 63, 94, 0.15);
-            --danger-glow: rgba(244, 63, 94, 0.5);
+            --danger-dim: rgba(244, 63, 94, 0.2);
+            --danger-glow: rgba(244, 63, 94, 0.6);
             --warning: #f59e0b;
             --text-main: #f8fafc;
             --text-option: #cbd5e1;
@@ -37,83 +37,84 @@
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
-            scroll-behavior: smooth;
-            padding-top: 210px; 
+            padding-top: 220px; /* الحفاظ على مسافة ثابتة للهيدر لمنع اهتزاز المحتوى */
             padding-bottom: 60px;
         }
 
+        /* خلفية شبكية ديناميكية */
         .bg-grid {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
             background-image: 
                 linear-gradient(to right, rgba(255,255,255,0.01) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(255,255,255,0.01) 1px, transparent 1px);
-            background-size: 50px 50px;
-            mask-image: radial-gradient(circle at center, black, transparent 85%);
-            -webkit-mask-image: radial-gradient(circle at center, black, transparent 85%);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at center, black, transparent 90%);
+            -webkit-mask-image: radial-gradient(circle at center, black, transparent 90%);
         }
 
         .orb {
-            position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1; opacity: 0.25;
-            animation: float 25s infinite alternate ease-in-out;
+            position: fixed; border-radius: 50%; filter: blur(120px); z-index: -1; opacity: 0.2;
+            animation: float 20s infinite alternate ease-in-out;
         }
-        .orb-1 { width: 400px; height: 400px; background: var(--accent); top: -15%; left: -10%; }
-        .orb-2 { width: 500px; height: 500px; background: var(--primary); bottom: -15%; right: -10%; animation-delay: -12s; }
+        .orb-1 { width: 500px; height: 500px; background: var(--accent); top: -10%; left: -10%; }
+        .orb-2 { width: 600px; height: 600px; background: var(--primary); bottom: -10%; right: -10%; animation-delay: -10s; }
 
-        @keyframes float {
-            0% { transform: translateY(0px) scale(1); }
-            100% { transform: translateY(30px) scale(1.1); }
-        }
+        @keyframes float { 0% { transform: translateY(0px) scale(1); } 100% { transform: translateY(40px) scale(1.1); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 5px var(--success-glow); } 100% { box-shadow: 0 0 15px var(--success); } }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-6px); }
-            75% { transform: translateX(6px); }
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* --- بنية الهيدر المتطور الهجين الجديد --- */
+        /* --- تصميم الـ NAV والهيدر المتطور بالاختفاء الديناميكي السلس --- */
         header {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
-            background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border-bottom: 1px solid var(--glass-border); box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(3, 7, 26, 0.94); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border-bottom: 1px solid var(--glass-border); box-shadow: 0 15px 50px rgba(0,0,0,0.8);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* حركة اختفاء وظهور انسيابية */
+        }
+
+        /* فئة الاختفاء عند النزول لأسفل */
+        header.nav-hidden {
+            transform: translateY(-100%);
         }
 
         .header-content {
-            max-width: 1100px; margin: 0 auto; padding: 12px 20px;
+            max-width: 1200px; margin: 0 auto; padding: 14px 20px;
             display: flex; justify-content: space-between; align-items: center; gap: 15px;
-            transition: all 0.4s ease;
         }
 
         .brand-title {
-            font-size: 1.1rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+            font-size: 1.15rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
             background: linear-gradient(to right, var(--primary), var(--accent));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            display: flex; align-items: center; gap: 8px; cursor: pointer;
-            transition: transform 0.3s, opacity 0.3s;
+            display: flex; align-items: center; gap: 10px; cursor: pointer;
         }
 
-        .header-badges-group { display: flex; align-items: center; gap: 10px; transition: all 0.4s ease; }
+        .header-badges-group { display: flex; align-items: center; gap: 12px; }
+
+        /* لوحة المستخدمين النشطين داخل الغرفة */
+        .users-online-badge {
+            display: flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success); padding: 8px 14px; border-radius: 12px;
+            font-size: 0.85rem; font-weight: 800; color: var(--success);
+        }
+        .users-online-badge .pulse-dot {
+            width: 8px; height: 8px; background-color: var(--success); border-radius: 50%;
+            animation: pulseGlow 1s infinite alternate;
+        }
 
         .stats-badge {
             display: flex; align-items: center; gap: 8px;
             background: var(--glass-bg); border: 1px solid var(--glass-border);
             padding: 8px 16px; border-radius: 12px; font-weight: 800; font-size: 0.9rem;
-            transition: all 0.3s ease;
         }
         .stats-badge span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
 
         .voice-mic-btn {
             background: var(--danger-dim); border: 1px solid var(--danger);
-            color: var(--danger); padding: 8px 14px; border-radius: 12px;
+            color: var(--danger); padding: 8px 16px; border-radius: 12px;
             font-weight: 800; font-size: 0.85rem; cursor: pointer;
             display: flex; align-items: center; gap: 6px; transition: all 0.3s;
             text-shadow: 0 0 5px var(--danger-glow);
-            z-index: 110;
         }
         .voice-mic-btn.active-streaming {
             background: var(--success-dim); border-color: var(--success);
@@ -121,135 +122,102 @@
         }
 
         .controls-header-row {
-            background: rgba(10, 15, 30, 0.5); border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            padding: 8px 20px; display: flex; justify-content: center; gap: 12px;
-            max-height: 100px; opacity: 1; overflow: hidden;
-            transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease;
+            background: rgba(8, 12, 36, 0.6); border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 10px 20px; display: flex; justify-content: center; gap: 15px;
         }
 
         .action-btn {
             background: var(--glass-bg); color: var(--text-main); border: 1px solid var(--glass-border);
-            padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.75rem;
+            padding: 8px 18px; border-radius: 20px; font-weight: 800; font-size: 0.8rem;
             cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 6px;
             letter-spacing: 0.5px; white-space: nowrap; text-transform: uppercase;
         }
-        .action-btn.mix { border-color: rgba(168, 85, 247, 0.4); color: var(--primary); }
+        .action-btn.mix { border-color: rgba(168, 85, 247, 0.5); color: var(--primary); }
         .action-btn.mix:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-glow); }
-        .action-btn.opt-mix { border-color: rgba(236, 72, 153, 0.4); color: var(--accent); }
+        .action-btn.opt-mix { border-color: rgba(236, 72, 153, 0.5); color: var(--accent); }
         .action-btn.opt-mix:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
         .action-btn.retry { background: linear-gradient(135deg, var(--warning), #d97706); color: #000; font-weight: 900; border: none; }
 
         .sheet-navigator {
-            background: rgba(15, 23, 42, 0.3); border-bottom: 1px solid var(--glass-border);
+            background: rgba(10, 16, 36, 0.4); border-bottom: 1px solid var(--glass-border);
             display: flex; justify-content: center; overflow-x: auto; scrollbar-width: none;
-            max-height: 100px; opacity: 1; transition: max-height 0.35s ease, opacity 0.3s ease;
         }
 
         .tab-btn {
             background: transparent; color: var(--text-muted); border: none;
-            padding: 14px 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 1.5px;
+            padding: 15px 24px; font-weight: 800; font-size: 0.85rem; letter-spacing: 1.5px;
             cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
             position: relative; white-space: nowrap;
         }
         .tab-btn:hover { color: var(--text-main); }
-        .tab-btn.active { color: var(--primary); }
+        .tab-btn.active { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
         .tab-btn.active::after {
             content: ''; position: absolute; bottom: 0; left: 15%; width: 70%; height: 3px;
-            background: var(--primary); border-radius: 3px 3px 0 0; box-shadow: 0 0 10px var(--primary-glow);
+            background: var(--primary); border-radius: 3px 3px 0 0; box-shadow: 0 0 15px var(--primary);
         }
 
-        .progress-container { width: 100%; height: 3px; background: rgba(255,255,255,0.03); position: relative; }
-        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--primary)); transition: width 0.5s ease; box-shadow: 0 0 15px var(--primary-glow); }
-
-        /* --- فئات تجميد وتقليص الهيدر أثناء النزول (يختفي كل شيء ويبان المايك فقط) --- */
-        header.minimized-cradle {
-            background: rgba(2, 6, 23, 0.3);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid transparent;
-            box-shadow: none;
-        }
-        header.minimized-cradle .controls-header-row,
-        header.minimized-cradle .sheet-navigator,
-        header.minimized-cradle .progress-container {
-            max-height: 0 !important;
-            padding: 0 !important;
-            opacity: 0 !important;
-            pointer-events: none;
-        }
-        header.minimized-cradle .header-content {
-            padding: 8px 20px !important;
-        }
-        header.minimized-cradle .brand-title {
-            opacity: 0; pointer-events: none; transform: scale(0.8);
-        }
-        header.minimized-cradle .stats-badge {
-            opacity: 0; pointer-events: none; width: 0; padding: 0; margin: 0; border: none; overflow: hidden;
-        }
-        header.minimized-cradle .header-badges-group {
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-        }
+        .progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.02); position: relative; }
+        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--primary)); transition: width 0.4s ease; box-shadow: 0 0 15px var(--primary-glow); }
 
         .mode-selection-deck {
-            display: flex; justify-content: center; gap: 12px; margin: 25px auto 25px;
+            display: flex; justify-content: center; gap: 14px; margin: 30px auto 25px;
             max-width: 900px; padding: 0 15px; flex-wrap: wrap;
         }
 
         .mode-select-card {
             background: var(--glass-bg); border: 1px solid var(--glass-border);
-            padding: 14px 24px; border-radius: 14px; cursor: pointer;
+            padding: 16px 28px; border-radius: 16px; cursor: pointer;
             font-size: 0.95rem; font-weight: 800; color: var(--text-option);
             letter-spacing: 0.5px; text-transform: uppercase;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex: 1; min-width: 150px; justify-content: center;
+            display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); flex: 1; min-width: 160px; justify-content: center;
         }
-        .mode-select-card.active-tf { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
-        .mode-select-card.active-mcq { color: #db2777; border-color: #db2777; background: rgba(219, 39, 119, 0.12); box-shadow: 0 0 20px rgba(219, 39, 119, 0.15); }
-        .mode-select-card.active-blank { color: var(--warning); border-color: var(--warning); background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
+        .mode-select-card.active-tf { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); box-shadow: 0 0 25px rgba(168, 85, 247, 0.25); }
+        .mode-select-card.active-mcq { color: #db2777; border-color: #db2777; background: rgba(219, 39, 119, 0.15); box-shadow: 0 0 25px rgba(219, 39, 119, 0.25); }
+        .mode-select-card.active-blank { color: var(--warning); border-color: var(--warning); background: rgba(245, 158, 11, 0.15); box-shadow: 0 0 25px rgba(245, 158, 11, 0.25); }
 
         .container { max-width: 850px; margin: 15px auto 40px; padding: 0 15px; }
         .assignment-sheet { display: none; }
         .assignment-sheet.active { display: block; }
 
         .card {
-            background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border); border-radius: 18px; padding: 25px; margin-bottom: 25px;
+            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 20px; padding: 28px; margin-bottom: 25px;
             position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
         }
-        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: all 0.4s; }
-        .card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: transparent; transition: all 0.4s; }
+        .card:hover { border-color: rgba(255, 255, 255, 0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
         
         .card.focused-by-peer {
-            border-color: var(--primary) !important; box-shadow: 0 0 35px var(--primary-glow) !important;
-            background: rgba(168, 85, 247, 0.04) !important;
+            border-color: var(--primary) !important; box-shadow: 0 0 40px var(--primary-glow) !important;
+            background: rgba(168, 85, 247, 0.06) !important;
         }
 
-        .question-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+        .question-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 22px; }
         .q-number {
-            background: var(--primary-dim); border: 1px solid rgba(168, 85, 247, 0.2); color: var(--primary);
-            font-size: 0.8rem; font-weight: 900; padding: 4px 8px; border-radius: 6px; flex-shrink: 0;
+            background: var(--primary-dim); border: 1px solid rgba(168, 85, 247, 0.3); color: var(--primary);
+            font-size: 0.85rem; font-weight: 900; padding: 4px 10px; border-radius: 8px; flex-shrink: 0;
         }
-        .question-text { font-size: 1.15rem; font-weight: 600; line-height: 1.5; color: #fff; text-align: left; }
+        .question-text { font-size: 1.2rem; font-weight: 600; line-height: 1.55; color: #fff; text-align: left; }
 
-        .options-grid { display: flex; flex-direction: column; gap: 10px; }
+        .options-grid { display: flex; flex-direction: column; gap: 12px; }
         .option-label {
-            position: relative; display: flex; align-items: center; background: rgba(255,255,255,0.03);
-            border: 1px solid var(--glass-border); padding: 14px 18px; border-radius: 12px;
-            cursor: pointer; transition: all 0.25s ease; font-size: 1rem; font-weight: 500; color: var(--text-option);
+            position: relative; display: flex; align-items: center; background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border); padding: 16px 20px; border-radius: 14px;
+            cursor: pointer; transition: all 0.25s ease; font-size: 1.05rem; font-weight: 500; color: var(--text-option);
             overflow: hidden;
         }
         .option-label::before { content: ''; position: absolute; left: 0; top: 0; width: 0%; height: 100%; background: var(--primary-dim); transition: width 0.35s ease; z-index: 0; }
         .option-label span, .option-label .custom-radio { position: relative; z-index: 1; }
-        .option-label:hover { border-color: rgba(255,255,255,0.12); color: #fff; transform: translateX(4px); }
+        .option-label:hover { border-color: rgba(255,255,255,0.15); color: #fff; transform: translateX(6px); }
         .option-label input { display: none; }
         
         .custom-radio {
-            width: 18px; height: 18px; border: 2px solid var(--text-muted); border-radius: 50%;
-            margin-right: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+            width: 20px; height: 20px; border: 2px solid var(--text-muted); border-radius: 50%;
+            margin-right: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
         }
-        .custom-radio::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); transform: scale(0); transition: transform 0.2s; }
+        .custom-radio::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); transform: scale(0); transition: transform 0.2s; }
 
         .option-label.selected { border-color: var(--primary); color: #fff; font-weight: 700; }
         .option-label.selected::before { width: 100%; }
@@ -259,32 +227,32 @@
 
         .blank-input-wrapper { margin: 15px 0; width: 100%; }
         .inference-input {
-            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
-            padding: 14px 18px; border-radius: 12px; color: #fff; font-size: 1.05rem; font-weight: 600; transition: all 0.3s;
+            width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border);
+            padding: 16px 20px; border-radius: 14px; color: #fff; font-size: 1.1rem; font-weight: 600; transition: all 0.3s;
         }
-        .inference-input:focus { border-color: var(--warning); background: rgba(245, 158, 11, 0.03); box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); }
+        .inference-input:focus { border-color: var(--warning); background: rgba(245, 158, 11, 0.05); box-shadow: 0 0 20px rgba(245, 158, 11, 0.2); }
         .inference-input:disabled { opacity: 0.6; cursor: not-allowed; }
         .expected-answer-box {
-            display: none; background: rgba(16, 185, 129, 0.1); border: 1px dashed var(--success);
-            padding: 12px 16px; border-radius: 10px; font-size: 0.95rem; margin-top: 10px; color: #fff; text-align: left;
+            display: none; background: rgba(16, 185, 129, 0.12); border: 1px dashed var(--success);
+            padding: 14px 18px; border-radius: 12px; font-size: 1rem; margin-top: 12px; color: #fff; text-align: left;
         }
         .card.wrong .expected-answer-box { display: block; }
 
         .check-btn {
-            background: rgba(255,255,255,0.02); color: var(--text-main); border: 1px solid var(--glass-border);
-            width: 100%; padding: 14px; border-radius: 12px; font-size: 0.9rem; font-weight: 800; letter-spacing: 1.5px;
-            margin-top: 20px; cursor: pointer; text-transform: uppercase; transition: all 0.3s;
+            background: rgba(255,255,255,0.03); color: var(--text-main); border: 1px solid var(--glass-border);
+            width: 100%; padding: 16px; border-radius: 14px; font-size: 0.95rem; font-weight: 800; letter-spacing: 1.5px;
+            margin-top: 22px; cursor: pointer; text-transform: uppercase; transition: all 0.3s;
         }
-        .check-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(255,255,255,0.04); }
+        .check-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(255,255,255,0.06); box-shadow: 0 0 15px var(--primary-dim); }
         .check-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
         .result-box {
-            margin-top: 15px; padding: 12px; border-radius: 10px; text-align: center; font-weight: 800; font-size: 0.95rem; opacity: 0; height: 0; overflow: hidden; transition: all 0.3s;
+            margin-top: 15px; padding: 14px; border-radius: 12px; text-align: center; font-weight: 800; font-size: 1rem; opacity: 0; height: 0; overflow: hidden; transition: all 0.3s;
             display: flex; align-items: center; justify-content: center; gap: 6px;
         }
 
         .card.correct .result-box, .card.wrong .result-box { opacity: 1; height: auto; margin-top: 15px; }
-        .card.correct { border-color: var(--success); box-shadow: 0 8px 25px var(--success-dim); }
+        .card.correct { border-color: var(--success); box-shadow: 0 10px 30px var(--success-dim); }
         .card.correct::before { background: var(--success); }
         .card.correct .result-box { background: var(--success-dim); color: var(--success); }
         .card.correct .option-label.selected { border-color: var(--success); }
@@ -292,7 +260,7 @@
         .card.correct .custom-radio::after { background: var(--success); }
         .card.correct .inference-input { border-color: var(--success); background: var(--success-dim); color: #fff; }
 
-        .card.wrong { border-color: var(--danger); box-shadow: 0 8px 25px var(--danger-dim); animation: shake 0.4s; }
+        .card.wrong { border-color: var(--danger); box-shadow: 0 10px 30px var(--danger-dim); animation: shake 0.4s; }
         .card.wrong::before { background: var(--danger); }
         .card.wrong .result-box { background: var(--danger-dim); color: var(--danger); }
         .card.wrong .option-label.selected { border-color: var(--danger); }
@@ -300,19 +268,19 @@
         .card.wrong .custom-radio::after { background: var(--danger); }
         .card.wrong .inference-input { border-color: var(--danger); background: var(--danger-dim); }
 
-        .bottom-nav-replica-title { text-align: center; font-size: 0.85rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 30px 0 10px; letter-spacing: 1px; }
-        .bottom-navigator-deck { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+        .bottom-nav-replica-title { text-align: center; font-size: 0.85rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 35px 0 12px; letter-spacing: 1px; }
+        .bottom-navigator-deck { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
         .bottom-nav-btn {
             background: var(--glass-bg); color: var(--text-muted); border: 1px solid var(--glass-border);
-            padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 0.75rem; cursor: pointer; transition: all 0.3s;
+            padding: 10px 16px; border-radius: 12px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: all 0.3s;
         }
-        .bottom-nav-btn.active { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); }
+        .bottom-nav-btn.active { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); box-shadow: 0 0 15px var(--primary-dim); }
 
         .score-board {
             display: none; background: var(--glass-bg); border: 1px solid var(--glass-border);
-            border-radius: 20px; padding: 40px 25px; text-align: center; margin-top: 30px;
+            border-radius: 24px; padding: 45px 30px; text-align: center; margin-top: 30px;
         }
-        .score-board.active { display: block; animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15); }
+        .score-board.active { display: block; animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15); }
     </style>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
@@ -325,10 +293,14 @@
 <header id="mainHeader">
     <div class="header-content">
         <div class="brand-title" onclick="window.location.href='index.html' + window.location.search">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            BIG DATA SUITE CRADLE
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            BIG DATA PREMIUM WORKSPACE
         </div>
         <div class="header-badges-group">
+            <div class="users-online-badge">
+                <div class="pulse-dot"></div>
+                ROOM USERS: <span id="online-users-count">1</span>
+            </div>
             <button class="voice-mic-btn" id="micToggleBtn" onclick="toggleLocalMicrophone()">
                 🎤 INITIALIZING AUDIO...
             </button>
@@ -362,7 +334,7 @@
     <div id="sheet-2" class="assignment-sheet"></div>
     <div id="sheet-3" class="assignment-sheet"></div>
 
-    <div class="bottom-nav-replica-title">Quick Sheet Switcher</div>
+    <div class="bottom-nav-replica-title">Quick Sheet Navigator</div>
     <div class="bottom-navigator-deck" id="bottomSheetNav">
         <button class="bottom-nav-btn" onclick="switchSheet(0, true)">Sheet 1</button>
         <button class="bottom-nav-btn" onclick="switchSheet(1, true)">Sheet 2 (P1)</button>
@@ -371,12 +343,52 @@
     </div>
 
     <div id="score-board" class="score-board">
-        <h2 style="margin-bottom:20px; color:var(--primary); font-size: 1.3rem;">BLOCK EXECUTION COMPLETE</h2>
-        <button class="action-btn retry" style="width: 100%; padding: 14px;" onclick="retryMode()">RE-RUN CLUSTER RUN</button>
+        <h2 style="margin-bottom:20px; color:var(--primary); font-size: 1.4rem; font-weight: 900;">BLOCK EXECUTION COMPLETE</h2>
+        <button class="action-btn retry" style="width: 100%; padding: 16px; justify-content: center;" onclick="retryMode()">RE-RUN CLUSTER RUN</button>
     </div>
 </div>
 
 <script>
+    // نظام مراقبة الـ Scroll الذكي لإخفاء وإظهار الـ NAV تلقائياً وبسلاسة دون التأثير على استقرار العناصر
+    let lastScrollTop = 0;
+    const headerElement = document.getElementById('mainHeader');
+
+    window.addEventListener('scroll', () => {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // إذا كان يمرر لأسفل وتجاوز ارتفاع الهيدر المبدئي، قم بإخفاء الـ Nav
+        if (currentScroll > lastScrollTop && currentScroll > 150) {
+            headerElement.classList.add('nav-hidden');
+        } else if (currentScroll < lastScrollTop) {
+            // إذا كان يمرر لأعلى، أظهر الـ Nav فوراً
+            headerElement.classList.remove('nav-hidden');
+        }
+        
+        // منع تسجيل قيم سالبة في الهواتف الذكية (iOS Bounce Effect)
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    });
+
+    // مولد الصوتيات التفاعلي للمستخدمين
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(isSuccess) {
+        try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            if (isSuccess) {
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            } else {
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(150, audioCtx.currentTime + 0.25);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            }
+            osc.start(); osc.stop(audioCtx.currentTime + (isSuccess ? 0.15 : 0.25));
+        } catch(e){}
+    }
+
     const assignmentsConfig = [
         {
             id: 0,
@@ -488,17 +500,15 @@
 
     let currentSheetIndex = 0;
     let currentGlobalMode = 'tf'; 
-    let lastScrollTop = 0;
 
     function initSuite() {
         switchSheet(0, false);
         globalSwitchMode('tf', false);
     }
 
-    function formatNumber(num) {
-        return num < 10 ? '0' + num : num;
-    }
+    function formatNumber(num) { return num < 10 ? '0' + num : num; }
 
+    // تعديل دالة تبديل الـ Sheets لتدعم الرفع التلقائي للشاشة لأعلى بسلاسة وثبات
     function switchSheet(index, sendToServer = false) {
         currentSheetIndex = index;
         document.querySelectorAll('#topSheetNav .tab-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
@@ -511,12 +521,19 @@
         document.getElementById('score-board').classList.remove('active');
         renderCurrentView();
 
+        // التمرير التلقائي الفوري والناعم إلى أعلى نقطة في الشاشة لتهيئة الرؤية
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // إظهار الـ NAV فوراً عند التبديل حتى لا يظل مخفياً إذا ضغطنا من الـ Footer Nav
+        headerElement.classList.remove('nav-hidden');
+
         if(sendToServer) {
             triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_sheet: index, active_card_id: `sheet-${index}-${currentGlobalMode}-q-0` });
         }
     }
 
+    // تعديل دالة تبديل الوضع (MCQ/True False) لتدعم الرفع التلقائي لأعلى الشاشة أيضاً
     function globalSwitchMode(mode, sendToServer = false) {
         currentGlobalMode = mode;
         document.getElementById('card-btn-tf').classList.toggle('active-tf', mode === 'tf');
@@ -525,6 +542,10 @@
         
         document.getElementById('score-board').classList.remove('active');
         renderCurrentView();
+
+        // التمرير التلقائي السلس لأعلى عند تغيير الـ Mode
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        headerElement.classList.remove('nav-hidden');
 
         if(sendToServer) {
             triggerUserActionBurst();
@@ -537,13 +558,9 @@
             const container = document.getElementById(`sheet-${sheet.id}`);
             if (sheet.id === currentSheetIndex) {
                 let targetData = [];
-                if (currentGlobalMode === 'mcq') {
-                    targetData = sheet.mcq || [];
-                } else if (currentGlobalMode === 'tf') {
-                    targetData = sheet.tf || [];
-                } else if (currentGlobalMode === 'blank') {
-                    targetData = sheet.mcq || []; 
-                }
+                if (currentGlobalMode === 'mcq') targetData = sheet.mcq || [];
+                else if (currentGlobalMode === 'tf') targetData = sheet.tf || [];
+                else if (currentGlobalMode === 'blank') targetData = sheet.mcq || []; 
                 renderBlock(container, sheet.id, targetData);
             } else {
                 container.innerHTML = ''; 
@@ -555,7 +572,7 @@
     function renderBlock(container, sheetId, data) {
         container.innerHTML = '';
         if (!data || data.length === 0) {
-            container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted)">No questions available for this mode.</div>';
+            container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted)">No questions available.</div>';
             return;
         }
         data.forEach((item, index) => {
@@ -641,10 +658,10 @@
         });
 
         if (parseInt(selectedInput.value) === correctAns) {
-            card.classList.add('correct');
+            card.classList.add('correct'); playBeep(true);
             resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
         } else {
-            card.classList.add('wrong');
+            card.classList.add('wrong'); playBeep(false);
             resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
         }
         updateProgress();
@@ -662,7 +679,7 @@
         if (userValue === '') {
             btn.disabled = true; btn.innerText = "SKIPPED / REVEALED";
             inputField.disabled = true;
-            card.classList.add('wrong'); 
+            card.classList.add('wrong'); playBeep(false);
             resultBox.innerHTML = `NODE REVEALED`;
             updateProgress();
             triggerGroupNextScroll(card);
@@ -673,10 +690,10 @@
         inputField.disabled = true;
 
         if (userValue === targetValue || targetValue.includes(userValue) && userValue.length > 2) {
-            card.classList.add('correct');
+            card.classList.add('correct'); playBeep(true);
             resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
         } else {
-            card.classList.add('wrong');
+            card.classList.add('wrong'); playBeep(false);
             resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
         }
         updateProgress();
@@ -794,7 +811,7 @@
 
 <script>
     // =========================================================================
-    // --- محرك الاستقبال التكيفي ذو الكفاءة العالية الموفر للسيرفر ---
+    // --- محرك المزامنة والاستقبال المتطور والتكيفي ---
     // =========================================================================
     let urlParams = new URLSearchParams(window.location.search);
     let roomName = urlParams.get('room');
@@ -831,9 +848,7 @@
                 if (data.current_mode !== undefined && data.current_mode !== currentGlobalMode) { globalSwitchMode(data.current_mode); structuralChanged = true; }
 
                 const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
-                if (currentContainer && currentContainer.innerHTML === "") {
-                    structuralChanged = true;
-                }
+                if (currentContainer && currentContainer.innerHTML === "") { structuralChanged = true; }
 
                 if (data.answers) {
                     Object.keys(data.answers).forEach(cardId => {
@@ -854,7 +869,10 @@
                     });
                 }
 
-                if (data.voice_peers && data.voice_peers.length > 0) {
+                // تحديث عدد المستخدمين المتصلين في الغرفة بشكل ديناميكي
+                if (data.voice_peers) {
+                    const totalUsers = data.voice_peers.length + 1; // إضافة المستخدم الحالي
+                    document.getElementById('online-users-count').innerText = totalUsers;
                     handleAudioMeshSignaling(data.voice_peers);
                 }
 
@@ -863,10 +881,7 @@
                     document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
                     setTimeout(() => { 
                         const t = document.getElementById(data.active_card_id); 
-                        if (t) { 
-                            t.classList.add('focused-by-peer'); 
-                            // تم تعطيل الـ scrollIntoView هنا لمنع تحرك الشاشة تلقائياً نهائياً
-                        } 
+                        if (t) t.classList.add('focused-by-peer'); 
                     }, 200);
                 }
                 updateProgress(); isSyncingFromServer = false;
@@ -885,12 +900,8 @@
         if (!roomName || isSyncingFromServer) return;
         try {
             const payload = {
-                room: roomName,
-                cardId: cardId,
-                selectedIdx: selectedIdx,
-                status: status,
-                inputValue: inputValue,
-                ...extraFields
+                room: roomName, cardId: cardId, selectedIdx: selectedIdx,
+                status: status, inputValue: inputValue, ...extraFields
             };
             await fetch(`${BACKEND_URL}/update`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -916,7 +927,7 @@
     });
 
     // =========================================================================
-    // --- محرك محادثات الصوت الجماعية الحية المستقرة والتلقائية بالكامل (Mesh Multi-peer) ---
+    // --- محرك محادثات الصوت الجماعية الحية (Mesh Multi-peer Room Audio) ---
     // =========================================================================
     let localAudioStream = null;
     let peerInstance = null;
@@ -933,12 +944,13 @@
                 peerInstance = new Peer(localVoicePeerId, { debug: 1 });
 
                 peerInstance.on('open', (id) => {
-                    console.log(`[VoiceEngine] Active. My Voice Peer ID: ${id}`);
+                    console.log(`[VoiceEngine] My Room Voice ID: ${id}`);
                     btn.classList.add('active-streaming');
                     btn.innerText = "🎙️ MIC ACTIVE (LIVE)";
                     if (roomName) startAdaptiveSyncLoop();
                 });
 
+                // استقبال المكالمات القادمة من أي شخص ينضم للغرفة
                 peerInstance.on('call', (call) => {
                     call.answer(localAudioStream);
                     call.on('stream', (remoteStream) => {
@@ -948,17 +960,18 @@
                 });
             })
             .catch(err => {
-                console.error("[VoiceEngine] Microphone access denied:", err);
+                console.error("[VoiceEngine] Access Denied:", err);
                 btn.style.background = "var(--danger)";
                 btn.innerText = "⚠️ MIC BLOCKED (GRANT PERMISSION)";
                 if (roomName) startAdaptiveSyncLoop();
             });
     }
 
+    // الربط الشبكي التلقائي الجماعي لجميع الأطراف في السيرفر (Multi-Peer Mesh Connecting)
     function handleAudioMeshSignaling(serverPeersList) {
         serverPeersList.forEach(remotePeerId => {
             if (remotePeerId !== localVoicePeerId && !activeCallsList[remotePeerId]) {
-                console.log(`[VoiceEngine] Building audio link channel to: ${remotePeerId}`);
+                console.log(`[VoiceEngine] Connecting mesh audio line to peer: ${remotePeerId}`);
                 const call = peerInstance.call(remotePeerId, localAudioStream);
                 if (call) {
                     call.on('stream', (remoteStream) => {
@@ -1000,19 +1013,6 @@
             btn.innerText = "🎙️ MIC ACTIVE (LIVE)";
         }
     }
-
-    // --- نظام المراقبة الديناميكي لتقليص وإخفاء الـ NAV وأزرار التحكم عدا المايك عند السكرول ---
-    window.addEventListener('scroll', () => {
-        const headerElement = document.getElementById('mainHeader');
-        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (currentScroll > lastScrollTop && currentScroll > 120) {
-            headerElement.classList.add('minimized-cradle');
-        } else if (currentScroll < lastScrollTop) {
-            headerElement.classList.remove('minimized-cradle');
-        }
-        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-    });
 
     initializeVoiceEngine();
     initSuite();
