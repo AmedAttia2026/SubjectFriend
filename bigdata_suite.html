@@ -64,13 +64,52 @@
             100% { transform: translate(80px, 60px) scale(1.15); }
         }
 
+        /* تأثيرات الانتقال لغطاء الهيدر وعناصره الداخلية لتسهيل الاختفاء الذاتي */
         header {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
             background: rgba(2, 6, 23, 0.85);
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border-bottom: 1px solid var(--glass-border);
             box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .brand-title, 
+        .stats-badge, 
+        .controls-header-row, 
+        .sheet-navigator, 
+        .progress-container {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        }
+
+        /* تخصيص حالة الهيدر عند التمرير لأسفل واختفاء الـ NAV */
+        header.hide-nav {
+            background: rgba(2, 6, 23, 0) !important;
+            backdrop-filter: blur(0px) !important;
+            -webkit-backdrop-filter: blur(0px) !important;
+            box-shadow: none !important;
+            border-bottom-color: transparent !important;
+            pointer-events: none; /* يسمح بلمس محتوى الصفحة من تحت الهيدر المخفي */
+        }
+
+        header.hide-nav .brand-title,
+        header.hide-nav .stats-badge {
+            opacity: 0;
+            transform: translateY(-40px);
+        }
+
+        header.hide-nav .controls-header-row {
+            opacity: 0;
+            transform: translateY(-80px);
+        }
+
+        header.hide-nav .sheet-navigator {
+            opacity: 0;
+            transform: translateY(-120px);
+        }
+
+        header.hide-nav .progress-container {
+            opacity: 0;
         }
 
         .header-content {
@@ -96,16 +135,31 @@
         }
         .stats-badge span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
 
+        /* تعديل زر المايك ليظل ثابتاً وقابلاً للضغط والتفاعل بصورة مستقلة */
         .voice-mic-btn {
             background: var(--danger-dim); border: 1px solid var(--danger);
             color: var(--danger); padding: 8px 14px; border-radius: 12px;
             font-weight: 800; font-size: 0.85rem; cursor: pointer;
-            display: flex; align-items: center; gap: 6px; transition: all 0.3s;
+            display: flex; align-items: center; gap: 6px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-shadow: 0 0 5px var(--danger-glow);
+            pointer-events: auto !important; /* ضمان بقائه قابلاً للضغط */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
         .voice-mic-btn.active-streaming {
             background: var(--success-dim); border-color: var(--success);
             color: var(--success); text-shadow: 0 0 5px var(--success-glow);
+        }
+
+        /* تحسين مظهر المايك وتثبيته عند إخفاء بقية عناصر الملاحة */
+        header.hide-nav .voice-mic-btn {
+            transform: translateY(12px); /* إزاحة خفيفة لأسفل ليكون بوضعية مريحة على زاوية الشاشة */
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 12px var(--danger-glow);
+        }
+
+        header.hide-nav .voice-mic-btn.active-streaming {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 12px var(--success-glow);
         }
 
         .controls-header-row {
@@ -1042,6 +1096,24 @@
             btn.innerText = "🎙️ MIC ACTIVE (LIVE)";
         }
     }
+
+    // =========================================================================
+    // --- مستشعر التمرير لإخفاء الملاحة تلقائياً مع الحفاظ على المايك ---
+    // =========================================================================
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+        const header = document.getElementById('mainHeader');
+        if (!header) return;
+        
+        // التمرير لأسفل يتجاوز 80 بكسل يفعل الإخفاء الذاتي للـ NAV
+        if (window.scrollY > lastScrollY && window.scrollY > 80) {
+            header.classList.add('hide-nav');
+        } else if (window.scrollY < lastScrollY) {
+            // التمرير لأعلى يعيد إظهار القائمة كاملة
+            header.classList.remove('hide-nav');
+        }
+        lastScrollY = window.scrollY;
+    });
 
     initializeVoiceEngine();
     initSuite();
