@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Big Data & Analytics Workspace - Fullscreen Optimization</title>
+    <title>Big Data & Analytics Workspace - Fixed Audio Stable Edition</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800;900&family=Cairo:wght@400;700;900&display=swap');
 
@@ -65,12 +65,17 @@
         }
 
         header {
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 99;
             background: rgba(2, 6, 23, 0.85);
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border-bottom: 1px solid var(--glass-border);
             box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* كلاس الاختفاء التلقائي السلس للهيدر دون المساس بالمايك */
+        header.nav-hidden {
+            transform: translateY(-100%);
         }
 
         .header-content {
@@ -87,6 +92,15 @@
 
         .header-badges-group {
             display: flex; align-items: center; gap: 10px;
+            /* ترك مساحة مستقرة على اليمين حتى لا يغطي الهيدر على مكان المايك الثابت */
+            padding-right: 180px; 
+        }
+
+        @media (max-width: 600px) {
+            .header-badges-group { padding-right: 0; margin-top: 50px; }
+            .header-content { flex-direction: column; align-items: flex-start; }
+            body { padding-top: 240px; }
+            .voice-mic-btn { top: 12px !important; right: 12px !important; }
         }
 
         .stats-badge {
@@ -96,16 +110,31 @@
         }
         .stats-badge span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
 
+        /* تعديل المايك ليكون ثابتاً ومستقراً تماماً في زاوية الشاشة منذ البداية لتفادي أي تعليق في الصوت */
         .voice-mic-btn {
-            background: var(--danger-dim); border: 1px solid var(--danger);
-            color: var(--danger); padding: 8px 14px; border-radius: 12px;
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            z-index: 1000; /* أعلى من الهيدر دائماً ليبقى ظاهراً عند نزول الصفحة */
+            background: rgba(244, 63, 94, 0.1); 
+            border: 1px solid var(--danger);
+            color: var(--danger); padding: 10px 16px; border-radius: 12px;
             font-weight: 800; font-size: 0.85rem; cursor: pointer;
-            display: flex; align-items: center; gap: 6px; transition: all 0.3s;
+            display: flex; align-items: center; gap: 6px; 
             text-shadow: 0 0 5px var(--danger-glow);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            transition: background 0.3s, border 0.3s, color 0.3s, box-shadow 0.3s, transform 0.2s;
         }
+        
+        .voice-mic-btn:hover {
+            transform: scale(1.02);
+        }
+
         .voice-mic-btn.active-streaming {
-            background: var(--success-dim); border-color: var(--success);
+            background: rgba(16, 185, 129, 0.12); border-color: var(--success);
             color: var(--success); text-shadow: 0 0 5px var(--success-glow);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15), 0 8px 25px rgba(0,0,0,0.5);
         }
 
         .controls-header-row {
@@ -164,7 +193,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex: 1; min-width: 150px; justify-content: center;
         }
 
-        .mode-select-card:hover { border-color: rgba(255,255,255,0.15); color: #fff; transform: translateY(-2px); }
+        .mode-select-card:hover { border-color: rgba(255, 255, 255, 0.15); color: #fff; transform: translateY(-2px); }
         .mode-select-card.active-tf { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
         .mode-select-card.active-mcq { color: #db2777; border-color: #db2777; background: rgba(219, 39, 119, 0.12); box-shadow: 0 0 20px rgba(219, 39, 119, 0.15); }
         .mode-select-card.active-blank { color: var(--warning); border-color: var(--warning); background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
@@ -298,8 +327,8 @@
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 
-<button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+<button class="voice-mic-btn" id="micToggleBtn" onclick="toggleLocalMicrophone()">
+    🎤 INITIALIZING AUDIO...
 </button>
 
 <header id="mainHeader">
@@ -309,9 +338,6 @@
             BIG DATA SUITE CRADLE
         </div>
         <div class="header-badges-group">
-            <button class="voice-mic-btn" id="micToggleBtn" onclick="toggleLocalMicrophone()">
-                🎤 INITIALIZING AUDIO...
-            </button>
             <div class="stats-badge">EVALUATED: <span id="live-score">00 / 00</span></div>
         </div>
     </div>
@@ -432,7 +458,7 @@
                 { q: "MapReduce primarily processes data in:", options: ["Real-time memory", "Distributed batch mode", "Manual mode", "Local spreadsheets"], ans: 1 },
                 { q: "Which language is commonly used with Hive?", options: ["SQL", "HQL", "Python", "C++"], ans: 1 },
                 { q: "HBase is best described as:", options: ["Relational database", "NoSQL wide-column database", "Visualization tool", "Monitoring tool"], ans: 1 },
-                { q: "Which company is known as a leading Big Data vendor?", options: ["Cloudera", "Adobe", "Intel", "Oracle Forms"], ans: 0 },
+                { q: "Which company is known as a leading Big Data vendor?", options: ["Cloudera", "Adobe", "Intel", "Oracle Forms"], ans: 2 },
                 { q: "Spark is preferred over MapReduce because:", options: ["It is slower", "It lacks scalability", "It supports in-memory processing", "It does not support ML"], ans: 2 },
                 { q: "Hadoop supports which type of data?", options: ["Only structured", "Only unstructured", "Structured, semi-structured, and unstructured", "Only relational"], ans: 2 }
             ]
@@ -469,6 +495,29 @@
     let currentSheetIndex = 0;
     let currentGlobalMode = 'tf'; 
     let lastScrollTop = 0;
+
+    // =========================================================================
+    // --- محرك مراقبة التمرير المستقر والآمن (إخفاء وإظهار الهيدر فقط) ---
+    // =========================================================================
+    const mainHeader = document.getElementById('mainHeader');
+
+    window.addEventListener('scroll', () => {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (currentScroll > 60) { 
+            // التمرير لأسفل: يختفي الهيدر بسلاسة تامة، والمايك لا يتأثر لأنه مستقل تماماً
+            if (currentScroll > lastScrollTop) {
+                mainHeader.classList.add('nav-hidden');
+            } else {
+                // التمرير لأعلى: يظهر الهيدر من جديد
+                mainHeader.classList.remove('nav-hidden');
+            }
+        } else {
+            mainHeader.classList.remove('nav-hidden');
+        }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    }, { passive: true });
+
 
     function formatNumber(num) {
         return num < 10 ? '0' + num : num;
@@ -830,7 +879,13 @@
                 if (data.active_card_id && (data.active_card_id !== lastActiveCardId || structuralChanged)) {
                     lastActiveCardId = data.active_card_id;
                     document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
-                    setTimeout(() => { const t = document.getElementById(data.active_card_id); if (t) { t.classList.add('focused-by-peer'); t.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }, 200);
+                    setTimeout(() => { 
+                        const t = document.getElementById(data.active_card_id); 
+                        if (t) { 
+                            t.classList.add('focused-by-peer'); 
+                            t.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+                        } 
+                    }, 200);
                 }
                 updateProgress(); isSyncingFromServer = false;
             }
@@ -871,7 +926,7 @@
     });
 
     // =========================================================================
-    // --- محرك محادثات الصوت الجماعية الحية المستقرة (Signaling Mesh Network) ---
+    // --- محرك محادثات الصوت الجماعية الحية المستقرة والتلقائية بدون تعليق ---
     // =========================================================================
     let localAudioStream = null;
     let peerInstance = null;
@@ -955,7 +1010,6 @@
         }
     }
 
-    // تهيئة محركات الصوت والتسجيل والتشغيل التلقائي المبدئي بنجاح
     initializeVoiceEngine();
     initSuite();
 </script>
