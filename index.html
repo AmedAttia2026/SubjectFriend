@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Machine Learning Engine Suite - Fullscreen Optimization</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800;900&family=Cairo:wght@400;700;900&display=swap');
+
+        :root {
+            --bg-dark: #020617;
+            --glass-bg: rgba(15, 23, 42, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            
+            --primary: #00f2fe;
+            --primary-dim: rgba(0, 242, 254, 0.12);
+            --primary-glow: rgba(0, 242, 254, 0.5);
+            
+            --accent: #3b82f6;
+            --accent-dim: rgba(59, 130, 246, 0.12);
+            --accent-glow: rgba(59, 130, 246, 0.5);
+
+            --success: #10b981;
+            --success-dim: rgba(16, 185, 129, 0.15);
+            --success-glow: rgba(16, 185, 129, 0.5);
+            
+            --danger: #f43f5e;
+            --danger-dim: rgba(244, 63, 94, 0.15);
+            --danger-glow: rgba(244, 63, 94, 0.5);
+
+            --warning: #f59e0b;
+
+            --text-main: #f8fafc;
+            --text-option: #cbd5e1;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            padding-top: 185px; 
+            padding-bottom: 60px;
+        }
+
+        /* --- Background Effects --- */
+        .bg-grid {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.01) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.01) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at center, black, transparent 85%);
+            -webkit-mask-image: radial-gradient(circle at center, black, transparent 85%);
+        }
+
+        .orb {
+            position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1; opacity: 0.25;
+            animation: float 25s infinite alternate ease-in-out;
+        }
+        .orb-1 { width: 400px; height: 400px; background: var(--accent); top: -15%; left: -10%; }
+        .orb-2 { width: 500px; height: 500px; background: var(--primary); bottom: -15%; right: -10%; animation-delay: -12s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(80px, 60px) scale(1.15); }
+        }
+
+        /* --- Main Header Architecture --- */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header-content {
+            max-width: 1100px; margin: 0 auto; padding: 12px 20px;
+            display: flex; justify-content: space-between; align-items: center; gap: 15px;
+        }
+
+        .brand-title {
+            font-size: 1.1rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .stats-badge {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            padding: 8px 16px; border-radius: 12px; font-weight: 800; font-size: 0.9rem;
+        }
+        .stats-badge span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
+
+        /* --- Control Actions Deck --- */
+        .controls-header-row {
+            background: rgba(10, 15, 30, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 8px 20px;
+            display: flex; justify-content: center; gap: 12px;
+        }
+
+        .action-btn {
+            background: var(--glass-bg); color: var(--text-main); border: 1px solid var(--glass-border);
+            padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.75rem;
+            cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 6px;
+            letter-spacing: 0.5px; white-space: nowrap; text-transform: uppercase;
+        }
+        .action-btn svg { width: 14px; height: 14px; }
+        .action-btn.mix { border-color: rgba(0, 242, 254, 0.4); color: var(--primary); }
+        .action-btn.mix:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-glow); }
+        .action-btn.opt-mix { border-color: rgba(59, 130, 246, 0.4); color: var(--accent); }
+        .action-btn.opt-mix:hover { background: var(--accent); color: #fff; box-shadow: 0 0 15px var(--accent-glow); }
+        .action-btn.retry { background: linear-gradient(135deg, var(--warning), #d97706); color: #000; font-weight: 900; border: none; }
+
+        .sheet-navigator {
+            background: rgba(15, 23, 42, 0.3);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex; justify-content: center; overflow-x: auto; scrollbar-width: none;
+        }
+        .sheet-navigator::-webkit-scrollbar { display: none; }
+
+        .tab-btn {
+            background: transparent; color: var(--text-muted); border: none;
+            padding: 14px 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 1.5px;
+            cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
+            position: relative; white-space: nowrap;
+        }
+        .tab-btn:hover { color: var(--text-main); }
+        .tab-btn.active { color: var(--primary); }
+        .tab-btn.active::after {
+            content: ''; position: absolute; bottom: 0; left: 15%; width: 70%; height: 3px;
+            background: var(--primary); border-radius: 3px 3px 0 0;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .progress-container { width: 100%; height: 3px; background: rgba(255,255,255,0.03); position: relative; }
+        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--primary)); transition: width 0.5s ease; box-shadow: 0 0 15px var(--primary-glow); }
+
+        /* --- Mode Selection Cards Deck --- */
+        .mode-selection-deck {
+            display: flex; justify-content: center; gap: 12px; margin: 25px auto 25px;
+            max-width: 900px; padding: 0 15px; flex-wrap: wrap;
+        }
+
+        .mode-select-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            padding: 14px 24px; border-radius: 14px; cursor: pointer;
+            font-size: 0.95rem; font-weight: 800; color: var(--text-option);
+            letter-spacing: 0.5px; text-transform: uppercase;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+            display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex: 1; min-width: 150px; justify-content: center;
+        }
+
+        .mode-select-card:hover { border-color: rgba(255,255,255,0.15); color: #fff; transform: translateY(-2px); }
+        .mode-select-card.active-tf { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); box-shadow: 0 0 20px rgba(0, 242, 254, 0.15); }
+        .mode-select-card.active-mcq { color: #a855f7; border-color: #a855f7; background: rgba(168, 85, 247, 0.12); box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
+        .mode-select-card.active-blank { color: var(--warning); border-color: var(--warning); background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
+
+        /* --- Replicated Navigation Titles & Decks --- */
+        .bottom-nav-replica-title {
+            text-align: center; font-size: 0.85rem; font-weight: 800; letter-spacing: 2px;
+            color: var(--text-muted); text-transform: uppercase; margin: 40px 0 15px;
+        }
+        .bottom-navigator-deck {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 16px; padding: 10px; display: flex; justify-content: center;
+            gap: 10px; flex-wrap: wrap; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .bottom-nav-btn {
+            background: rgba(255,255,255,0.02); color: var(--text-option); border: 1px solid var(--glass-border);
+            padding: 10px 18px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;
+            cursor: pointer; transition: all 0.25s ease; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .bottom-nav-btn:hover { border-color: var(--primary); color: #fff; }
+        .bottom-nav-btn.active {
+            background: var(--primary-dim); color: var(--primary); border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1); font-weight: 900;
+        }
+
+        /* --- Scroll To Top Button --- */
+        .scroll-top-btn {
+            position: fixed; bottom: 25px; right: 25px; width: 48px; height: 48px;
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            color: var(--primary); border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; z-index: 99;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5), 0 0 15px rgba(0, 242, 254, 0.1);
+            opacity: 0; transform: translateY(20px); pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .scroll-top-btn.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .scroll-top-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); transform: translateY(-3px); }
+        .scroll-top-btn svg { width: 22px; height: 22px; transition: transform 0.3s; }
+        .scroll-top-btn:hover svg { transform: translateY(-2px); }
+
+        /* --- Main Layout Systems --- */
+        .container { max-width: 850px; margin: 15px auto 40px; padding: 0 15px; }
+        .assignment-sheet { display: none; }
+        .assignment-sheet.active { display: block; }
+
+        /* --- Node Cards --- */
+        .card {
+            background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border); border-radius: 18px; padding: 25px; margin-bottom: 25px;
+            position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+        }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: all 0.4s; }
+        .card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+
+        .question-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+        .q-number {
+            background: var(--primary-dim); border: 1px solid rgba(0, 242, 254, 0.2); color: var(--primary);
+            font-size: 0.8rem; font-weight: 900; padding: 4px 8px; border-radius: 6px; flex-shrink: 0;
+        }
+        .question-text { font-size: 1.15rem; font-weight: 600; line-height: 1.5; color: #fff; }
+
+        /* --- Options Grid --- */
+        .options-grid { display: flex; flex-direction: column; gap: 10px; }
+        .option-label {
+            position: relative; display: flex; align-items: center; background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border); padding: 14px 18px; border-radius: 12px;
+            cursor: pointer; transition: all 0.25s ease; font-size: 1rem; font-weight: 500; color: var(--text-option);
+            overflow: hidden;
+        }
+        .option-label::before { content: ''; position: absolute; left: 0; top: 0; width: 0%; height: 100%; background: var(--primary-dim); transition: width 0.35s ease; z-index: 0; }
+        .option-label span, .option-label .custom-radio { position: relative; z-index: 1; }
+        .option-label:hover { border-color: rgba(255,255,255,0.12); color: #fff; transform: translateX(4px); }
+        .option-label input { display: none; }
+        
+        .custom-radio {
+            width: 18px; height: 18px; border: 2px solid var(--text-muted); border-radius: 50%;
+            margin-right: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+        }
+        .custom-radio::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); transform: scale(0); transition: transform 0.2s; }
+
+        .option-label.selected { border-color: var(--primary); color: #fff; font-weight: 700; }
+        .option-label.selected::before { width: 100%; }
+        .option-label.selected .custom-radio { border-color: var(--primary); }
+        .option-label.selected .custom-radio::after { transform: scale(1); }
+
+        /* --- Direct Input Layout --- */
+        .blank-input-wrapper { margin: 15px 0; width: 100%; }
+        .inference-input {
+            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
+            padding: 14px 18px; border-radius: 12px; color: #fff; font-size: 1.05rem;
+            font-family: 'Outfit', sans-serif; font-weight: 600; transition: all 0.3s;
+        }
+        .inference-input:focus { border-color: var(--warning); background: rgba(245, 158, 11, 0.03); box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); }
+        .inference-input:disabled { opacity: 0.6; cursor: not-allowed; }
+        .expected-answer-box {
+            display: none; background: rgba(16, 185, 129, 0.1); border: 1px dashed var(--success);
+            padding: 12px 16px; border-radius: 10px; font-size: 0.95rem; margin-top: 10px; color: #fff; text-align: left;
+        }
+        .card.wrong .expected-answer-box { display: block; animation: slideUp 0.3s ease; }
+
+        /* --- Verification Actions --- */
+        .check-btn {
+            background: rgba(255,255,255,0.02); color: var(--text-main); border: 1px solid var(--glass-border);
+            width: 100%; padding: 14px; border-radius: 12px; font-size: 0.9rem; font-weight: 800; letter-spacing: 1.5px;
+            margin-top: 20px; cursor: pointer; text-transform: uppercase; transition: all 0.3s;
+        }
+        .check-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(255,255,255,0.04); }
+        .check-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* --- Result States --- */
+        .result-box {
+            margin-top: 15px; padding: 12px; border-radius: 10px; text-align: center; font-weight: 800;
+            font-size: 0.95rem; opacity: 0; height: 0; overflow: hidden; transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+
+        .card.correct .result-box, .card.wrong .result-box { opacity: 1; height: auto; margin-top: 15px; }
+        .card.correct { border-color: var(--success); box-shadow: 0 8px 25px var(--success-dim); }
+        .card.correct::before { background: var(--success); }
+        .card.correct .result-box { background: var(--success-dim); color: var(--success); }
+        .card.correct .option-label.selected { border-color: var(--success); }
+        .card.correct .custom-radio { border-color: var(--success); }
+        .card.correct .custom-radio::after { background: var(--success); }
+        .card.correct .inference-input { border-color: var(--success); background: var(--success-dim); color: #fff; }
+
+        .card.wrong { border-color: var(--danger); box-shadow: 0 8px 25px var(--danger-dim); animation: shake 0.4s; }
+        .card.wrong::before { background: var(--danger); }
+        .card.wrong .result-box { background: var(--danger-dim); color: var(--danger); }
+        .card.wrong .option-label.selected { border-color: var(--danger); }
+        .card.wrong .custom-radio { border-color: var(--danger); }
+        .card.wrong .custom-radio::after { background: var(--danger); }
+        .card.wrong .option-label.true-answer { border-color: var(--success); color: #fff; font-weight: 700; }
+        .card.wrong .inference-input { border-color: var(--danger); background: var(--danger-dim); }
+
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } }
+
+        /* --- Score Board Module --- */
+        .score-board {
+            display: none; background: var(--glass-bg); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 20px; padding: 40px 25px;
+            text-align: center; box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+        }
+        .score-board.active { display: block; animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15); }
+        @keyframes scaleUp { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        .score-circle {
+            width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 25px;
+            display: flex; align-items: center; justify-content: center;
+            background: conic-gradient(var(--primary) 0%, rgba(255,255,255,0.04) 0%);
+        }
+        .score-circle-inner {
+            width: 96px; height: 96px; border-radius: 50%; background: var(--bg-dark);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .score-circle-inner .pct { font-size: 2rem; font-weight: 900; }
+        .score-circle-inner .lbl { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 1px; }
+
+        .score-stats { display: flex; justify-content: center; gap: 40px; margin-bottom: 20px; }
+        .stat-item { display: flex; flex-direction: column; }
+        .stat-val { font-size: 2rem; font-weight: 900; }
+        .stat-val.correct-text { color: var(--success); }
+        .stat-val.wrong-text { color: var(--danger); }
+        .stat-lbl { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+        .score-msg { font-size: 1.05rem; font-weight: 600; color: var(--text-option); }
+
+        /* --- Responsiveness System --- */
+        @media (max-width: 600px) {
+            body { padding-top: 195px; }
+            .header-content { flex-direction: column; gap: 8px; padding: 10px; }
+            .controls-header-row { padding: 6px; gap: 8px; }
+            .action-btn { padding: 5px 10px; font-size: 0.65rem; }
+            .container { margin-top: 15px; padding: 0 10px; }
+            .mode-selection-deck { gap: 10px; flex-direction: row; padding: 0 10px; margin-bottom: 20px;}
+            .mode-select-card { padding: 12px 10px; font-size: 0.8rem; flex: 1; min-width: 90px; text-align: center; }
+            .card { padding: 20px 15px; }
+            .question-text { font-size: 1.05rem; }
+            .option-label { padding: 12px 14px; font-size: 0.95rem; }
+            .scroll-top-btn { bottom: 15px; right: 15px; width: 42px; height: 42px; }
+            .bottom-nav-btn { padding: 8px 12px; font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
+
+<header id="mainHeader">
+    <div class="header-content">
+        <div class="brand-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+            ML INFERENCE ENGINE
+        </div>
+        <div class="stats-badge">
+            EVALUATED: <span id="live-score">00 / 00</span>
+        </div>
+    </div>
+    
+    <div class="controls-header-row">
+        <button class="action-btn mix" onclick="mixQuestions()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="22" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline></svg>
+            SHUFFLE BLOCK
+        </button>
+        <button class="action-btn opt-mix" id="mix-opt-btn" onclick="mixOptions()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"></path><path d="M4 20L21 3"></path><path d="M21 16v5h-5"></path></svg>
+            MIX FEATURES
+        </button>
+    </div>
+
+    <div class="sheet-navigator" id="topSheetNav">
+        <button class="tab-btn active" onclick="switchSheet(0)">Sheet 1</button>
+        <button class="tab-btn" onclick="switchSheet(1)">Sheet 2</button>
+        <button class="tab-btn" onclick="switchSheet(2)">Sheet 3</button>
+        <button class="tab-btn" onclick="switchSheet(3)">Sheet 4 (P1)</button>
+        <button class="tab-btn" onclick="switchSheet(4)">Sheet 4 (P2)</button>
+    </div>
+    <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+</header>
+
+<div class="mode-selection-deck">
+    <div class="mode-select-card active-tf" id="card-btn-tf" onclick="globalSwitchMode('tf')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        True / False
+    </div>
+    <div class="mode-select-card" id="card-btn-mcq" onclick="globalSwitchMode('mcq')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+        MCQ
+    </div>
+    <div class="mode-select-card" id="card-btn-blank" onclick="globalSwitchMode('blank')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="4" y1="20" x2="20" y2="20"></line><polyline points="14 4 20 10 8 22 2 22 2 16 14 4"></polyline></svg>
+        وا اكمل
+    </div>
+</div>
+
+<div class="container">
+    <div id="sheet-0" class="assignment-sheet active"></div>
+    <div id="sheet-1" class="assignment-sheet"></div>
+    <div id="sheet-2" class="assignment-sheet"></div>
+    <div id="sheet-3" class="assignment-sheet"></div>
+    <div id="sheet-4" class="assignment-sheet"></div>
+
+    <div class="bottom-nav-replica-title">Quick Mode Switcher</div>
+    <div class="mode-selection-deck" style="margin: 10px auto 25px;">
+        <div class="mode-select-card active-tf" id="bottom-card-btn-tf" onclick="globalSwitchMode('tf')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            True / False
+        </div>
+        <div class="mode-select-card" id="bottom-card-btn-mcq" onclick="globalSwitchMode('mcq')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+            MCQ
+        </div>
+        <div class="mode-select-card" id="bottom-card-btn-blank" onclick="globalSwitchMode('blank')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="4" y1="20" x2="20" y2="20"></line><polyline points="14 4 20 10 8 22 2 22 2 16 14 4"></polyline></svg>
+            وا اكمل
+        </div>
+    </div>
+
+    <div class="bottom-nav-replica-title">Quick Sheet Switcher</div>
+    <div class="bottom-navigator-deck" id="bottomSheetNav">
+        <button class="bottom-nav-btn active" onclick="switchSheet(0)">Sheet 1</button>
+        <button class="bottom-nav-btn" onclick="switchSheet(1)">Sheet 2</button>
+        <button class="bottom-nav-btn" onclick="switchSheet(2)">Sheet 3</button>
+        <button class="bottom-nav-btn" onclick="switchSheet(3)">Sheet 4 (P1)</button>
+        <button class="bottom-nav-btn" onclick="switchSheet(4)">Sheet 4 (P2)</button>
+    </div>
+
+    <div id="score-board" class="score-board">
+        <h2 style="margin-bottom:20px; letter-spacing: 2px; color:var(--primary); font-size: 1.3rem;">BLOCK EXECUTION COMPLETE</h2>
+        <div class="score-circle" id="score-circle">
+            <div class="score-circle-inner">
+                <span class="pct" id="score-pct">0%</span>
+                <span class="lbl">ACCURACY METRIC</span>
+            </div>
+        </div>
+        <div class="score-stats">
+            <div class="stat-item">
+                <span class="stat-val correct-text" id="stat-correct">0</span>
+                <span class="stat-lbl">TRUE PREDICTIONS</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-val wrong-text" id="stat-wrong">0</span>
+                <span class="stat-lbl">FALSE LOSS</span>
+            </div>
+        </div>
+        <div class="score-msg" id="score-msg">Processing data...</div>
+        
+        <button class="action-btn retry" style="margin: 30px auto 0; font-size: 1rem; padding: 14px 25px; width: 100%; justify-content: center; border-radius:12px;" onclick="retryMode()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 16px; height: 16px;"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            RE-RUN GRADIENT DESCENT (RETRY)
+        </button>
+    </div>
+</div>
+
+<script>
+    const assignmentsConfig = [
+        {
+            id: 0,
+            tf: [
+                { q: "Machine Learning became widely adopted only after big data and powerful GPUs became available.", options: ["True", "False"], ans: 0 },
+                { q: "Supervised learning works without labeled data.", options: ["True", "False"], ans: 1 },
+                { q: "Reinforcement learning is based on rewards and penalties.", options: ["True", "False"], ans: 0 },
+                { q: "Machine Learning and Traditional Programming follow the same logic-based approach.", options: ["True", "False"], ans: 1 },
+                { q: "Deep Learning is a specialized subset of Machine Learning.", options: ["True", "False"], ans: 0 },
+                { q: "Generative AI models can create new data based on patterns they learned.", options: ["True", "False"], ans: 0 },
+                { q: "Overfitting happens when a model performs well on training data but poorly on new data.", options: ["True", "False"], ans: 0 },
+                { q: "Unsupervised learning is mainly used in clustering and dimensionality reduction.", options: ["True", "False"], ans: 0 },
+                { q: "ML Life Cycle includes steps such as data collection, cleaning, modeling, and evaluation.", options: ["True", "False"], ans: 0 },
+                { q: "Machine Learning can solve all real-world problems without limitations.", options: ["True", "False"], ans: 1 }
+            ],
+            mcq: [
+                { q: "Machine Learning became more successful mainly due to:", options: ["Bigger screens", "More data + stronger GPUs", "New programming languages", "Cloud storage only"], ans: 1 },
+                { q: "Traditional programming focuses on:", options: ["Data + rules → output", "Data + output → rules", "Rewards and penalties", "Random predictions"], ans: 0 },
+                { q: "Which ML type requires labeled data?", options: ["Unsupervised", "Semi-Supervised", "Supervised", "Reinforcement"], ans: 2 },
+                { q: "Clustering is an example of:", options: ["Supervised learning", "Unsupervised learning", "Reinforcement learning", "Deep learning"], ans: 1 },
+                { q: "“The model memorizes training data but fails on test data” refers to:", options: ["Underfitting", "Normal behavior", "Perfect generalization", "Overfitting"], ans: 3 },
+                { q: "Which of the following is a popular ML library in Python?", options: ["NumPy", "TensorFlow", "OpenCV", "Flask"], ans: 1 },
+                { q: "Generative AI is mainly used for:", options: ["Predicting labels", "Creating new data (text/images/audio)", "Cleaning datasets", "Database indexing"], ans: 1 },
+                { q: "A challenge in Machine Learning is:", options: ["Having too little data", "Data bias", "High computational cost", "All of the above"], ans: 3 },
+                { q: "Which algorithm is used for classification?", options: ["K-Means", "Linear Regression", "Logistic Regression", "PCA"], ans: 2 },
+                { q: "The last step of the ML Life Cycle is usually:", options: ["Data collection", "Model deployment", "Feature engineering", "Model training"], ans: 1 }
+            ]
+        },
+        {
+            id: 1,
+            tf: [
+                { q: "Artificial Intelligence is a broader field that includes Machine Learning as one of its subfields.", options: ["True", "False"], ans: 0 },
+                { q: "Artificial Neural Networks (ANNs) are inspired by the structure of the human brain.", options: ["True", "False"], ans: 0 },
+                { q: "Deep Learning is a subset of Machine Learning that uses multiple neural network layers.", options: ["True", "False"], ans: 0 },
+                { q: "Machine Learning always requires Artificial Neural Networks.", options: ["True", "False"], ans: 1 },
+                { q: "Classification and regression are examples of Machine Learning tasks.", options: ["True", "False"], ans: 0 },
+                { q: "Quantitative data can be measured numerically.", options: ["True", "False"], ans: 0 },
+                { q: "Qualitative data represents categories or labels rather than numbers.", options: ["True", "False"], ans: 0 },
+                { q: "One-Hot Encoding increases the number of features in a dataset.", options: ["True", "False"], ans: 0 },
+                { q: "Label Encoding is suitable for all categorical features without risk.", options: ["True", "False"], ans: 1 },
+                { q: "High-quality datasets improve the accuracy and reliability of ML models.", options: ["True", "False"], ans: 0 }
+            ],
+            mcq: [
+                { q: "Which statement best describes the relationship between AI and ML?", options: ["AI is a subset of ML", "ML is a subset of AI", "AI and ML are identical", "ML is unrelated to AI"], ans: 1 },
+                { q: "Which of the following is NOT an AI branch?", options: ["Machine Learning", "Robotics", "Computer Vision", "Database Management"], ans: 3 },
+                { q: "Artificial Neural Networks are mainly composed of:", options: ["Rules and logic", "Neurons and weighted connections", "Databases and tables", "Decision trees only"], ans: 1 },
+                { q: "Which ANN type is commonly used for image processing?", options: ["RNN", "CNN", "GAN", "SVM"], ans: 1 },
+                { q: "What is the key difference between ML and ANN-based models?", options: ["ML never uses data", "ANN is a specific ML approach", "ANN replaces ML completely", "ML cannot learn patterns"], ans: 1 },
+                { q: "Which data type represents categories such as “Red, Blue, Green”?", options: ["Quantitative", "Continuous", "Qualitative", "Numerical"], ans: 2 },
+                { q: "Which encoding technique creates a separate binary column for each category?", options: ["Label Encoding", "Frequency Encoding", "One-Hot Encoding", "Target Encoding"], ans: 2 },
+                { q: "Which encoding technique replaces categories with their occurrence frequency?", options: ["Binary Encoding", "Frequency Encoding", "One-Hot Encoding", "Label Encoding"], ans: 1 },
+                { q: "Which dataset source is considered reliable for ML projects?", options: ["Random internet comments", "Public datasets (e.g., Kaggle, UCI)", "Unverified social media posts", "Synthetic noise data only"], ans: 1 },
+                { q: "Which strategy improves dataset quality?", options: ["Removing labels", "Data cleaning and preprocessing", "Using small datasets", "Ignoring missing values"], ans: 1 }
+            ]
+        },
+        {
+            id: 2,
+            tf: [
+                { q: "Data loading is the first step before understanding and preparing the dataset.", options: ["True", "False"], ans: 0 },
+                { q: "Raw data is always clean and ready to be used directly in machine learning models.", options: ["True", "False"], ans: 1 },
+                { q: "Checking data dimensions helps identify the number of features and records.", options: ["True", "False"], ans: 0 },
+                { q: "Statistical summaries include measures such as mean, median, and standard deviation.", options: ["True", "False"], ans: 0 },
+                { q: "Class distribution review is important only for regression problems.", options: ["True", "False"], ans: 1 },
+                { q: "Data preparation improves model performance and reliability.", options: ["True", "False"], ans: 0 },
+                { q: "Feature engineering focuses on creating or transforming features to improve learning.", options: ["True", "False"], ans: 0 },
+                { q: "Precision measures how many actual positive cases were correctly predicted.", options: ["True", "False"], ans: 1 },
+                { q: "Recall is also known as sensitivity.", options: ["True", "False"], ans: 0 },
+                { q: "Logarithmic Loss (LogLoss) penalizes confident but wrong predictions.", options: ["True", "False"], ans: 0 }
+            ],
+            mcq: [
+                { q: "Which of the following is a common method for loading data in Python?", options: ["print()", "read_csv()", "load_data()", "input()"], ans: 1 },
+                { q: "Which function shows the first few rows of a dataset?", options: ["info()", "describe()", "head()", "shape()"], ans: 2 },
+                { q: "Which method is used to check the number of rows and columns?", options: ["shape", "head()", "dtypes", "corr()"], ans: 0 },
+                { q: "Which metric evaluates how well classes are balanced?", options: ["Correlation", "Class distribution", "Skewness", "Feature scaling"], ans: 1 },
+                { q: "Which step removes missing values and duplicates?", options: ["Data Reduction", "Data Splitting", "Data Cleaning", "Feature Engineering"], ans: 2 },
+                { q: "Feature engineering mainly aims to:", options: ["Reduce hardware cost", "Improve model learning", "Increase dataset size", "Remove labels"], ans: 1 },
+                { q: "Which metric combines precision and recall?", options: ["Accuracy", "ROC AUC", "F1 Score", "Support"], ans: 2 },
+                { q: "A Confusion Matrix is mainly used to evaluate:", options: ["Regression models", "Clustering models", "Classification models", "Dimensionality reduction"], ans: 2 },
+                { q: "Which metric measures how many positive predictions were correct?", options: ["Recall", "Precision", "Accuracy", "Specificity"], ans: 1 },
+                { q: "ROC AUC Score measures:", options: ["Error rate", "Probability loss", "Model’s ability to separate classes", "Number of features"], ans: 2 }
+            ]
+        },
+        {
+            id: 3,
+            tf: [
+                { q: "Linear regression is used to predict continuous numerical values.", options: ["True", "False"], ans: 0 },
+                { q: "A linear equation represents a straight-line relationship between variables.", options: ["True", "False"], ans: 0 },
+                { q: "Gradient Descent is used to maximize the error in a machine learning model.", options: ["True", "False"], ans: 1 },
+                { q: "Matrix addition is possible only if the matrices have the same dimensions.", options: ["True", "False"], ans: 0 },
+                { q: "Matrix subtraction requires both matrices to have identical sizes.", options: ["True", "False"], ans: 0 },
+                { q: "Scalar multiplication multiplies each element in the matrix by a constant value.", options: ["True", "False"], ans: 0 },
+                { q: "In dot matrix multiplication, the number of columns of the first matrix must equal the number of rows of the second matrix.", options: ["True", "False"], ans: 0 },
+                { q: "The transpose of a matrix swaps rows with columns.", options: ["True", "False"], ans: 0 },
+                { q: "A singular matrix has a determinant equal to zero.", options: ["True", "False"], ans: 0 },
+                { q: "An identity matrix contains ones on the main diagonal and zeros elsewhere.", options: ["True", "False"], ans: 0 }
+            ],
+            mcq: [
+                { q: "Linear regression attempts to model the relationship between variables using:", options: ["A curve", "A straight line", "A circle", "A polynomial only"], ans: 1 },
+                { q: "The equation of a simple linear regression model is:", options: ["y = ax² + bx + c", "y = mx + b", "y = mx²", "y = m/x"], ans: 1 },
+                { q: "Gradient Descent is mainly used for:", options: ["Data cleaning", "Parameter optimization", "Sorting data", "Data visualization"], ans: 1 },
+                { q: "Matrix addition requires:", options: ["Same number of rows only", "Same number of columns only", "Same dimensions", "Same determinant"], ans: 2 },
+                { q: "The transpose of a matrix A is represented as:", options: ["A⁻¹", "Aᵀ", "A²", "A°"], ans: 1 },
+                { q: "A vector is best described as:", options: ["A single number", "A one-dimensional array of numbers", "A square matrix", "A random variable"], ans: 1 },
+                { q: "Which matrix contains only zeros?", options: ["Identity Matrix", "Diagonal Matrix", "Zero Matrix", "Scalar Matrix"], ans: 2 },
+                { q: "Which matrix has ones on the main diagonal?", options: ["Zero Matrix", "Identity Matrix", "Random Matrix", "Singular Matrix"], ans: 1 },
+                { q: "If a matrix has no inverse, it is called:", options: ["Identity matrix", "Non-square matrix", "Singular matrix", "Diagonal matrix"], ans: 2 },
+                { q: "In gradient descent, parameters are updated in the direction of:", options: ["Maximum gradient", "Zero gradient", "Negative gradient", "Random gradient"], ans: 2 }
+            ]
+        },
+        {
+            id: 4,
+            tf: [
+                { q: "Linear regression with multivariables uses more than one input feature to predict the output.", options: ["True", "False"], ans: 0 },
+                { q: "In multivariable linear regression, the hypothesis function can include multiple parameters (θ values).", options: ["True", "False"], ans: 0 },
+                { q: "The learning rate controls how large the update step is during Gradient Descent.", options: ["True", "False"], ans: 0 },
+                { q: "Increasing the number of iterations always guarantees the best model.", options: ["True", "False"], ans: 1 },
+                { q: "Data rescaling helps Gradient Descent converge faster.", options: ["True", "False"], ans: 0 },
+                { q: "Polynomial regression can model nonlinear relationships between variables.", options: ["True", "False"], ans: 0 },
+                { q: "The Normal Equation is an iterative optimization method.", options: ["True", "False"], ans: 1 },
+                { q: "Gradient Descent requires selecting a learning rate parameter.", options: ["True", "False"], ans: 0 },
+                { q: "The Normal Equation can compute theta values directly without iterations.", options: ["True", "False"], ans: 0 },
+                { q: "Gradient Descent is usually preferred for very large datasets.", options: ["True", "False"], ans: 0 }
+            ],
+            mcq: [
+                { q: "Multivariable Linear Regression uses:", options: ["One feature only", "Multiple input features", "Only categorical variables", "Only binary variables"], ans: 1 },
+                { q: "The general hypothesis equation for multivariable linear regression is:", options: ["h(x) = θ₀ + θ₁x₁ + θ₂x₂ + ... + θₙxₙ", "h(x) = x² + y²", "h(x) = θx²", "h(x) = x + y²"], ans: 0 },
+                { q: "The parameter that controls the step size in Gradient Descent is called:", options: ["Iteration number", "Learning rate", "Theta", "Bias"], ans: 1 },
+                { q: "If the learning rate is too large, Gradient Descent may:", options: ["Converge slowly", "Fail to converge", "Always find the exact minimum", "Stop immediately"], ans: 1 },
+                { q: "Polynomial regression is used when:", options: ["Data has a nonlinear pattern", "Data is always linear", "Only one variable exists", "Data is categorical"], ans: 0 },
+                { q: "Data rescaling is mainly used to:", options: ["Increase dataset size", "Improve convergence speed of Gradient Descent", "Remove noise", "Change labels"], ans: 1 },
+                { q: "Which method directly computes theta values without iterations?", options: ["Gradient Descent", "Normal Equation", "Logistic Regression", "Decision Tree"], ans: 1 },
+                { q: "Which method requires selecting a learning rate?", options: ["Normal Equation", "Gradient Descent", "Polynomial Equation", "Matrix Inverse"], ans: 1 },
+                { q: "Which of the following equation types represents a second-degree polynomial?", options: ["Linear", "Quadratic", "Cubic", "Square Root"], ans: 1 },
+                { q: "For very large datasets, which method is generally more practical?", options: ["Normal Equation", "Gradient Descent", "Matrix Inversion Only", "Direct Calculation"], ans: 1 }
+            ]
+        }
+    ];
+
+    let currentSheetIndex = 0;
+    let currentGlobalMode = 'tf'; 
+    let lastScrollTop = 0;
+    
+    window.addEventListener('scroll', () => {
+        const headerElement = document.getElementById('mainHeader');
+        const scrollBtn = document.getElementById('scrollTopBtn');
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (currentScroll > 250) {
+            scrollBtn.classList.add('visible');
+        } else {
+            scrollBtn.classList.remove('visible');
+        }
+
+        if (currentScroll > lastScrollTop && currentScroll > 150) {
+            headerElement.style.transform = 'translateY(-100%)'; 
+        } else {
+            headerElement.style.transform = 'translateY(0)'; 
+        }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    });
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function initSuite() {
+        renderCurrentView();
+    }
+
+    function formatNumber(num) { return num < 10 ? `0${num}` : num; }
+
+    function switchSheet(index) {
+        currentSheetIndex = index;
+        
+        document.querySelectorAll('#topSheetNav .tab-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
+        document.querySelectorAll('#bottomSheetNav .bottom-nav-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
+        document.querySelectorAll('.assignment-sheet').forEach((sheet, i) => sheet.classList.toggle('active', i === index));
+        
+        document.getElementById('score-board').classList.remove('active');
+        renderCurrentView();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function globalSwitchMode(mode) {
+        currentGlobalMode = mode;
+        
+        document.getElementById('card-btn-tf').classList.toggle('active-tf', mode === 'tf');
+        document.getElementById('card-btn-mcq').classList.toggle('active-mcq', mode === 'mcq');
+        document.getElementById('card-btn-blank').classList.toggle('active-blank', mode === 'blank');
+
+        document.getElementById('bottom-card-btn-tf').classList.toggle('active-tf', mode === 'tf');
+        document.getElementById('bottom-card-btn-mcq').classList.toggle('active-mcq', mode === 'mcq');
+        document.getElementById('bottom-card-btn-blank').classList.toggle('active-blank', mode === 'blank');
+        
+        document.getElementById('mix-opt-btn').style.display = (mode === 'mcq') ? 'flex' : 'none';
+
+        document.getElementById('score-board').classList.remove('active');
+        renderCurrentView();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderCurrentView() {
+        assignmentsConfig.forEach(sheet => {
+            const container = document.getElementById(`sheet-${sheet.id}`);
+            if (sheet.id === currentSheetIndex) {
+                const targetData = (currentGlobalMode === 'tf') ? sheet.tf : sheet.mcq;
+                renderBlock(container, sheet.id, targetData);
+            } else {
+                container.innerHTML = ''; 
+            }
+        });
+        updateProgress();
+    }
+
+    function renderBlock(container, sheetId, data) {
+        container.innerHTML = '';
+        data.forEach((item, index) => {
+            const cardId = `sheet-${sheetId}-${currentGlobalMode}-q-${index}`;
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.id = cardId;
+            card.dataset.correct = item.ans;
+            card.style.animationDelay = `${index * 0.04}s`;
+            
+            let html = `
+                <div class="question-header">
+                    <div class="q-number">${formatNumber(index + 1)} / ${data.length}</div>
+                    <div class="question-text">${item.q}</div>
+                </div>
+            `;
+
+            if (currentGlobalMode === 'blank') {
+                const exactCorrectText = item.options[item.ans];
+                card.dataset.correctString = exactCorrectText.toLowerCase().trim();
+
+                html += `
+                    <div class="blank-input-wrapper">
+                        <input type="text" class="inference-input" placeholder="Type your full exact answer here (Or leave empty to reveal)..." id="${cardId}-input" autocomplete="off">
+                        <div class="expected-answer-box"><b>Correct Answer Model:</b> ${exactCorrectText}</div>
+                    </div>
+                    <button class="check-btn" onclick="checkBlankAnswer('${cardId}')">COMPUTE INFERENCE</button>
+                `;
+            } else {
+                html += `<div class="options-grid">`;
+                item.options.forEach((opt, i) => {
+                    const optLetters = ['A', 'B', 'C', 'D'];
+                    html += `
+                        <label class="option-label" onclick="selectOption('${cardId}', ${i})">
+                            <input type="radio" name="${cardId}" value="${i}">
+                            <div class="custom-radio"></div>
+                            <span><b>${currentGlobalMode === 'tf' ? opt : optLetters[i] + '. ' + opt}</b></span>
+                        </label>
+                    `;
+                });
+                html += `</div>
+                <button class="check-btn" onclick="checkRadioAnswer('${cardId}')">COMPUTE INFERENCE</button>`;
+            }
+            
+            html += `<div class="result-box"></div>`;
+            card.innerHTML = html;
+            container.appendChild(card);
+        });
+    }
+
+    function selectOption(cardId, optionIndex) {
+        const card = document.getElementById(cardId);
+        if(card.classList.contains('correct') || card.classList.contains('wrong')) return;
+
+        card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+        const selectedInput = card.querySelector(`input[value="${optionIndex}"]`);
+        if(selectedInput) {
+            selectedInput.checked = true;
+            selectedInput.parentElement.classList.add('selected');
+        }
+    }
+
+    function checkRadioAnswer(cardId) {
+        const card = document.getElementById(cardId);
+        const correctAns = parseInt(card.dataset.correct);
+        const selectedInput = card.querySelector('input:checked');
+        const resultBox = card.querySelector('.result-box');
+        const btn = card.querySelector('.check-btn');
+
+        if (!selectedInput) {
+            card.style.animation = 'none'; card.offsetHeight; card.style.animation = 'shake 0.4s'; return;
+        }
+
+        btn.disabled = true; btn.innerText = "WEIGHTS FROZEN";
+        card.querySelectorAll('input').forEach(inp => inp.disabled = true);
+        
+        card.querySelectorAll('.option-label').forEach(lbl => {
+            lbl.style.pointerEvents = 'none';
+            if(parseInt(lbl.querySelector('input').value) === correctAns) lbl.classList.add('true-answer');
+        });
+
+        if (parseInt(selectedInput.value) === correctAns) {
+            card.classList.add('correct');
+            resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
+        } else {
+            card.classList.add('wrong');
+            resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
+        }
+        
+        updateProgress();
+        triggerAutoscroll(card);
+    }
+
+    function checkBlankAnswer(cardId) {
+        const card = document.getElementById(cardId);
+        const inputField = document.getElementById(`${cardId}-input`);
+        const resultBox = card.querySelector('.result-box');
+        const btn = card.querySelector('.check-btn');
+        const userValue = inputField.value.trim().toLowerCase();
+        const targetValue = card.dataset.correctString;
+
+        if (userValue === '') {
+            btn.disabled = true; 
+            btn.innerText = "SKIPPED / REVEALED";
+            inputField.disabled = true;
+            card.classList.add('wrong'); 
+            resultBox.innerHTML = `NODE REVEALED`;
+            updateProgress();
+            return; 
+        }
+
+        btn.disabled = true; btn.innerText = "INFERENCE LOCKED";
+        inputField.disabled = true;
+
+        if (userValue === targetValue || targetValue.includes(userValue) && userValue.length > 3) {
+            card.classList.add('correct');
+            resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
+        } else {
+            card.classList.add('wrong');
+            resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
+        }
+
+        updateProgress();
+    }
+
+    function triggerAutoscroll(card) {
+        if (currentGlobalMode === 'blank') return; 
+        
+        setTimeout(() => {
+            let nextCard = card.nextElementSibling;
+            while(nextCard) {
+                if (nextCard.classList.contains('card') && nextCard.style.display !== 'none') {
+                    window.scrollTo({ top: nextCard.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
+                    break;
+                }
+                nextCard = nextCard.nextElementSibling;
+            }
+            if(!nextCard) {
+                const scoreBoard = document.getElementById('score-board');
+                if(scoreBoard.classList.contains('active')) {
+                    window.scrollTo({ top: scoreBoard.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
+                }
+            }
+        }, 350);
+    }
+
+    function updateProgress() {
+        const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
+        if (!currentContainer) return;
+        const cards = Array.from(currentContainer.querySelectorAll('.card')).filter(c => c.style.display !== 'none');
+        
+        const total = cards.length;
+        const correct = cards.filter(c => c.classList.contains('correct')).length;
+        const wrong = cards.filter(c => c.classList.contains('wrong')).length;
+        const solved = correct + wrong;
+        
+        const pct = total === 0 ? 0 : (solved / total) * 100;
+        document.getElementById('progressBar').style.width = `${pct}%`;
+        document.getElementById('live-score').innerText = `${formatNumber(correct)} / ${total}`;
+
+        const scoreBoard = document.getElementById('score-board');
+        if (solved === total && total > 0) {
+            scoreBoard.classList.add('active');
+            document.getElementById('stat-correct').innerText = correct;
+            document.getElementById('stat-wrong').innerText = wrong;
+            
+            const accuracy = Math.round((correct / total) * 100);
+            document.getElementById('score-pct').innerText = `${accuracy}%`;
+            
+            const circle = document.getElementById('score-circle');
+            let ringColor = accuracy >= 80 ? 'var(--success)' : accuracy >= 50 ? 'var(--warning)' : 'var(--danger)';
+            circle.style.background = `conic-gradient(${ringColor} ${accuracy}%, rgba(255,255,255,0.03) 0%)`;
+            document.getElementById('score-pct').style.color = ringColor;
+            
+            const msgBox = document.getElementById('score-msg');
+            if(accuracy === 100) msgBox.innerText = "Generalization Perfect. Block evaluation weights optimized completely.";
+            else if(accuracy >= 80) msgBox.innerText = "Validation Metrics Passed. Satisfactory prediction precision.";
+            else msgBox.innerText = "High cost variance error! Underfitting detected in layout processing.";
+        } else {
+            scoreBoard.classList.remove('active');
+        }
+    }
+
+    function retryMode() {
+        const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
+        const cards = currentContainer.querySelectorAll('.card');
+        let hiddenCount = 0;
+        let firstWrongCard = null;
+
+        cards.forEach(card => {
+            if (card.classList.contains('correct')) {
+                card.style.display = 'none';
+                hiddenCount++;
+            } else if (card.classList.contains('wrong')) {
+                card.style.display = 'block';
+                card.style.animation = 'slideUp 0.4s ease';
+                resetCardState(card);
+                if (!firstWrongCard) firstWrongCard = card;
+            } else {
+                card.style.display = 'block';
+            }
+        });
+
+        if (hiddenCount === cards.length) {
+            alert("All block metrics validated dynamically.");
+            cards.forEach(c => { c.style.display = 'block'; resetCardState(c); });
+        } else {
+            document.getElementById('score-board').classList.remove('active');
+            updateProgress();
+            if (firstWrongCard) {
+                setTimeout(() => {
+                    window.scrollTo({ top: firstWrongCard.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
+                }, 100);
+            }
+        }
+    }
+
+    function resetCardState(card) {
+        card.classList.remove('wrong', 'correct');
+        const btn = card.querySelector('.check-btn');
+        btn.disabled = false;
+        btn.innerText = "COMPUTE INFERENCE";
+        card.querySelector('.result-box').innerHTML = '';
+        
+        if (currentGlobalMode === 'blank') {
+            const inputField = card.querySelector('.inference-input');
+            inputField.disabled = false;
+            inputField.value = '';
+        } else {
+            card.querySelectorAll('.option-label').forEach(lbl => {
+                lbl.classList.remove('selected', 'true-answer');
+                lbl.style.pointerEvents = 'auto';
+            });
+            card.querySelectorAll('input').forEach(inp => {
+                inp.disabled = false;
+                inp.checked = false;
+            });
+        }
+    }
+
+    function mixQuestions() {
+        const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
+        const cards = Array.from(currentContainer.querySelectorAll('.card'));
+        for (let i = cards.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [cards[i], cards[j]] = [cards[j], cards[i]];
+        }
+        currentContainer.innerHTML = '';
+        cards.forEach((card, index) => {
+            card.style.animation = 'none';
+            card.offsetHeight;
+            card.style.animation = `slideUp 0.4s ${index * 0.02}s backwards`;
+            
+            const qNumElement = card.querySelector('.q-number');
+            if (qNumElement) {
+                qNumElement.innerText = `${formatNumber(index + 1)} / ${cards.length}`;
+            }
+            
+            currentContainer.appendChild(card);
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function mixOptions() {
+        if (currentGlobalMode !== 'mcq') return; 
+        const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
+        currentContainer.querySelectorAll('.card').forEach(card => {
+            const grid = card.querySelector('.options-grid');
+            const labels = Array.from(grid.querySelectorAll('.option-label'));
+            
+            for (let i = labels.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [labels[i], labels[j]] = [labels[j], labels[i]];
+            }
+            
+            grid.innerHTML = '';
+            const optLetters = ['A', 'B', 'C', 'D'];
+            labels.forEach((lbl, index) => {
+                const spanTag = lbl.querySelector('span b');
+                if(spanTag) {
+                    const exactText = spanTag.innerText.substring(3);
+                    spanTag.innerText = optLetters[index] + '. ' + exactText;
+                }
+                grid.appendChild(lbl);
+            });
+        });
+    }
+
+    initSuite();
+
+    // =========================================================================
+    // --- نظام البث والمزامنة الجماعي المتزامن التلقائي عبر السيرفر ---
+    // =========================================================================
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomName = urlParams.get('room');
+    const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? 'http://127.0.0.1:5000/api' 
+        : '/api';
+
+    let isSyncingFromServer = false;
+
+    if (roomName) {
+        console.log(`%c[SyncEngine] Room Connected: ${roomName}`, "color: #00f2fe; font-weight: bold; font-size: 1.1rem;");
+        setInterval(fetchRoomState, 2000);
+    }
+
+    async function fetchRoomState() {
+        if (!roomName || isSyncingFromServer) return;
+        try {
+            const response = await fetch(`${BACKEND_URL}/state?room=${roomName}`);
+            if (!response.ok) return;
+            const data = await response.json();
+            
+            if (data && data.answers) {
+                isSyncingFromServer = true;
+                
+                Object.keys(data.answers).forEach(cardId => {
+                    if (!cardId.startsWith(`sheet-${currentSheetIndex}-${currentGlobalMode}-`)) return;
+                    
+                    const card = document.getElementById(cardId);
+                    if (!card) return;
+
+                    const state = data.answers[cardId];
+
+                    if (state.selectedIdx !== null && !card.classList.contains('correct') && !card.classList.contains('wrong')) {
+                        if (currentGlobalMode === 'blank') {
+                            const inputField = document.getElementById(`${cardId}-input`);
+                            if (inputField && state.inputValue && inputField.value !== state.inputValue) {
+                                inputField.value = state.inputValue;
+                            }
+                        } else {
+                            const radioInput = card.querySelector(`input[value="${state.selectedIdx}"]`);
+                            if (radioInput && !radioInput.checked) {
+                                card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+                                radioInput.checked = true;
+                                radioInput.parentElement.classList.add('selected');
+                            }
+                        }
+                    }
+
+                    if (state.status === 'correct' && !card.classList.contains('correct')) {
+                        executeRemoteFreeze(card, cardId, true, state.inputValue || "");
+                    } else if (state.status === 'wrong' && !card.classList.contains('wrong')) {
+                        executeRemoteFreeze(card, cardId, false, state.inputValue || "");
+                    }
+                });
+                
+                updateProgress();
+                isSyncingFromServer = false;
+            }
+        } catch (error) {
+            isSyncingFromServer = false;
+        }
+    }
+
+    function executeRemoteFreeze(card, cardId, isCorrect, remoteInputValue) {
+        const btn = card.querySelector('.check-btn');
+        const resultBox = card.querySelector('.result-box');
+        const correctAns = parseInt(card.dataset.correct);
+
+        if(btn) {
+            btn.disabled = true;
+            btn.innerText = currentGlobalMode === 'blank' ? "SKIPPED / REVEALED" : "WEIGHTS FROZEN";
+        }
+
+        if (currentGlobalMode === 'blank') {
+            const inputField = document.getElementById(`${cardId}-input`);
+            if (inputField) {
+                inputField.disabled = true;
+                if (remoteInputValue) inputField.value = remoteInputValue;
+            }
+        } else {
+            card.querySelectorAll('input').forEach(inp => inp.disabled = true);
+            card.querySelectorAll('.option-label').forEach(lbl => {
+                lbl.style.pointerEvents = 'none';
+                if(parseInt(lbl.querySelector('input').value) === correctAns) lbl.classList.add('true-answer');
+            });
+        }
+
+        if (isCorrect) {
+            card.classList.add('correct');
+            if(resultBox) resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
+        } else {
+            card.classList.add('wrong');
+            if(resultBox) resultBox.innerHTML = currentGlobalMode === 'blank' && !remoteInputValue ? `NODE REVEALED` : `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
+        }
+    }
+
+    async function sendStateToBackend(cardId, selectedIdx, status, inputValue = "") {
+        if (!roomName || isSyncingFromServer) return;
+        try {
+            await fetch(`${BACKEND_URL}/update`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    room: roomName,
+                    cardId: cardId,
+                    selectedIdx: selectedIdx,
+                    status: status,
+                    inputValue: inputValue
+                })
+            });
+        } catch (error) {
+            console.error("[SyncEngine] Broadcast Error:", error);
+        }
+    }
+
+    const originalSelectOption = selectOption;
+    selectOption = function(cardId, optionIndex) {
+        originalSelectOption(cardId, optionIndex);
+        sendStateToBackend(cardId, optionIndex, 'selected');
+    };
+
+    const originalCheckRadioAnswer = checkRadioAnswer;
+    checkRadioAnswer = function(cardId) {
+        const card = document.getElementById(cardId);
+        if (card) {
+            const selectedInput = card.querySelector('input:checked');
+            if (selectedInput) {
+                const correctAns = parseInt(card.dataset.correct);
+                const isCorrect = parseInt(selectedInput.value) === correctAns;
+                sendStateToBackend(cardId, parseInt(selectedInput.value), isCorrect ? 'correct' : 'wrong');
+            }
+        }
+        originalCheckRadioAnswer(cardId);
+    };
+
+    const originalCheckBlankAnswer = checkBlankAnswer;
+    checkBlankAnswer = function(cardId) {
+        const card = document.getElementById(cardId);
+        const inputField = document.getElementById(`${cardId}-input`);
+        if (card && inputField) {
+            const userValue = inputField.value.trim().toLowerCase();
+            const targetValue = card.dataset.correctString;
+            
+            if (userValue === '') {
+                sendStateToBackend(cardId, null, 'wrong', '');
+            } else {
+                const isCorrect = (userValue === targetValue || targetValue.includes(userValue) && userValue.length > 3);
+                sendStateToBackend(cardId, 0, isCorrect ? 'correct' : 'wrong', inputField.value.trim());
+            }
+        }
+        originalCheckBlankAnswer(cardId);
+    };
+
+    document.addEventListener('input', function(e) {
+        if (roomName && e.target && e.target.classList.contains('inference-input')) {
+            const inputId = e.target.id;
+            const cardId = inputId.replace('-input', '');
+            sendStateToBackend(cardId, 0, 'selected', e.target.value);
+        }
+    });
+</script>
+</body>
+</html>
