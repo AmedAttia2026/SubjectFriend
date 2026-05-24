@@ -1,53 +1,174 @@
 import os
+import threading
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-from pymongo import MongoClient
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 app = Flask(__name__)
 CORS(app)
 
-# ضع بيانات قاعدة البيانات الخاصة بك هنا
-db_user = "YOUR_DB_USERNAME"
-db_pass = "YOUR_DB_PASSWORD"
-MONGO_URI = os.environ.get("MONGO_URI", f"mongodb+srv://{db_user}:{db_pass}@cluster0.8wawfsu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+# تخزين الغرف في الذاكرة
+GLOBAL_ROOMS_DATA = {}
 
-client = MongoClient(MONGO_URI)
-db = client['ml_suite_db']
-rooms_collection = db['rooms']
+# Lock لمنع تضارب التحديثات بين الأجهزة
+ROOM_LOCK = threading.Lock()
 
-# إعداد لخدمة ملف الـ HTML الرئيسي عند فتح الرابط
+# مدة حذف الغرف غير النشطة
+ROOM_TIMEOUT_MINUTES = 60
+
+
+def create_room(room_id):
+    return {
+        "room_id": room_id,
+        "current_sheet": 0,
+        "current_mode": "tf",
+        "active_card_id": "sheet-0-tf-q-0",
+        "answers": {},
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+
+
+def cleanup_old_rooms():
+    """
+    حذف الغرف القديمة تلقائياً
+    """
+    now = datetime.now(timezone.utc)
+
+    with ROOM_LOCK:
+        rooms_to_delete = []
+
+        for room_id, room_data in GLOBAL_ROOMS_DATA.items():
+            updated_time = datetime.fromisoformat(room_data["updated_at"])
+
+            if now - updated_time > timedelta(minutes=ROOM_TIMEOUT_MINUTES):
+                rooms_to_delete.append(room_id)
+
+        for room_id in rooms_to_delete:
+            del GLOBAL_ROOMS_DATA[room_id]
+
+
 @app.route('/')
 def serve_index():
     return send_from_directory('..', 'index.html')
 
+
 @app.route('/api/state', methods=['GET'])
 def get_state():
     room = request.args.get('room')
-    if not room: return jsonify({"error": "Room required"}), 400
-    room_data = rooms_collection.find_one({"room_id": room})
-    if not room_data:
-        rooms_collection.insert_one({"room_id": room, "answers": {}, "updated_at": datetime.utcnow()})
-        return jsonify({"room_id": room, "answers": {}})
-    return jsonify({"room_id": room_data["room_id"], "answers": room_data.get("answers", {})})
+
+    if not room:
+        return jsonify({"error": "Room required"}), 400
+
+    cleanup_old_rooms()
+
+    with ROOM_LOCK:
+
+        if room not in GLOBAL_ROOMS_DATA:
+            GLOBAL_ROOMS_DATA[room] = create_room(room)
+
+        return jsonify(GLOBAL_ROOMS_DATA[room])
+
 
 @app.route('/api/update', methods=['POST'])
 def update_state():
-    data = request.json
-    room, card_id = data.get('room'), data.get('cardId')
-    if not room or not card_id: return jsonify({"error": "Invalid data"}), 400
-    
-    rooms_collection.update_one(
-        {"room_id": room},
-        {"$set": {
-            f"answers.{card_id}.selectedIdx": data.get('selectedIdx'),
-            f"answers.{card_id}.status": data.get('status'),
-            f"answers.{card_id}.inputValue": data.get('inputValue', ''),
-            "updated_at": datetime.utcnow()
-        }},
-        upsert=True
-    )
-    return jsonify({"success": True})
+
+    if not request.is_json:
+        return jsonify({"error": "Request must be JSON"}), 400
+
+    data = request.get_json()
+
+    room = data.get('room')
+
+    if not room:
+        return jsonify({"error": "Room required"}), 400
+
+    card_id = data.get('cardId')
+    selected_idx = data.get('selectedIdx')
+    status = data.get('status')
+    input_value = data.get('inputValue', '')
+
+    cleanup_old_rooms()
+
+    with ROOM_LOCK:
+
+        if room not in GLOBAL_ROOMS_DATA:
+            GLOBAL_ROOMS_DATA[room] = create_room(room)
+
+        room_ref = GLOBAL_ROOMS_DATA[room]
+
+        room_ref["updated_at"] = datetime.now(
+            timezone.utc
+        ).isoformat()
+
+        # تحديث الشيت الحالي
+        if data.get('current_sheet') is not None:
+            room_ref["current_sheet"] = int(
+                data.get('current_sheet')
+            )
+
+        # تحديث المود
+        if data.get('current_mode') is not None:
+            room_ref["current_mode"] = str(
+                data.get('current_mode')
+            )
+
+        # تحديث الكارت الحالي
+        if data.get('active_card_id') is not None:
+            room_ref["active_card_id"] = str(
+                data.get('active_card_id')
+            )
+
+        # حفظ الإجابات
+        if card_id:
+
+            room_ref["answers"][card_id] = {
+                "selectedIdx": selected_idx,
+                "status": status,
+                "inputValue": input_value,
+                "submitted_at": datetime.now(
+                    timezone.utc
+                ).isoformat()
+            }
+
+    return jsonify({
+        "success": True,
+        "room": room
+    })
+
+
+@app.route('/api/reset', methods=['POST'])
+def reset_room():
+
+    data = request.get_json()
+    room = data.get('room')
+
+    if not room:
+        return jsonify({"error": "Room required"}), 400
+
+    with ROOM_LOCK:
+        GLOBAL_ROOMS_DATA[room] = create_room(room)
+
+    return jsonify({
+        "success": True,
+        "message": "Room reset successfully"
+    })
+
+
+@app.route('/api/rooms', methods=['GET'])
+def list_rooms():
+
+    with ROOM_LOCK:
+        return jsonify({
+            "rooms": list(GLOBAL_ROOMS_DATA.keys()),
+            "count": len(GLOBAL_ROOMS_DATA)
+        })
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+
+    app.run(
+        host='0.0.0.0',
+        port=5000,
+        debug=True,
+        threaded=True
+    )
