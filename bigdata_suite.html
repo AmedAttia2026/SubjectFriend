@@ -73,6 +73,11 @@
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* كلاس الاختفاء التلقائي للهيدر بالكامل */
+        header.nav-hidden {
+            transform: translateY(-100%);
+        }
+
         .header-content {
             max-width: 1100px; margin: 0 auto; padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center; gap: 15px;
@@ -96,16 +101,33 @@
         }
         .stats-badge span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
 
+        /* تعديل تصميم الميكروفون ليدعم الاستقلالية والعوم التلقائي عند النزول لأسفل */
         .voice-mic-btn {
             background: var(--danger-dim); border: 1px solid var(--danger);
             color: var(--danger); padding: 8px 14px; border-radius: 12px;
             font-weight: 800; font-size: 0.85rem; cursor: pointer;
-            display: flex; align-items: center; gap: 6px; transition: all 0.3s;
+            display: flex; align-items: center; gap: 6px; 
             text-shadow: 0 0 5px var(--danger-glow);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s, border 0.3s, color 0.3s, box-shadow 0.3s;
+            z-index: 101; /* يجعله دائماً فوق كل شيء */
         }
         .voice-mic-btn.active-streaming {
             background: var(--success-dim); border-color: var(--success);
             color: var(--success); text-shadow: 0 0 5px var(--success-glow);
+        }
+
+        /* الكلاس السحري الذي يحول زر الميكروفون إلى عنصر عائم بالزاوية عند اختفاء الهيدر */
+        .voice-mic-btn.floating-mic {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(244, 63, 94, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transform: scale(1.05);
+        }
+        .voice-mic-btn.floating-mic.active-streaming {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(16, 185, 129, 0.3);
         }
 
         .controls-header-row {
@@ -298,6 +320,10 @@
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 
+<button class="voice-mic-btn" id="micToggleBtn" onclick="toggleLocalMicrophone()">
+    🎤 INITIALIZING AUDIO...
+</button>
+
 <header id="mainHeader">
     <div class="header-content">
         <div class="brand-title" onclick="window.location.href='index.html' + window.location.search">
@@ -305,9 +331,7 @@
             BIG DATA SUITE CRADLE
         </div>
         <div class="header-badges-group">
-            <button class="voice-mic-btn" id="micToggleBtn" onclick="toggleLocalMicrophone()">
-                🎤 INITIALIZING AUDIO...
-            </button>
+            <div id="micHeaderContainer"></div>
             <div class="stats-badge">EVALUATED: <span id="live-score">00 / 00</span></div>
         </div>
     </div>
@@ -428,7 +452,7 @@
                 { q: "MapReduce primarily processes data in:", options: ["Real-time memory", "Distributed batch mode", "Manual mode", "Local spreadsheets"], ans: 1 },
                 { q: "Which language is commonly used with Hive?", options: ["SQL", "HQL", "Python", "C++"], ans: 1 },
                 { q: "HBase is best described as:", options: ["Relational database", "NoSQL wide-column database", "Visualization tool", "Monitoring tool"], ans: 1 },
-                { q: "Which company is known as a leading Big Data vendor?", options: ["Cloudera", "Adobe", "Intel", "Oracle Forms"], ans: 0 },
+                { q: "Which company is known as a leading Big Data vendor?", options: ["Cloudera", "Adobe", "Intel", "Oracle Forms"], ans: 2 },
                 { q: "Spark is preferred over MapReduce because:", options: ["It is slower", "It lacks scalability", "It supports in-memory processing", "It does not support ML"], ans: 2 },
                 { q: "Hadoop supports which type of data?", options: ["Only structured", "Only unstructured", "Structured, semi-structured, and unstructured", "Only relational"], ans: 2 }
             ]
@@ -465,6 +489,47 @@
     let currentSheetIndex = 0;
     let currentGlobalMode = 'tf'; 
     let lastScrollTop = 0;
+
+    // =========================================================================
+    // --- محرك مراقبة التمرير لإخفاء وإظهار الهيدر وعزل الميكروفون ---
+    // =========================================================================
+    const mainHeader = document.getElementById('mainHeader');
+    const micBtn = document.getElementById('micToggleBtn');
+    const micHeaderContainer = document.getElementById('micHeaderContainer');
+
+    // لضمان وجود المايك بداخل الهيدر عند التشغيل المبدئي
+    micHeaderContainer.appendChild(micBtn);
+
+    window.addEventListener('scroll', () => {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (currentScroll > 120) { 
+            // التمرير لأسفل: إخفاء الهيدر وتحويل الميكروفون لعنصر عائم ثابث في الزاوية
+            if (currentScroll > lastScrollTop) {
+                mainHeader.classList.add('nav-hidden');
+                if (micBtn.parentElement !== document.body) {
+                    document.body.appendChild(micBtn);
+                    micBtn.classList.add('floating-mic');
+                }
+            } else {
+                // التمرير لأعلى: إظهار الهيدر وإعادة الميكروفون لمكانه الأصلي الطبيعي بداخل الهيدر
+                mainHeader.classList.remove('nav-hidden');
+                if (micBtn.parentElement !== micHeaderContainer) {
+                    micHeaderContainer.appendChild(micBtn);
+                    micBtn.classList.remove('floating-mic');
+                }
+            }
+        } else {
+            // الشاشة في الأعلى تماماً: الهيدر طبيعي والمايك بداخله
+            mainHeader.classList.remove('nav-hidden');
+            if (micBtn.parentElement !== micHeaderContainer) {
+                micHeaderContainer.appendChild(micBtn);
+                micBtn.classList.remove('floating-mic');
+            }
+        }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    }, { passive: true });
+
 
     function formatNumber(num) {
         return num < 10 ? '0' + num : num;
@@ -958,7 +1023,6 @@
         }
     }
 
-    // تهيئة محركات الصوت والتسجيل والتشغيل التلقائي المبدئي بنجاح
     initializeVoiceEngine();
     initSuite();
 </script>
