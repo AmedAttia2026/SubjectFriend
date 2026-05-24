@@ -24,6 +24,7 @@ def create_room(room_id):
         "current_mode": "tf",
         "active_card_id": "sheet-0-tf-q-0",
         "answers": {},
+        "voice_peers": [],  # مصفوفة لتخزين معرفات الصوت النشطة للجروب
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
 
@@ -49,18 +50,16 @@ def cleanup_old_rooms():
             del GLOBAL_ROOMS_DATA[room_id]
 
 
-# --- الحل الجذري للمشكلة ---
-# جعل السيرفر يخدم الصفحة الرئيسية أو أي ملف HTML فرعي تطلبه تلقائياً
 @app.route('/', defaults={'path': 'index.html'})
 @app.route('/<path:path>')
 def serve_index(path):
-    # إذا انتهى المسار بـ .html أو طلب الصفحة الرئيسية، يخدمها من المجلد الرئيسي (الأب لمجلد api)
     return send_from_directory('..', path)
 
 
 @app.route('/api/state', methods=['GET'])
 def get_state():
     room = request.args.get('room')
+    peer_id = request.args.get('peer_id')  # استقبال معرف الصوت للجهاز الحالي
 
     if not room:
         return jsonify({"error": "Room required"}), 400
@@ -71,7 +70,14 @@ def get_state():
         if room not in GLOBAL_ROOMS_DATA:
             GLOBAL_ROOMS_DATA[room] = create_room(room)
 
-        return jsonify(GLOBAL_ROOMS_DATA[room])
+        room_ref = GLOBAL_ROOMS_DATA[room]
+        
+        # تسجيل معرف الصوت للجهاز الحالي إذا لم يكن مسجلاً مسبقاً
+        if peer_id and peer_id not in room_ref["voice_peers"]:
+            room_ref["voice_peers"].append(peer_id)
+            room_ref["updated_at"] = datetime.now(timezone.utc).isoformat()
+
+        return jsonify(room_ref)
 
 
 @app.route('/api/update', methods=['POST'])
@@ -99,19 +105,15 @@ def update_state():
         room_ref = GLOBAL_ROOMS_DATA[room]
         room_ref["updated_at"] = datetime.now(timezone.utc).isoformat()
 
-        # تحديث رقم الشيت الحالي بذكاء جماعي قسري
         if data.get('current_sheet') is not None:
             room_ref["current_sheet"] = int(data.get('current_sheet'))
 
-        # تحديث مود الحل الحالي (MCQ / True/False / وا اكمل)
         if data.get('current_mode') is not None:
             room_ref["current_mode"] = str(data.get('current_mode'))
 
-        # تحديث السؤال النشط حالياً لفرض الـ AutoScroll الموحد
         if data.get('active_card_id') is not None:
             room_ref["active_card_id"] = str(data.get('active_card_id'))
 
-        # حفظ وإثبات إجابات الطلاب حية داخل الذاكرة
         if card_id:
             if "answers" not in room_ref:
                 room_ref["answers"] = {}
@@ -144,15 +146,6 @@ def reset_room():
         "success": True,
         "message": "Room reset successfully"
     })
-
-
-@app.route('/api/rooms', methods=['GET'])
-def list_rooms():
-    with ROOM_LOCK:
-        return jsonify({
-            "rooms": list(GLOBAL_ROOMS_DATA.keys()),
-            "count": len(GLOBAL_ROOMS_DATA)
-        })
 
 
 if __name__ == '__main__':
