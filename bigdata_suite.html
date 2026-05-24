@@ -9,8 +9,8 @@
 
         :root {
             --bg-dark: #020617;
-            --glass-bg: rgba(15, 23, 42, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(15, 23, 42, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.06);
             --primary: #a855f7;
             --primary-dim: rgba(168, 85, 247, 0.12);
             --primary-glow: rgba(168, 85, 247, 0.5);
@@ -18,490 +18,925 @@
             --accent-dim: rgba(236, 72, 153, 0.12);
             --accent-glow: rgba(236, 72, 153, 0.5);
             --success: #10b981;
+            --success-dim: rgba(16, 185, 129, 0.15);
+            --success-glow: rgba(16, 185, 129, 0.5);
+            --danger: #f43f5e;
+            --danger-dim: rgba(244, 63, 94, 0.15);
+            --danger-glow: rgba(244, 63, 94, 0.5);
             --warning: #f59e0b;
             --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --text-option: #cbd5e1;
+            --text-muted: #64748b;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Outfit', 'Cairo', sans-serif;
-        }
+        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
 
         body {
+            font-family: 'Outfit', 'Cairo', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
+            scroll-behavior: smooth;
+            padding-top: 185px; 
+            padding-bottom: 60px;
+        }
+
+        .bg-grid {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
             background-image: 
-                radial-gradient(at 0% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
-            background-attachment: fixed;
+                linear-gradient(to right, rgba(255,255,255,0.01) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.01) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at center, black, transparent 85%);
+            -webkit-mask-image: radial-gradient(circle at center, black, transparent 85%);
         }
 
-        /* الهيدر ونظام التحكم العائم */
+        .orb {
+            position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1; opacity: 0.25;
+            animation: float 25s infinite alternate ease-in-out;
+        }
+        .orb-1 { width: 400px; height: 400px; background: var(--accent); top: -15%; left: -10%; }
+        .orb-2 { width: 500px; height: 500px; background: var(--primary); bottom: -15%; right: -10%; animation-delay: -12s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(80px, 60px) scale(1.15); }
+        }
+
         header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border-bottom: 1px solid var(--glass-border);
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        header.minimized-cradle {
-            padding: 8px 24px;
-            background: rgba(15, 23, 42, 0.85);
+        .header-content {
+            max-width: 1100px; margin: 0 auto; padding: 12px 20px;
+            display: flex; justify-content: space-between; align-items: center; gap: 15px;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .brand-title {
+            font-size: 1.1rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            display: flex; align-items: center; gap: 8px; cursor: pointer;
         }
 
-        .brand-dot {
-            width: 12px;
-            height: 12px;
-            background: var(--accent);
-            border-radius: 50%;
-            box-shadow: 0 0 12px var(--accent-glow);
-            animation: pulse 2s infinite;
+        .header-badges-group {
+            display: flex; align-items: center; gap: 10px;
         }
 
-        .brand h1 {
-            font-size: 1.25rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            background: linear-gradient(to right, #fff, var(--text-muted));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .stats-badge {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            padding: 8px 16px; border-radius: 12px; font-weight: 800; font-size: 0.9rem;
+        }
+        .stats-badge span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
+
+        .voice-mic-btn {
+            background: var(--danger-dim); border: 1px solid var(--danger);
+            color: var(--danger); padding: 8px 14px; border-radius: 12px;
+            font-weight: 800; font-size: 0.85rem; cursor: pointer;
+            display: flex; align-items: center; gap: 6px; transition: all 0.3s;
+            text-shadow: 0 0 5px var(--danger-glow);
+        }
+        .voice-mic-btn.active-streaming {
+            background: var(--success-dim); border-color: var(--success);
+            color: var(--success); text-shadow: 0 0 5px var(--success-glow);
         }
 
-        .controls-hub {
-            display: flex;
-            align-items: center;
-            gap: 16px;
+        .controls-header-row {
+            background: rgba(10, 15, 30, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 8px 20px;
+            display: flex; justify-content: center; gap: 12px;
         }
 
-        /* أزرار التحكم المتطورة */
-        .btn-status {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
+        .action-btn {
+            background: var(--glass-bg); color: var(--text-main); border: 1px solid var(--glass-border);
+            padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.75rem;
+            cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 6px;
+            letter-spacing: 0.5px; white-space: nowrap; text-transform: uppercase;
+        }
+        .action-btn svg { width: 14px; height: 14px; }
+        .action-btn.mix { border-color: rgba(168, 85, 247, 0.4); color: var(--primary); }
+        .action-btn.mix:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-glow); }
+        .action-btn.retry { background: linear-gradient(135deg, var(--warning), #d97706); color: #000; font-weight: 900; border: none; }
+
+        .sheet-navigator {
+            background: rgba(15, 23, 42, 0.3);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex; justify-content: center; overflow-x: auto; scrollbar-width: none;
         }
 
-        .active-streaming {
-            background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
-            border-color: transparent !important;
-            box-shadow: 0 4px 20px var(--primary-glow);
-            animation: activePulse 2s infinite alternate;
+        .tab-btn {
+            background: transparent; color: var(--text-muted); border: none;
+            padding: 14px 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 1.5px;
+            cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
+            position: relative; white-space: nowrap;
+        }
+        .tab-btn:hover { color: var(--text-main); }
+        .tab-btn.active { color: var(--primary); }
+        .tab-btn.active::after {
+            content: ''; position: absolute; bottom: 0; left: 15%; width: 70%; height: 3px;
+            background: var(--primary); border-radius: 3px 3px 0 0;
+            box-shadow: 0 0 10px var(--primary-glow);
         }
 
-        /* مساحة العمل والشبكة الذكية */
-        .workspace-container {
-            margin-top: 90px;
-            padding: 24px;
-            width: 100%;
-            max-width: 1600px;
-            margin-left: auto;
-            margin-right: auto;
+        .progress-container { width: 100%; height: 3px; background: rgba(255,255,255,0.03); position: relative; }
+        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--primary)); transition: width 0.5s ease; box-shadow: 0 0 15px var(--primary-glow); }
+
+        .mode-selection-deck {
+            display: flex; justify-content: center; gap: 12px; margin: 25px auto 25px;
+            max-width: 900px; padding: 0 15px; flex-wrap: wrap;
         }
 
-        .workspace-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
+        .mode-select-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            padding: 14px 24px; border-radius: 14px; cursor: pointer;
+            font-size: 0.95rem; font-weight: 800; color: var(--text-option);
+            letter-spacing: 0.5px; text-transform: uppercase;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+            display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex: 1; min-width: 150px; justify-content: center;
         }
 
-        /* لوحة الشات والأسئلة الأساسية المحسنة */
-        .qa-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 150px);
-            min-height: 550px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        .mode-select-card:hover { border-color: rgba(255,255,255,0.15); color: #fff; transform: translateY(-2px); }
+        .mode-select-card.active-tf { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
+        .mode-select-card.active-mcq { color: #db2777; border-color: #db2777; background: rgba(219, 39, 119, 0.12); box-shadow: 0 0 20px rgba(219, 39, 119, 0.15); }
+        .mode-select-card.active-blank { color: var(--warning); border-color: var(--warning); background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
+
+        .bottom-nav-replica-title {
+            text-align: center; font-size: 0.85rem; font-weight: 800; letter-spacing: 2px;
+            color: var(--text-muted); text-transform: uppercase; margin: 40px 0 15px;
+        }
+        .bottom-navigator-deck {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 16px; padding: 10px; display: flex; justify-content: center;
+            gap: 10px; flex-wrap: wrap; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .bottom-nav-btn {
+            background: rgba(255,255,255,0.02); color: var(--text-option); border: 1px solid var(--glass-border);
+            padding: 10px 18px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;
+            cursor: pointer; transition: all 0.25s ease; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .bottom-nav-btn:hover { border-color: var(--primary); color: #fff; }
+        .bottom-nav-btn.active {
+            background: var(--primary-dim); color: var(--primary); border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.1); font-weight: 900;
+        }
+
+        .container { max-width: 850px; margin: 15px auto 40px; padding: 0 15px; }
+        .assignment-sheet { display: none; }
+        .assignment-sheet.active { display: block; }
+
+        .card {
+            background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border); border-radius: 18px; padding: 25px; margin-bottom: 25px;
+            position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+        }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: all 0.4s; }
+        .card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        
+        .card.focused-by-peer {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 35px var(--primary-glow) !important;
+            background: rgba(168, 85, 247, 0.04) !important;
+        }
+
+        .question-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+        .q-number {
+            background: var(--primary-dim); border: 1px solid rgba(168, 85, 247, 0.2); color: var(--primary);
+            font-size: 0.8rem; font-weight: 900; padding: 4px 8px; border-radius: 6px; flex-shrink: 0;
+        }
+        .question-text { font-size: 1.15rem; font-weight: 600; line-height: 1.5; color: #fff; text-align: left; }
+
+        .options-grid { display: flex; flex-direction: column; gap: 10px; }
+        .option-label {
+            position: relative; display: flex; align-items: center; background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border); padding: 14px 18px; border-radius: 12px;
+            cursor: pointer; transition: all 0.25s ease; font-size: 1rem; font-weight: 500; color: var(--text-option);
             overflow: hidden;
         }
+        .option-label::before { content: ''; position: absolute; left: 0; top: 0; width: 0%; height: 100%; background: var(--primary-dim); transition: width 0.35s ease; z-index: 0; }
+        .option-label span, .option-label .custom-radio { position: relative; z-index: 1; }
+        .option-label:hover { border-color: rgba(255,255,255,0.12); color: #fff; transform: translateX(4px); }
+        .option-label input { display: none; }
+        
+        .custom-radio {
+            width: 18px; height: 18px; border: 2px solid var(--text-muted); border-radius: 50%;
+            margin-right: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+        }
+        .custom-radio::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); transform: scale(0); transition: transform 0.2s; }
 
-        .qa-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.02);
-        }
+        .option-label.selected { border-color: var(--primary); color: #fff; font-weight: 700; }
+        .option-label.selected::before { width: 100%; }
+        .option-label.selected .custom-radio { border-color: var(--primary); }
+        .option-label.selected .custom-radio::after { transform: scale(1); }
+        .option-label.true-answer { border-color: var(--success) !important; color: #fff !important; font-weight: 700; }
 
-        .qa-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .blank-input-wrapper { margin: 15px 0; width: 100%; }
+        .inference-input {
+            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
+            padding: 14px 18px; border-radius: 12px; color: #fff; font-size: 1.05rem;
+            font-family: 'Outfit', sans-serif; font-weight: 600; transition: all 0.3s;
         }
+        .inference-input:focus { border-color: var(--warning); background: rgba(245, 158, 11, 0.03); box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); }
+        .inference-input:disabled { opacity: 0.6; cursor: not-allowed; }
+        .expected-answer-box {
+            display: none; background: rgba(16, 185, 129, 0.1); border: 1px dashed var(--success);
+            padding: 12px 16px; border-radius: 10px; font-size: 0.95rem; margin-top: 10px; color: #fff; text-align: left;
+        }
+        .card.wrong .expected-answer-box { display: block; }
 
-        .qa-title h2 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            font-family: 'Cairo', sans-serif;
+        .check-btn {
+            background: rgba(255,255,255,0.02); color: var(--text-main); border: 1px solid var(--glass-border);
+            width: 100%; padding: 14px; border-radius: 12px; font-size: 0.9rem; font-weight: 800; letter-spacing: 1.5px;
+            margin-top: 20px; cursor: pointer; text-transform: uppercase; transition: all 0.3s;
         }
+        .check-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(255,255,255,0.04); }
+        .check-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        .live-indicator {
-            background: var(--primary-dim);
-            color: var(--primary);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        /* منطقة تغذية وعرض الأسئلة */
-        .questions-feed {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            scroll-behavior: smooth;
-        }
-
-        /* تخصيص السكرول بار */
-        .questions-feed::-webkit-scrollbar {
-            width: 6px;
-        }
-        .questions-feed::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .questions-feed::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-        .questions-feed::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .result-box {
+            margin-top: 15px; padding: 12px; border-radius: 10px; text-align: center; font-weight: 800;
+            font-size: 0.95rem; opacity: 0; height: 0; overflow: hidden; transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
         }
 
-        /* بطاقة السؤال المباشر */
-        .question-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: slideIn 0.4s ease forwards;
-        }
+        .card.correct .result-box, .card.wrong .result-box { opacity: 1; height: auto; margin-top: 15px; }
+        .card.correct { border-color: var(--success); box-shadow: 0 8px 25px var(--success-dim); }
+        .card.correct::before { background: var(--success); }
+        .card.correct .result-box { background: var(--success-dim); color: var(--success); }
+        .card.correct .option-label.selected { border-color: var(--success); }
+        .card.correct .custom-radio { border-color: var(--success); }
+        .card.correct .custom-radio::after { background: var(--success); }
+        .card.correct .inference-input { border-color: var(--success); background: var(--success-dim); color: #fff; }
 
-        .question-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(168, 85, 247, 0.3);
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-        }
+        .card.wrong { border-color: var(--danger); box-shadow: 0 8px 25px var(--danger-dim); animation: shake 0.4s; }
+        .card.wrong::before { background: var(--danger); }
+        .card.wrong .result-box { background: var(--danger-dim); color: var(--danger); }
+        .card.wrong .option-label.selected { border-color: var(--danger); }
+        .card.wrong .custom-radio { border-color: var(--danger); }
+        .card.wrong .custom-radio::after { background: var(--danger); }
+        .card.wrong .inference-input { border-color: var(--danger); background: var(--danger-dim); }
 
-        .question-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .score-board {
+            display: none; background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 40px 25px; text-align: center; margin-top: 30px;
         }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .user-name {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .question-time {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .question-body {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: #e2e8f0;
-            font-family: 'Cairo', sans-serif;
-            text-align: right;
-            direction: rtl;
-        }
-
-        /* صندوق إدخال وإرسال الأسئلة الجديد */
-        .qa-footer {
-            padding: 18px 24px;
-            border-top: 1px solid var(--glass-border);
-            background: rgba(15, 23, 42, 0.4);
-        }
-
-        .input-wrapper {
-            display: flex;
-            gap: 12px;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--glass-border);
-            padding: 6px 6px 6px 16px;
-            border-radius: 16px;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .input-wrapper:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 0 14px var(--primary-dim);
-        }
-
-        .qa-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--text-main);
-            font-size: 0.95rem;
-            font-family: 'Cairo', sans-serif;
-            direction: rtl;
-            text-align: right;
-            padding: 8px 0;
-        }
-
-        .qa-input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .btn-send {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-family: 'Cairo', sans-serif;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-send:hover {
-            background: var(--accent);
-            transform: scale(1.02);
-        }
-
-        /* الأنميشن والنبضات */
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(236, 72, 153, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }
-        }
-
-        @keyframes activePulse {
-            0% { box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4); }
-            100% { box-shadow: 0 4px 28px rgba(236, 72, 153, 0.7); }
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            header { padding: 12px 16px; }
-            .brand h1 { font-size: 1rem; }
-            .workspace-container { padding: 12px; margin-top: 80px; }
-            .qa-panel { height: calc(100vh - 120px); }
-        }
+        .score-board.active { display: block; }
     </style>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
 <body>
 
-    <header id="mainHeader">
-        <div class="brand">
-            <div class="brand-dot"></div>
-            <h1>BIG DATA WORKSPACE</h1>
+<div class="bg-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
+
+<header id="mainHeader">
+    <div class="header-content">
+        <div class="brand-title" onclick="window.location.href='index.html' + window.location.search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            BIG DATA SUITE CRADLE
         </div>
-        
-        <div class="controls-hub">
-            <button id="micToggleBtn" class="btn-status active-streaming" onclick="toggleLocalMicrophone()">
-                🎙️ MIC ACTIVE (LIVE)
+        <div class="header-badges-group">
+            <button class="voice-mic-btn" id="micToggleBtn" onclick="toggleLocalMicrophone()">
+                🎤 INITIALIZING AUDIO...
             </button>
+            <div class="stats-badge">EVALUATED: <span id="live-score">00 / 00</span></div>
         </div>
-    </header>
+    </div>
+    
+    <div class="controls-header-row">
+        <button class="action-btn mix" onclick="mixQuestions()">SHUFFLE BLOCK</button>
+        <button class="action-btn opt-mix" onclick="mixOptions()">MIX OPTIONS</button>
+    </div>
 
-    <main class="workspace-container">
-        <div class="workspace-grid">
-            
-            <section class="qa-panel">
-                <div class="qa-header">
-                    <span class="live-indicator">LIVE FEED</span>
-                    <div class="qa-title">
-                        <h2>الأسئلة والدردشة المباشرة</h2>
-                        <span>💬</span>
-                    </div>
-                </div>
+    <div class="sheet-navigator" id="topSheetNav">
+        <button class="tab-btn" onclick="switchSheet(0, true)">Sheet 1</button>
+        <button class="tab-btn" onclick="switchSheet(1, true)">Sheet 2 (P1)</button>
+        <button class="tab-btn" onclick="switchSheet(2, true)">Sheet 2 (P2)</button>
+        <button class="tab-btn" onclick="switchSheet(3, true)">Sheet 3</button>
+    </div>
+    <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+</header>
 
-                <div class="questions-feed" id="questionsFeed">
-                    </div>
+<div class="mode-selection-deck">
+    <div class="mode-select-card" id="card-btn-tf" onclick="globalSwitchMode('tf', true)">True / False</div>
+    <div class="mode-select-card" id="card-btn-mcq" onclick="globalSwitchMode('mcq', true)">MCQ</div>
+    <div class="mode-select-card" id="card-btn-blank" onclick="globalSwitchMode('blank', true)">وا اكمل</div>
+</div>
 
-                <div class="qa-footer">
-                    <form id="qaForm" onsubmit="handleQuestionSubmit(event)">
-                        <div class="input-wrapper">
-                            <button type="submit" class="btn-send">إرسال 🚀</button>
-                            <input type="text" id="questionInput" class="qa-input" placeholder="اكتب سؤالك أو استفسارك هنا ليظهر فوراً بالشات..." autocomplete="off" required>
-                        </div>
-                    </form>
-                </div>
-            </section>
+<div class="container">
+    <div id="sheet-0" class="assignment-sheet"></div>
+    <div id="sheet-1" class="assignment-sheet"></div>
+    <div id="sheet-2" class="assignment-sheet"></div>
+    <div id="sheet-3" class="assignment-sheet"></div>
 
-        </div>
-    </main>
+    <div class="bottom-nav-replica-title">Quick Sheet Switcher</div>
+    <div class="bottom-navigator-deck" id="bottomSheetNav">
+        <button class="bottom-nav-btn" onclick="switchSheet(0, true)">Sheet 1</button>
+        <button class="bottom-nav-btn" onclick="switchSheet(1, true)">Sheet 2 (P1)</button>
+        <button class="bottom-nav-btn" onclick="switchSheet(2, true)">Sheet 2 (P2)</button>
+        <button class="bottom-nav-btn" onclick="switchSheet(3, true)">Sheet 3</button>
+    </div>
+
+    <div id="score-board" class="score-board">
+        <h2 style="margin-bottom:20px; color:var(--primary); font-size: 1.3rem;">BLOCK EXECUTION COMPLETE</h2>
+        <button class="action-btn retry" style="width: 100%; padding: 14px;" onclick="retryMode()">RE-RUN CLUSTER RUN</button>
+    </div>
+</div>
 
 <script>
-    let localAudioStream = null;
-    let lastScrollTop = 0;
-
-    // مصفوفة تجريبية لحقن أسئلة أولية عند التحميل لضمان عمل "قراءة وعرض الأسئلة" فوراً
-    const initialQuestions = [
-        { name: "أحمد المالي", text: "هل يمكن ربط شاشات التحليل الرسومية بمصادر بيانات ضخمة كـ Hadoop بشكل فوري؟", time: "منذ دقيقة" },
-        { name: "سارة المهندسة", text: "النظام ممتاز جداً، هل يوجد ميزة لتصدير تقارير الأسئلة المباشرة بعد انتهاء الجلسة؟", time: "منذ 3 دقائق" }
+    const assignmentsConfig = [
+        {
+            id: 0,
+            tf: [
+                { q: "The growth of IoT devices is one of the main causes of the data explosion.", options: ["True", "False"], ans: 0 },
+                { q: "Big Data only refers to structured data stored in relational databases.", options: ["True", "False"], ans: 1 },
+                { q: "Volume refers to the speed at which data is generated.", options: ["True", "False"], ans: 1 },
+                { q: "Velocity describes how fast data is generated and processed.", options: ["True", "False"], ans: 0 },
+                { q: "Variety refers to different formats such as text, images, and videos.", options: ["True", "False"], ans: 0 },
+                { q: "Veracity deals with data accuracy and reliability.", options: ["True", "False"], ans: 0 },
+                { q: "Traditional systems are always sufficient for handling petabytes of data.", options: ["True", "False"], ans: 1 },
+                { q: "Distributed computing allows multiple machines to work together.", options: ["True", "False"], ans: 0 },
+                { q: "Big Data architecture includes ingestion, storage, processing, and analytics layers.", options: ["True", "False"], ans: 0 },
+                { q: "Scalability is not a challenge in Big Data systems.", options: ["True", "False"], ans: 1 }
+            ],
+            mcq: [
+                { q: "Which of the following contributes most to the data explosion?", options: ["Manual record keeping", "IoT devices", "Typewriters", "Fax machines"], ans: 1 },
+                { q: "Which “V” represents the scale of data?", options: ["Velocity", "Value", "Volume", "Variety"], ans: 2 },
+                { q: "Which layer is responsible for collecting data from different sources?", options: ["Storage", "Analytics", "Ingestion", "Visualization"], ans: 2 },
+                { q: "Which of the following is an example of unstructured data?", options: ["Excel table", "SQL database", "Social media image", "CSV file"], ans: 2 },
+                { q: "Traditional systems mainly rely on:", options: ["Distributed clusters", "Single-server architecture", "Cloud-native systems", "Edge computing"], ans: 1 },
+                { q: "Velocity mainly concerns:", options: ["Data size", "Data speed", "Data quality", "Data storage cost"], ans: 1 },
+                { q: "Which industry uses Big Data for fraud detection?", options: ["Agriculture", "Finance", "Construction", "Manufacturing"], ans: 1 },
+                { q: "Veracity is related to:", options: ["Data truthfulness", "Data format", "Data speed", "Data storage cost"], ans: 0 },
+                { q: "Distributed computing improves:", options: ["Manual processing", "Scalability", "Paper documentation", "Data entry speed"], ans: 1 },
+                { q: "One key challenge in Big Data implementation is:", options: ["Low internet usage", "Data security", "Small datasets", "Limited software options"], ans: 1 }
+            ]
+        },
+        {
+            id: 1,
+            tf: [
+                { q: "The ingestion layer is responsible for collecting data from different sources.", options: ["True", "False"], ans: 0 },
+                { q: "Apache Kafka is mainly used for streaming data ingestion.", options: ["True", "False"], ans: 0 },
+                { q: "Hadoop Distributed File System is a distributed file system used for large-scale storage.", options: ["True", "False"], ans: 0 },
+                { q: "Data warehouses are optimized mainly for transactional workloads.", options: ["True", "False"], ans: 1 },
+                { q: "ETL loads data first and then transforms it.", options: ["True", "False"], ans: 1 },
+                { q: "Stateless services help improve scalability.", options: ["True", "False"], ans: 0 },
+                { q: "Leader election is part of high availability mechanisms.", options: ["True", "False"], ans: 0 },
+                { q: "Encryption is part of the security layer in Big Data architecture.", options: ["True", "False"], ans: 0 }
+            ],
+            mcq: [
+                { q: "Which layer is responsible for storing large volumes of data?", options: ["Ingestion", "Storage", "Analytics", "Monitoring"], ans: 1 },
+                { q: "Which of the following is an example of streaming ingestion tool?", options: ["Power BI", "Apache Kafka", "MySQL", "Excel"], ans: 1 },
+                { q: "Which storage option is commonly used in Hadoop ecosystems?", options: ["HDFS", "FTP", "HTML", "SMTP"], ans: 0 },
+                { q: "ELT differs from ETL because transformation happens:", options: ["Before loading", "During ingestion", "After loading", "Outside the system"], ans: 2 },
+                { q: "Sharding is mainly used for:", options: ["Backup", "Partitioning data", "Encryption", "Visualization"], ans: 1 },
+                { q: "Geo-replication improves:", options: ["Data formatting", "Geographic availability", "Dashboard design", "Programming speed"], ans: 1 },
+                { q: "Which tool is commonly used for monitoring cluster metrics?", options: ["Kafka", "Prometheus", "HDFS", "SQL Server"], ans: 1 },
+                { q: "Data lakes are beneficial because they:", options: ["Reduce flexibility", "Store only structured data", "Support machine learning readiness", "Eliminate scalability"], ans: 2 },
+                { q: "Stateless services are important for:", options: ["Security only", "Scalability and autoscaling", "Manual processing", "Backup operations"], ans: 1 },
+                { q: "In high availability systems, automated failover ensures:", options: ["Manual restart", "Immediate recovery from failure", "Data deletion", "Reduced monitoring"], ans: 1 }
+            ]
+        },
+        {
+            id: 2,
+            tf: [
+                { q: "RDBMS systems are fully optimized for petabyte-scale Big Data workloads.", options: ["True", "False"], ans: 1 },
+                { q: "Scalability is one of the main limitations of traditional RDBMS when handling Big Data.", options: ["True", "False"], ans: 0 },
+                { q: "Apache Hadoop is designed for distributed storage and processing of large datasets.", options: ["True", "False"], ans: 0 },
+                { q: "Hadoop provides built-in fault tolerance.", options: ["True", "False"], ans: 0 },
+                { q: "NoSQL databases are limited to structured data only.", options: ["True", "False"], ans: 1 },
+                { q: "Hadoop Distributed File System is part of the Hadoop storage layer.", options: ["True", "False"], ans: 0 },
+                { q: "Apache Spark is generally faster than MapReduce due to in-memory processing.", options: ["True", "False"], ans: 0 },
+                { q: "Apache Hive belongs to the data querying layer of the Hadoop ecosystem.", options: ["True", "False"], ans: 0 },
+                { q: "Hadoop cluster management can be performed using Apache Ambari.", options: ["True", "False"], ans: 0 },
+                { q: "Hadoop is only suitable for structured relational data.", options: ["True", "False"], ans: 1 }
+            ],
+            mcq: [
+                { q: "Which of the following is a limitation of RDBMS in Big Data?", options: ["High scalability", "Low cost storage", "Limited scalability", "Built-in fault tolerance"], ans: 2 },
+                { q: "Hadoop mainly solves problems related to:", options: ["Small datasets", "Distributed storage and processing", "Desktop computing", "Word processing"], ans: 1 },
+                { q: "Which tool belongs to the Hadoop ingestion layer?", options: ["Hive", "Spark", "Flume", "HDFS"], ans: 2 },
+                { q: "Component used for distributed storage is called:", options: ["HDFS", "Pig", "Hive", "Oozie"], ans: 0 },
+                { q: "MapReduce primarily processes data in:", options: ["Real-time memory", "Distributed batch mode", "Manual mode", "Local spreadsheets"], ans: 1 },
+                { q: "Which language is commonly used with Hive?", options: ["SQL", "HQL", "Python", "C++"], ans: 1 },
+                { q: "HBase is best described as:", options: ["Relational database", "NoSQL wide-column database", "Visualization tool", "Monitoring tool"], ans: 1 },
+                { q: "Which company is known as a leading Big Data vendor?", options: ["Cloudera", "Adobe", "Intel", "Oracle Forms"], ans: 0 },
+                { q: "Spark is preferred over MapReduce because:", options: ["It is slower", "It lacks scalability", "It supports in-memory processing", "It does not support ML"], ans: 2 },
+                { q: "Hadoop supports which type of data?", options: ["Only structured", "Only unstructured", "Structured, semi-structured, and unstructured", "Only relational"], ans: 2 }
+            ]
+        },
+        {
+            id: 3,
+            tf: [
+                { q: "Data Visualization is used to represent data graphically for better understanding.", options: ["True", "False"], ans: 0 },
+                { q: "Exploratory Data Analysis (EDA) is only performed after model deployment.", options: ["True", "False"], ans: 1 },
+                { q: "EDA helps in identifying patterns, trends, and anomalies in data.", options: ["True", "False"], ans: 0 },
+                { q: "Central tendency refers to measures like mean, median, and mode.", options: ["True", "False"], ans: 0 },
+                { q: "Dispersion measures the spread of data.", options: ["True", "False"], ans: 0 },
+                { q: "A histogram is used for multivariate analysis only.", options: ["True", "False"], ans: 1 },
+                { q: "Box plots can help identify outliers in data.", options: ["True", "False"], ans: 0 },
+                { q: "Correlation matrix is used to analyze relationships between multiple variables.", options: ["True", "False"], ans: 0 },
+                { q: "Data visualization has no role in machine learning.", options: ["True", "False"], ans: 1 },
+                { q: "Scatter plots are used for visualizing relationships between two variables.", options: ["True", "False"], ans: 0 }
+            ],
+            mcq: [
+                { q: "What is the main goal of EDA?", options: ["Data storage", "Data exploration and understanding", "Data deletion", "Data encryption"], ans: 1 },
+                { q: "Which measure represents central tendency?", options: ["Variance", "Mean", "Range", "Standard deviation"], ans: 1 },
+                { q: "Which plot is used for distribution analysis?", options: ["Histogram", "Pie chart", "Line chart", "Bar chart"], ans: 0 },
+                { q: "Which plot is used to detect outliers?", options: ["Scatter plot", "Box plot", "Heatmap", "Line chart"], ans: 1 },
+                { q: "Which library is commonly used for visualization in Python?", options: ["NumPy", "Pandas", "Matplotlib", "TensorFlow"], ans: 2 },
+                { q: "Correlation matrix is used to:", options: ["Store data", "Measure relationships between variables", "Clean data", "Encode data"], ans: 1 },
+                { q: "Which plot is used for multivariate analysis?", options: ["Histogram", "Box plot", "Scatter matrix", "Density plot"], ans: 2 },
+                { q: "Dispersion includes:", options: ["Mean", "Median", "Standard deviation", "Mode"], ans: 2 },
+                { q: "Density plots are used to:", options: ["Show data categories", "Show data distribution smoothly", "Show exact values", "Store data"], ans: 1 },
+                { q: "Data visualization in ML helps in:", options: ["Ignoring data", "Understanding features and patterns", "Deleting models", "Avoiding preprocessing"], ans: 1 }
+            ]
+        }
     ];
 
-    // دالة تهيئة شاشة الأسئلة والأنظمة التابعة لها عند التحميل
+    let currentSheetIndex = 0;
+    let currentGlobalMode = 'tf'; 
+    let lastScrollTop = 0;
+
+    function formatNumber(num) {
+        return num < 10 ? '0' + num : num;
+    }
+
     function initSuite() {
-        // تحميل الأسئلة الأولية في الشات
-        initialQuestions.forEach(q => appendQuestion(q.name, q.text, q.time));
-        
-        // تشغيل محاكي الأسئلة التلقائي لاستقبال أسئلة مستمرة وعرضها حية
-        startLiveQuestionsSimulator();
+        switchSheet(0);
+        globalSwitchMode('tf');
     }
 
-    // دالة إضافة سؤال جديد في واجهة المستخدم وقراءته وعرضه بالكامل
-    function appendQuestion(name, text, time = "الآن") {
-        const feed = document.getElementById('questionsFeed');
-        if (!feed) return;
-
-        // إنشاء بطاقة السؤال بهيكلية CSS الحديثة
-        const card = document.createElement('div');
-        card.className = 'question-card';
+    function switchSheet(index, sendToServer = false) {
+        currentSheetIndex = index;
+        document.querySelectorAll('#topSheetNav .tab-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
+        document.querySelectorAll('#bottomSheetNav .bottom-nav-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
         
-        // جلب أول حرف من الاسم للأفاتار
-        const firstChar = name ? name.trim().charAt(0) : "U";
-
-        card.innerHTML = `
-            <div class="question-meta">
-                <span class="question-time">${time}</span>
-                <div class="user-info">
-                    <span class="user-name">${name}</span>
-                    <div class="user-avatar">${firstChar}</div>
-                </div>
-            </div>
-            <div class="question-body">${text}</div>
-        `;
-
-        // إدراج البطاقة في الشات
-        feed.appendChild(card);
+        document.querySelectorAll('.assignment-sheet').forEach((sheet, i) => {
+            sheet.classList.toggle('active', i === index);
+        });
         
-        // التمرير التلقائي لأسفل الشات لمشاهدة السؤال الجديد فوراً
-        feed.scrollTop = feed.scrollHeight;
+        document.getElementById('score-board').classList.remove('active');
+        renderCurrentView();
+
+        if(sendToServer) {
+            triggerUserActionBurst();
+            sendStateToBackend(null, null, null, "", { current_sheet: index, active_card_id: `sheet-${index}-${currentGlobalMode}-q-0` });
+        }
     }
 
-    // معالجة إرسال السؤال من صندوق الإدخال يدوياً
-    function handleQuestionSubmit(event) {
-        event.preventDefault();
-        const input = document.getElementById('questionInput');
-        if (!input || !input.value.trim()) return;
-
-        // إضافة السؤال للشات باسمك كمسؤول/مستخدم
-        appendQuestion("أنت (المضيف)", input.value.trim(), "الآن");
+    function globalSwitchMode(mode, sendToServer = false) {
+        currentGlobalMode = mode;
+        document.getElementById('card-btn-tf').classList.toggle('active-tf', mode === 'tf');
+        document.getElementById('card-btn-mcq').classList.toggle('active-mcq', mode === 'mcq');
+        document.getElementById('card-btn-blank').classList.toggle('active-blank', mode === 'blank');
         
-        // تفريغ الحقل
-        input.value = "";
+        document.getElementById('score-board').classList.remove('active');
+        renderCurrentView();
+
+        if(sendToServer) {
+            triggerUserActionBurst();
+            sendStateToBackend(null, null, null, "", { current_mode: mode, active_card_id: `sheet-${currentSheetIndex}-${mode}-q-0` });
+        }
     }
 
-    // محاكي ديناميكي يضخ أسئلة جديدة تلقائياً كل 15 ثانية للتأكد من أن الكود "يقرأ الأسئلة باستمرار"
-    function startLiveQuestionsSimulator() {
-        const mockDatabase = [
-            { name: "خالد العتيبي", text: "هل هناك قيود على حجم البيانات المرفوعة أثناء البث الصوتي الحركي؟" },
-            { name: "د. ريم مصطفى", text: "كيف يمكنني تفعيل التنبيهات الذكية عند حدوث طفرة مفاجئة في أداء السيرفر؟" },
-            { name: "عمر فاروق", text: "الرجاء توضيح طريقة معالجة البيانات النصية غير المهيكلة داخل الـ Workspace." },
-            { name: "م. ناصر الحارثي", text: "هل تدعم هذه النسخة المحسنة بروتوكولات الأمان العالية وتشفير الطرفين؟" }
-        ];
-
-        let index = 0;
-        setInterval(() => {
-            if (index < mockDatabase.length) {
-                appendQuestion(mockDatabase[index].name, mockDatabase[index].text, "الآن");
-                index++;
+    function renderCurrentView() {
+        assignmentsConfig.forEach(sheet => {
+            const container = document.getElementById(`sheet-${sheet.id}`);
+            if (sheet.id === currentSheetIndex) {
+                const targetData = (currentGlobalMode === 'mcq') ? sheet.mcq : sheet.tf; 
+                renderBlock(container, sheet.id, targetData);
+            } else {
+                container.innerHTML = ''; 
             }
-        }, 15000); // سؤال جديد يظهر تلقائياً كل 15 ثانية
+        });
+        updateProgress();
     }
 
-    // --- المحرك الصوتي المتطور (WebRTC / PeerJS Interface) ---
+    function renderBlock(container, sheetId, data) {
+        container.innerHTML = '';
+        data.forEach((item, index) => {
+            const cardId = `sheet-${sheetId}-${currentGlobalMode}-q-${index}`;
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.id = cardId;
+            card.dataset.correct = item.ans;
+            card.dataset.index = index;
+            card.style.animationDelay = `${index * 0.04}s`;
+            
+            card.addEventListener('click', () => {
+                triggerUserActionBurst();
+                sendStateToBackend(null, null, null, "", { active_card_id: cardId });
+            });
+            
+            let html = `
+                <div class="question-header">
+                    <div class="q-number">${formatNumber(index + 1)} / ${data.length}</div>
+                    <div class="question-text">${item.q}</div>
+                </div>
+            `;
+
+            if (currentGlobalMode === 'blank') {
+                const exactCorrectText = item.options[item.ans];
+                card.dataset.correctString = exactCorrectText.toLowerCase().trim();
+                html += `
+                    <div class="blank-input-wrapper">
+                        <input type="text" class="inference-input" placeholder="Type your full exact answer here..." id="${cardId}-input" autocomplete="off">
+                        <div class="expected-answer-box"><b>Correct Answer Model:</b> ${exactCorrectText}</div>
+                    </div>
+                    <button class="check-btn" onclick="checkBlankAnswer('${cardId}')">COMPUTE INFERENCE</button>
+                `;
+            } else {
+                html += `<div class="options-grid">`;
+                item.options.forEach((opt, i) => {
+                    html += `
+                        <label class="option-label" onclick="selectOption('${cardId}', ${i})">
+                            <input type="radio" name="${cardId}" value="${i}">
+                            <div class="custom-radio"></div>
+                            <span><b>${currentGlobalMode === 'tf' ? opt : ['A', 'B', 'C', 'D'][i] + '. ' + opt}</b></span>
+                        </label>
+                    `;
+                });
+                html += `</div><button class="check-btn" onclick="checkRadioAnswer('${cardId}')">COMPUTE INFERENCE</button>`;
+            }
+            
+            html += `<div class="result-box"></div>`;
+            card.innerHTML = html;
+            container.appendChild(card);
+        });
+    }
+
+    function selectOption(cardId, optionIndex) {
+        const card = document.getElementById(cardId);
+        if(!card || card.classList.contains('correct') || card.classList.contains('wrong')) return;
+
+        card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+        const selectedInput = card.querySelector(`input[value="${optionIndex}"]`);
+        if(selectedInput) {
+            selectedInput.checked = true;
+            selectedInput.parentElement.classList.add('selected');
+        }
+    }
+
+    function checkRadioAnswer(cardId) {
+        const card = document.getElementById(cardId);
+        const correctAns = parseInt(card.dataset.correct);
+        const selectedInput = card.querySelector('input:checked');
+        const resultBox = card.querySelector('.result-box');
+        const btn = card.querySelector('.check-btn');
+
+        if (!selectedInput) {
+            card.style.animation = 'none'; card.offsetHeight; card.style.animation = 'shake 0.4s'; return;
+        }
+
+        btn.disabled = true; btn.innerText = "WEIGHTS FROZEN";
+        card.querySelectorAll('input').forEach(inp => inp.disabled = true);
+        
+        card.querySelectorAll('.option-label').forEach(lbl => {
+            lbl.style.pointerEvents = 'none';
+            if(parseInt(lbl.querySelector('input').value) === correctAns) lbl.classList.add('true-answer');
+        });
+
+        if (parseInt(selectedInput.value) === correctAns) {
+            card.classList.add('correct');
+            resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
+        } else {
+            card.classList.add('wrong');
+            resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
+        }
+        updateProgress();
+        triggerGroupNextScroll(card);
+    }
+
+    function checkBlankAnswer(cardId) {
+        const card = document.getElementById(cardId);
+        const inputField = document.getElementById(`${cardId}-input`);
+        const resultBox = card.querySelector('.result-box');
+        const btn = card.querySelector('.check-btn');
+        const userValue = inputField.value.trim().toLowerCase();
+        const targetValue = card.dataset.correctString;
+
+        if (userValue === '') {
+            btn.disabled = true; btn.innerText = "SKIPPED / REVEALED";
+            inputField.disabled = true;
+            card.classList.add('wrong'); 
+            resultBox.innerHTML = `NODE REVEALED`;
+            updateProgress();
+            triggerGroupNextScroll(card);
+            return; 
+        }
+
+        btn.disabled = true; btn.innerText = "INFERENCE LOCKED";
+        inputField.disabled = true;
+
+        if (userValue === targetValue || targetValue.includes(userValue) && userValue.length > 2) {
+            card.classList.add('correct');
+            resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
+        } else {
+            card.classList.add('wrong');
+            resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
+        }
+        updateProgress();
+        triggerGroupNextScroll(card);
+    }
+
+    function triggerGroupNextScroll(card) {
+        const currentIndex = parseInt(card.dataset.index);
+        const nextIndex = currentIndex + 1;
+        const nextCardId = `sheet-${currentSheetIndex}-${currentGlobalMode}-q-${nextIndex}`;
+        const nextCardExists = document.getElementById(nextCardId);
+        
+        if (typeof triggerUserActionBurst === 'function') triggerUserActionBurst();
+        
+        setTimeout(() => {
+            if (nextCardExists) {
+                sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
+                    currentGlobalMode === 'blank' ? document.getElementById(`${card.id}-input`).value.trim() : "", 
+                    { active_card_id: nextCardId }
+                );
+            } else {
+                sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
+                    currentGlobalMode === 'blank' ? document.getElementById(`${card.id}-input`).value.trim() : ""
+                );
+            }
+        }, 600); 
+    }
+
+    function updateProgress() {
+        const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
+        if (!currentContainer) return;
+        const cards = Array.from(currentContainer.querySelectorAll('.card')).filter(c => c.style.display !== 'none');
+        const total = cards.length;
+        if(total === 0) return;
+        const correct = cards.filter(c => c.classList.contains('correct')).length;
+        const wrong = cards.filter(c => c.classList.contains('wrong')).length;
+        const solved = correct + wrong;
+        
+        document.getElementById('progressBar').style.width = `${(solved / total) * 100}%`;
+        document.getElementById('live-score').innerText = `${formatNumber(correct)} / ${total}`;
+        
+        if(solved === total && total > 0){
+            document.getElementById('score-board').classList.add('active');
+        } else {
+            document.getElementById('score-board').classList.remove('active');
+        }
+    }
+
+    function retryMode() {
+        const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
+        currentContainer.querySelectorAll('.card').forEach(c => { resetCardState(c); });
+        document.getElementById('score-board').classList.remove('active');
+        updateProgress();
+        triggerUserActionBurst();
+        sendStateToBackend(null, null, null, "", { active_card_id: `sheet-${currentSheetIndex}-${currentGlobalMode}-q-0` });
+    }
+
+    function resetCardState(card) {
+        card.classList.remove('wrong', 'correct');
+        const btn = card.querySelector('.check-btn');
+        if(btn) { btn.disabled = false; btn.innerText = "COMPUTE INFERENCE"; }
+        const rb = card.querySelector('.result-box');
+        if(rb) rb.innerHTML = '';
+        if (currentGlobalMode === 'blank') {
+            const inputField = card.querySelector('.inference-input');
+            if(inputField) { inputField.disabled = false; inputField.value = ''; }
+        } else {
+            card.querySelectorAll('.option-label').forEach(lbl => {
+                lbl.classList.remove('selected', 'true-answer');
+                lbl.style.pointerEvents = 'auto';
+            });
+            card.querySelectorAll('input').forEach(inp => { inp.disabled = false; inp.checked = false; });
+        }
+    }
+
+    function mixQuestions() {
+        const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
+        const cards = Array.from(currentContainer.querySelectorAll('.card'));
+        for (let i = cards.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [cards[i], cards[j]] = [cards[j], cards[i]];
+        }
+        currentContainer.innerHTML = '';
+        cards.forEach((card, index) => {
+            card.dataset.index = index;
+            const qNumElement = card.querySelector('.q-number');
+            if (qNumElement) qNumElement.innerText = `${formatNumber(index + 1)} / ${cards.length}`;
+            currentContainer.appendChild(card);
+        });
+    }
+
+    function mixOptions() {
+        if (currentGlobalMode !== 'mcq') return; 
+        const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
+        currentContainer.querySelectorAll('.card').forEach(card => {
+            const grid = card.querySelector('.options-grid');
+            const labels = Array.from(grid.querySelectorAll('.option-label'));
+            for (let i = labels.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [labels[i], labels[j]] = [labels[j], labels[i]];
+            }
+            grid.innerHTML = '';
+            const optLetters = ['A', 'B', 'C', 'D'];
+            labels.forEach((lbl, index) => {
+                const spanTag = lbl.querySelector('span b');
+                if(spanTag) {
+                    const exactText = spanTag.innerText.substring(3);
+                    spanTag.innerText = optLetters[index] + '. ' + exactText;
+                }
+                grid.appendChild(lbl);
+            });
+        });
+    }
+</script>
+
+<script>
+    // =========================================================================
+    // --- محرك الاستقبال التكيفي ذو الكفاءة العالية الموفر للسيرفر ---
+    // =========================================================================
+    let urlParams = new URLSearchParams(window.location.search);
+    let roomName = urlParams.get('room');
+    const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost:5000' ? 'http://127.0.0.1:5000/api' : '/api';
+
+    let isSyncingFromServer = false, lastActiveCardId = "", currentIntervalDelay = 2000, syncIntervalId = null, burstCountdown = 0;
+    let localVoicePeerId = "";
+
+    function startAdaptiveSyncLoop() {
+        if (syncIntervalId) clearInterval(syncIntervalId);
+        syncIntervalId = setInterval(async () => {
+            await fetchRoomState();
+            if (burstCountdown > 0) { burstCountdown--; if (burstCountdown === 0) { currentIntervalDelay = 2000; startAdaptiveSyncLoop(); } }
+        }, currentIntervalDelay);
+    }
+
+    function triggerUserActionBurst() {
+        burstCountdown = 15;
+        if (currentIntervalDelay !== 300) { currentIntervalDelay = 300; startAdaptiveSyncLoop(); }
+    }
+
+    async function fetchRoomState() {
+        if (!roomName || isSyncingFromServer) return;
+        try {
+            const url = `${BACKEND_URL}/state?room=${roomName}&peer_id=${localVoicePeerId}`;
+            const response = await fetch(url);
+            if (!response.ok) return;
+            const data = await response.json();
+            if (data) {
+                isSyncingFromServer = true;
+                let structuralChanged = false;
+
+                if (data.current_sheet !== undefined && data.current_sheet !== currentSheetIndex) { switchSheet(data.current_sheet); structuralChanged = true; }
+                if (data.current_mode !== undefined && data.current_mode !== currentGlobalMode) { globalSwitchMode(data.current_mode); structuralChanged = true; }
+
+                const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
+                if (currentContainer && currentContainer.innerHTML === "") {
+                    structuralChanged = true;
+                }
+
+                if (data.answers) {
+                    Object.keys(data.answers).forEach(cardId => {
+                        if (!cardId.startsWith(`sheet-${currentSheetIndex}-${currentGlobalMode}-`)) return;
+                        const card = document.getElementById(cardId); if (!card) return;
+                        const state = data.answers[cardId];
+
+                        if (state.selectedIdx !== null && !card.classList.contains('correct') && !card.classList.contains('wrong')) {
+                            if (currentGlobalMode === 'blank') { const i = document.getElementById(`${cardId}-input`); if (i && state.inputValue) i.value = state.inputValue; }
+                            else {
+                                card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+                                const targetInp = card.querySelector(`input[value="${state.selectedIdx}"]`);
+                                if(targetInp) { targetInp.checked = true; targetInp.parentElement.classList.add('selected'); }
+                            }
+                        }
+                        if (state.status === 'correct' && !card.classList.contains('correct')) executeRemoteFreeze(card, cardId, true, state.inputValue || "");
+                        else if (state.status === 'wrong' && !card.classList.contains('wrong')) executeRemoteFreeze(card, cardId, false, state.inputValue || "");
+                    });
+                }
+
+                if (data.voice_peers && data.voice_peers.length > 0) {
+                    handleAudioMeshSignaling(data.voice_peers);
+                }
+
+                if (data.active_card_id && (data.active_card_id !== lastActiveCardId || structuralChanged)) {
+                    lastActiveCardId = data.active_card_id;
+                    document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
+                    setTimeout(() => { const t = document.getElementById(data.active_card_id); if (t) { t.classList.add('focused-by-peer'); t.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }, 200);
+                }
+                updateProgress(); isSyncingFromServer = false;
+            }
+        } catch (error) { isSyncingFromServer = false; }
+    }
+
+    function executeRemoteFreeze(card, cardId, isCorrect, remoteValue) {
+        const btn = card.querySelector('.check-btn'); if(btn) { btn.disabled = true; btn.innerText = "WEIGHTS FROZEN"; }
+        if (currentGlobalMode === 'blank') { const i = document.getElementById(`${cardId}-input`); if (i) { i.disabled = true; if (remoteValue) i.value = remoteValue; } }
+        else { card.querySelectorAll('input').forEach(inp => inp.disabled = true); card.querySelectorAll('.option-label').forEach(lbl => { lbl.style.pointerEvents = 'none'; if(parseInt(lbl.querySelector('input').value) === parseInt(card.dataset.correct)) lbl.classList.add('true-answer'); }); }
+        card.classList.add(isCorrect ? 'correct' : 'wrong');
+    }
+
+    async function sendStateToBackend(cardId, selectedIdx, status, inputValue = "", extraFields = {}) {
+        if (!roomName || isSyncingFromServer) return;
+        try {
+            await fetch(`${BACKEND_URL}/update`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ room: roomName, cardId: cardId, selectedIdx: selectedIdx, status: status, inputValue: inputValue, ...extraFields })
+            });
+        } catch (error) {}
+    }
+
+    const originalSelectOption = selectOption;
+    selectOption = function(cardId, optionIndex) {
+        originalSelectOption(cardId, optionIndex);
+        triggerUserActionBurst();
+        sendStateToBackend(cardId, optionIndex, 'selected', "", { active_card_id: cardId });
+    };
+
+    document.addEventListener('input', function(e) {
+        if (roomName && e.target && e.target.classList.contains('inference-input')) {
+            const inputId = e.target.id;
+            const cardId = inputId.replace('-input', '');
+            triggerUserActionBurst();
+            sendStateToBackend(cardId, 0, 'selected', e.target.value, { active_card_id: cardId });
+        }
+    });
+
+    // =========================================================================
+    // --- محرك محادثات الصوت الجماعية الحية المستقرة (Signaling Mesh Network) ---
+    // =========================================================================
+    let localAudioStream = null;
+    let peerInstance = null;
+    let connectedVoicePeersList = new Set();
+
     function initializeVoiceEngine() {
+        const btn = document.getElementById('micToggleBtn');
+        
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-        .then(stream => {
-            localAudioStream = stream;
-            console.log("تم تفعيل ميكروفون البث بنجاح والتوصيل بجهاز تحكم الصوت الرئيسي.");
-        })
-        .catch(err => {
-            console.error("لم يتم العثور على صلاحيات المايك: ", err);
-            const btn = document.getElementById('micToggleBtn');
-            if(btn) {
-                btn.innerText = "❌ MIC ERROR";
-                btn.style.background = "rgba(239, 68, 68, 0.2)";
+            .then(stream => {
+                localAudioStream = stream;
+                localVoicePeerId = `peer-${roomName}-${Math.floor(100000 + Math.random() * 900000)}`;
+                peerInstance = new Peer(localVoicePeerId, { debug: 1 });
+
+                peerInstance.on('open', (id) => {
+                    console.log(`[VoiceEngine] My Peer ID: ${id}`);
+                    btn.classList.add('active-streaming');
+                    btn.innerText = "🎙️ MIC ACTIVE (LIVE)";
+                    if (roomName) startAdaptiveSyncLoop();
+                });
+
+                peerInstance.on('call', (call) => {
+                    call.answer(localAudioStream);
+                    call.on('stream', (remoteStream) => {
+                        handleRemoteAudioPlayback(call.peer, remoteStream);
+                    });
+                });
+            })
+            .catch(err => {
+                console.error("[VoiceEngine] Access Denied:", err);
+                btn.style.background = "var(--danger)";
+                btn.innerText = "⚠️ MIC BLOCKED (GRANT PERMISSION)";
+                if (roomName) startAdaptiveSyncLoop();
+            });
+    }
+
+    function handleAudioMeshSignaling(serverPeers) {
+        serverPeers.forEach(remotePeerId => {
+            if (remotePeerId !== localVoicePeerId && !connectedVoicePeersList.has(remotePeerId)) {
+                connectedVoicePeersList.add(remotePeerId);
+                console.log(`[VoiceEngine] Calling new user: ${remotePeerId}`);
+                
+                const call = peerInstance.call(remotePeerId, localAudioStream);
+                if (call) {
+                    call.on('stream', (remoteStream) => {
+                        handleRemoteAudioPlayback(remotePeerId, remoteStream);
+                    });
+                }
             }
         });
     }
 
+    function handleRemoteAudioPlayback(peerId, remoteStream) {
+        if (document.getElementById(`audio_${peerId}`)) return;
+        
+        const audioNode = document.createElement('audio');
+        audioNode.id = `audio_${peerId}`;
+        audioNode.srcObject = remoteStream;
+        audioNode.autoplay = true;
+        audioNode.controls = false;
+        document.body.appendChild(audioNode);
+    }
+
     function toggleLocalMicrophone() {
-        if (!localAudioStream) {
-            initializeVoiceEngine();
-            return;
-        }
+        if (!localAudioStream) return;
         const btn = document.getElementById('micToggleBtn');
         const audioTrack = localAudioStream.getAudioTracks()[0];
         
@@ -520,20 +955,7 @@
         }
     }
 
-    // نظام تقليص وتوسيع الهيدر التلقائي عند التمرير لحماية مساحة الرؤية للشات
-    window.addEventListener('scroll', () => {
-        const headerElement = document.getElementById('mainHeader');
-        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (currentScroll > lastScrollTop && currentScroll > 80) {
-            headerElement.classList.add('minimized-cradle');
-        } else if (currentScroll < lastScrollTop) {
-            headerElement.classList.remove('minimized-cradle');
-        }
-        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-    });
-
-    // تشغيل المحركات والأسئلة فور اكتمال تحميل عناصر الصفحة
+    // تهيئة محركات الصوت والتسجيل والتشغيل التلقائي المبدئي بنجاح
     initializeVoiceEngine();
     initSuite();
 </script>
