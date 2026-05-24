@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Big Data & Analytics Workspace - Hyper-Dynamic Sync</title>
+    <title>Big Data & Analytics Workspace - Fullscreen Optimization</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800;900&family=Cairo:wght@400;700;900&display=swap');
 
@@ -59,10 +59,17 @@
         .orb-1 { width: 400px; height: 400px; background: var(--accent); top: -15%; left: -10%; }
         .orb-2 { width: 500px; height: 500px; background: var(--primary); bottom: -15%; right: -10%; animation-delay: -12s; }
 
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(80px, 60px) scale(1.15); }
+        }
+
         header {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
-            background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border-bottom: 1px solid var(--glass-border); box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -78,7 +85,9 @@
             display: flex; align-items: center; gap: 8px; cursor: pointer;
         }
 
-        .header-badges-group { display: flex; align-items: center; gap: 10px; }
+        .header-badges-group {
+            display: flex; align-items: center; gap: 10px;
+        }
 
         .stats-badge {
             display: flex; align-items: center; gap: 8px;
@@ -100,8 +109,10 @@
         }
 
         .controls-header-row {
-            background: rgba(10, 15, 30, 0.5); border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            padding: 8px 20px; display: flex; justify-content: center; gap: 12px;
+            background: rgba(10, 15, 30, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 8px 20px;
+            display: flex; justify-content: center; gap: 12px;
         }
 
         .action-btn {
@@ -110,12 +121,14 @@
             cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 6px;
             letter-spacing: 0.5px; white-space: nowrap; text-transform: uppercase;
         }
+        .action-btn svg { width: 14px; height: 14px; }
         .action-btn.mix { border-color: rgba(168, 85, 247, 0.4); color: var(--primary); }
         .action-btn.mix:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-glow); }
         .action-btn.retry { background: linear-gradient(135deg, var(--warning), #d97706); color: #000; font-weight: 900; border: none; }
 
         .sheet-navigator {
-            background: rgba(15, 23, 42, 0.3); border-bottom: 1px solid var(--glass-border);
+            background: rgba(15, 23, 42, 0.3);
+            border-bottom: 1px solid var(--glass-border);
             display: flex; justify-content: center; overflow-x: auto; scrollbar-width: none;
         }
 
@@ -129,7 +142,8 @@
         .tab-btn.active { color: var(--primary); }
         .tab-btn.active::after {
             content: ''; position: absolute; bottom: 0; left: 15%; width: 70%; height: 3px;
-            background: var(--primary); border-radius: 3px 3px 0 0; box-shadow: 0 0 10px var(--primary-glow);
+            background: var(--primary); border-radius: 3px 3px 0 0;
+            box-shadow: 0 0 10px var(--primary-glow);
         }
 
         .progress-container { width: 100%; height: 3px; background: rgba(255,255,255,0.03); position: relative; }
@@ -146,11 +160,34 @@
             font-size: 0.95rem; font-weight: 800; color: var(--text-option);
             letter-spacing: 0.5px; text-transform: uppercase;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.25);
-            display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex: 1; min-width: 150px; justify-content: center;
+            display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); flex: 1; min-width: 150px; justify-content: center;
         }
+
+        .mode-select-card:hover { border-color: rgba(255,255,255,0.15); color: #fff; transform: translateY(-2px); }
         .mode-select-card.active-tf { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
         .mode-select-card.active-mcq { color: #db2777; border-color: #db2777; background: rgba(219, 39, 119, 0.12); box-shadow: 0 0 20px rgba(219, 39, 119, 0.15); }
         .mode-select-card.active-blank { color: var(--warning); border-color: var(--warning); background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
+
+        .bottom-nav-replica-title {
+            text-align: center; font-size: 0.85rem; font-weight: 800; letter-spacing: 2px;
+            color: var(--text-muted); text-transform: uppercase; margin: 40px 0 15px;
+        }
+        .bottom-navigator-deck {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 16px; padding: 10px; display: flex; justify-content: center;
+            gap: 10px; flex-wrap: wrap; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .bottom-nav-btn {
+            background: rgba(255,255,255,0.02); color: var(--text-option); border: 1px solid var(--glass-border);
+            padding: 10px 18px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;
+            cursor: pointer; transition: all 0.25s ease; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .bottom-nav-btn:hover { border-color: var(--primary); color: #fff; }
+        .bottom-nav-btn.active {
+            background: var(--primary-dim); color: var(--primary); border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.1); font-weight: 900;
+        }
 
         .container { max-width: 850px; margin: 15px auto 40px; padding: 0 15px; }
         .assignment-sheet { display: none; }
@@ -160,12 +197,14 @@
             background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border); border-radius: 18px; padding: 25px; margin-bottom: 25px;
             position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
         }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: all 0.4s; }
         .card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
         
         .card.focused-by-peer {
-            border-color: var(--primary) !important; box-shadow: 0 0 35px var(--primary-glow) !important;
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 35px var(--primary-glow) !important;
             background: rgba(168, 85, 247, 0.04) !important;
         }
 
@@ -203,7 +242,8 @@
         .blank-input-wrapper { margin: 15px 0; width: 100%; }
         .inference-input {
             width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
-            padding: 14px 18px; border-radius: 12px; color: #fff; font-size: 1.05rem; font-weight: 600; transition: all 0.3s;
+            padding: 14px 18px; border-radius: 12px; color: #fff; font-size: 1.05rem;
+            font-family: 'Outfit', sans-serif; font-weight: 600; transition: all 0.3s;
         }
         .inference-input:focus { border-color: var(--warning); background: rgba(245, 158, 11, 0.03); box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); }
         .inference-input:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -224,6 +264,7 @@
         .result-box {
             margin-top: 15px; padding: 12px; border-radius: 10px; text-align: center; font-weight: 800;
             font-size: 0.95rem; opacity: 0; height: 0; overflow: hidden; transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
         }
 
         .card.correct .result-box, .card.wrong .result-box { opacity: 1; height: auto; margin-top: 15px; }
@@ -257,6 +298,10 @@
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 
+<button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
+
 <header id="mainHeader">
     <div class="header-content">
         <div class="brand-title" onclick="window.location.href='index.html' + window.location.search">
@@ -273,6 +318,7 @@
     
     <div class="controls-header-row">
         <button class="action-btn mix" onclick="mixQuestions()">SHUFFLE BLOCK</button>
+        <button class="action-btn opt-mix" onclick="mixOptions()">MIX OPTIONS</button>
     </div>
 
     <div class="sheet-navigator" id="topSheetNav">
@@ -424,13 +470,27 @@
     let currentGlobalMode = 'tf'; 
     let lastScrollTop = 0;
 
+    function formatNumber(num) {
+        return num < 10 ? '0' + num : num;
+    }
+
+    function initSuite() {
+        switchSheet(0);
+        globalSwitchMode('tf');
+    }
+
     function switchSheet(index, sendToServer = false) {
         currentSheetIndex = index;
         document.querySelectorAll('#topSheetNav .tab-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
         document.querySelectorAll('#bottomSheetNav .bottom-nav-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
-        document.querySelectorAll('.assignment-sheet').forEach((sheet, i) => sheet.classList.toggle('active', i === index));
+        
+        document.querySelectorAll('.assignment-sheet').forEach((sheet, i) => {
+            sheet.classList.toggle('active', i === index);
+        });
+        
         document.getElementById('score-board').classList.remove('active');
         renderCurrentView();
+
         if(sendToServer) {
             triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_sheet: index, active_card_id: `sheet-${index}-${currentGlobalMode}-q-0` });
@@ -442,8 +502,10 @@
         document.getElementById('card-btn-tf').classList.toggle('active-tf', mode === 'tf');
         document.getElementById('card-btn-mcq').classList.toggle('active-mcq', mode === 'mcq');
         document.getElementById('card-btn-blank').classList.toggle('active-blank', mode === 'blank');
+        
         document.getElementById('score-board').classList.remove('active');
         renderCurrentView();
+
         if(sendToServer) {
             triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_mode: mode, active_card_id: `sheet-${currentSheetIndex}-${mode}-q-0` });
@@ -472,6 +534,7 @@
             card.id = cardId;
             card.dataset.correct = item.ans;
             card.dataset.index = index;
+            card.style.animationDelay = `${index * 0.04}s`;
             
             card.addEventListener('click', () => {
                 triggerUserActionBurst();
@@ -595,7 +658,7 @@
         const nextCardId = `sheet-${currentSheetIndex}-${currentGlobalMode}-q-${nextIndex}`;
         const nextCardExists = document.getElementById(nextCardId);
         
-        triggerUserActionBurst();
+        if (typeof triggerUserActionBurst === 'function') triggerUserActionBurst();
         
         setTimeout(() => {
             if (nextCardExists) {
@@ -673,6 +736,29 @@
             currentContainer.appendChild(card);
         });
     }
+
+    function mixOptions() {
+        if (currentGlobalMode !== 'mcq') return; 
+        const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
+        currentContainer.querySelectorAll('.card').forEach(card => {
+            const grid = card.querySelector('.options-grid');
+            const labels = Array.from(grid.querySelectorAll('.option-label'));
+            for (let i = labels.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [labels[i], labels[j]] = [labels[j], labels[i]];
+            }
+            grid.innerHTML = '';
+            const optLetters = ['A', 'B', 'C', 'D'];
+            labels.forEach((lbl, index) => {
+                const spanTag = lbl.querySelector('span b');
+                if(spanTag) {
+                    const exactText = spanTag.innerText.substring(3);
+                    spanTag.innerText = optLetters[index] + '. ' + exactText;
+                }
+                grid.appendChild(lbl);
+            });
+        });
+    }
 </script>
 
 <script>
@@ -702,7 +788,6 @@
     async function fetchRoomState() {
         if (!roomName || isSyncingFromServer) return;
         try {
-            // تمرير الـ localVoicePeerId الحقيقي للسيرفر ليقوم بتوزيعه على الشبكة
             const url = `${BACKEND_URL}/state?room=${roomName}&peer_id=${localVoicePeerId}`;
             const response = await fetch(url);
             if (!response.ok) return;
@@ -738,7 +823,6 @@
                     });
                 }
 
-                // استقبال ومعالجة شبكة الصوت المفتوحة للجروب بالكامل
                 if (data.voice_peers && data.voice_peers.length > 0) {
                     handleAudioMeshSignaling(data.voice_peers);
                 }
@@ -799,8 +883,6 @@
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
             .then(stream => {
                 localAudioStream = stream;
-                
-                // توليد ID فريد عشوائي لكل جهاز متصل بالـ Room
                 localVoicePeerId = `peer-${roomName}-${Math.floor(100000 + Math.random() * 900000)}`;
                 peerInstance = new Peer(localVoicePeerId, { debug: 1 });
 
@@ -808,12 +890,9 @@
                     console.log(`[VoiceEngine] My Peer ID: ${id}`);
                     btn.classList.add('active-streaming');
                     btn.innerText = "🎙️ MIC ACTIVE (LIVE)";
-                    
-                    // تشغيل حلقة استقبال ومراقبة السيرفر
                     if (roomName) startAdaptiveSyncLoop();
                 });
 
-                // استقبال المكالمات الصوتية الواردة من بقية زملائك في الجروب فورا
                 peerInstance.on('call', (call) => {
                     call.answer(localAudioStream);
                     call.on('stream', (remoteStream) => {
@@ -825,15 +904,12 @@
                 console.error("[VoiceEngine] Access Denied:", err);
                 btn.style.background = "var(--danger)";
                 btn.innerText = "⚠️ MIC BLOCKED (GRANT PERMISSION)";
-                // تشغيل مزامنة الأسئلة حتى لو تم رفض المايك
                 if (roomName) startAdaptiveSyncLoop();
             });
     }
 
-    // خوارزمية الربط الهيكلي الصوتي القسري لجميع شاشات الجروب
     function handleAudioMeshSignaling(serverPeers) {
         serverPeers.forEach(remotePeerId => {
-            // شروط الاتصال: ألا يكون هذا الـ ID الخاص بجهازي، وألا أكون قد اتصلت به مسبقاً
             if (remotePeerId !== localVoicePeerId && !connectedVoicePeersList.has(remotePeerId)) {
                 connectedVoicePeersList.add(remotePeerId);
                 console.log(`[VoiceEngine] Calling new user: ${remotePeerId}`);
@@ -870,7 +946,7 @@
             btn.style.background = "var(--glass-bg)";
             btn.style.borderColor = "var(--warning)";
             btn.style.color = "var(--warning)";
-            btn.innerText = "¼ MIC MUTED";
+            btn.innerText = "🔇 MIC MUTED";
         } else {
             audioTrack.enabled = true;
             btn.classList.add('active-streaming');
@@ -879,10 +955,9 @@
         }
     }
 
-    // تشغيل الصوت الفوري أولاً، وهو بدوره سيطلق الـ Sync Loop بنجاح
+    // تهيئة محركات الصوت والتسجيل والتشغيل التلقائي المبدئي بنجاح
     initializeVoiceEngine();
-    switchSheet(0);
-    globalSwitchMode('tf');
+    initSuite();
 </script>
 </body>
 </html>
