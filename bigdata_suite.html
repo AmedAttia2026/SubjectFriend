@@ -20,7 +20,7 @@
             --success: #10b981;
             --success-dim: rgba(16, 185, 129, 0.15);
             --success-glow: rgba(16, 185, 129, 0.5);
-            --danger: #ef4444; /* لون أحمر أكثر كثافة ووضوحاً */
+            --danger: #ef4444; 
             --danger-dim: rgba(239, 68, 68, 0.15);
             --danger-glow: rgba(239, 68, 68, 0.5);
             --warning: #f59e0b;
@@ -241,7 +241,6 @@
 
         .container { max-width: 850px; margin: 15px auto 40px; padding: 0 15px; }
         
-        /* تفعيل تنقل سلس وتلاشي ناعم للـ Sheets لمنع الوميض المزعج */
         @keyframes fadeInSlide {
             from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
@@ -298,9 +297,6 @@
         .option-label.selected .custom-radio { border-color: var(--primary); }
         .option-label.selected .custom-radio::after { transform: scale(1); }
 
-        /* =========================================================================
-           --- ألوان مكثفة وقوية وحواف معززة عند تفعيل التحقق من الإجابات ---
-           ========================================================================= */
         .card.correct .option-label.selected { 
             border: 2.5px solid var(--success) !important; 
             background: rgba(16, 185, 129, 0.25) !important;
@@ -333,7 +329,6 @@
             transform: scale(1.1);
         }
 
-        /* تحديد واضح للإجابة النموذجية بلون أخضر منقط عند الوقوع في الخطأ */
         .card.wrong .option-label.true-answer {
             border: 2px dashed var(--success) !important;
             background: rgba(16, 185, 129, 0.1) !important;
@@ -565,13 +560,17 @@
     let currentGlobalMode = 'tf'; 
     let lastScrollTop = 0;
 
-    // متقفي الرندرة الحالية لضمان عدم تجميد المتصفح
     let lastRenderedSheet = null;
     let lastRenderedMode = null;
 
     // =========================================================================
-    // --- محرك الصوت الذكي المدمج دون الحاجة لملفات خارجية (Web Audio API) ---
+    // --- متتبع وبادئ مؤقت كولداون تفاعل المستخدم لمنع القفز والاهتزاز العشوائي ---
     // =========================================================================
+    let lastLocalActionTime = 0;
+    function recordLocalAction() {
+        lastLocalActionTime = Date.now();
+    }
+
     function playAudioFeedback(type) {
         try {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -579,7 +578,6 @@
             const ctx = new AudioContext();
             
             if (type === 'correct') {
-                // نغمة رنين تصاعدية جميلة
                 const osc1 = ctx.createOscillator();
                 const osc2 = ctx.createOscillator();
                 const gain = ctx.createGain();
@@ -587,15 +585,14 @@
                 osc1.type = 'sine';
                 osc2.type = 'triangle';
                 
-                // نوتات تصاعدية سريعة ومبهجة
-                osc1.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-                osc1.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08); // E5
-                osc1.frequency.setValueAtTime(783.99, ctx.currentTime + 0.16); // G5
-                osc1.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.24); // C6
+                osc1.frequency.setValueAtTime(523.25, ctx.currentTime); 
+                osc1.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08); 
+                osc1.frequency.setValueAtTime(783.99, ctx.currentTime + 0.16); 
+                osc1.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.24); 
                 
-                osc2.frequency.setValueAtTime(261.63, ctx.currentTime); // C4
-                osc2.frequency.setValueAtTime(329.63, ctx.currentTime + 0.08); // E4
-                osc2.frequency.setValueAtTime(392.00, ctx.currentTime + 0.16); // G4
+                osc2.frequency.setValueAtTime(261.63, ctx.currentTime); 
+                osc2.frequency.setValueAtTime(329.63, ctx.currentTime + 0.08); 
+                osc2.frequency.setValueAtTime(392.00, ctx.currentTime + 0.16); 
                 
                 gain.gain.setValueAtTime(0.12, ctx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.45);
@@ -609,7 +606,6 @@
                 osc1.stop(ctx.currentTime + 0.45);
                 osc2.stop(ctx.currentTime + 0.45);
             } else if (type === 'wrong') {
-                // نغمة خطأ منخفضة وهادئة
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 const filter = ctx.createBiquadFilter();
@@ -618,7 +614,6 @@
                 osc.frequency.setValueAtTime(160, ctx.currentTime);
                 osc.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.35);
                 
-                // فلتر لتنعيم الصوت وجعله غير حاد للسمع
                 filter.type = 'lowpass';
                 filter.frequency.setValueAtTime(380, ctx.currentTime);
                 
@@ -659,6 +654,7 @@
         renderCurrentView();
 
         if(sendToServer) {
+            recordLocalAction(); // تسجيل الحدث المحلي
             triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_sheet: index, active_card_id: `sheet-${index}-${currentGlobalMode}-q-0` });
         }
@@ -674,6 +670,7 @@
         renderCurrentView();
 
         if(sendToServer) {
+            recordLocalAction(); // تسجيل الحدث المحلي
             triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_mode: mode, active_card_id: `sheet-${currentSheetIndex}-${mode}-q-0` });
         }
@@ -713,6 +710,7 @@
             card.style.animationDelay = `${index * 0.04}s`;
             
             card.addEventListener('click', () => {
+                recordLocalAction(); // عند نقر الكارد يتم حظر أي تدخل خارجي فوراً
                 triggerUserActionBurst();
                 sendStateToBackend(null, null, null, "", { active_card_id: cardId });
             });
@@ -755,6 +753,7 @@
     }
 
     function selectOption(cardId, optionIndex) {
+        recordLocalAction(); // حماية فورية عند الاختيار
         const card = document.getElementById(cardId);
         if(!card || card.classList.contains('correct') || card.classList.contains('wrong')) return;
 
@@ -767,6 +766,7 @@
     }
 
     function checkRadioAnswer(cardId) {
+        recordLocalAction(); // حظر إضافي عند التحقق
         const card = document.getElementById(cardId);
         const correctAns = parseInt(card.dataset.correct);
         const selectedInput = card.querySelector('input:checked');
@@ -788,17 +788,18 @@
         if (parseInt(selectedInput.value) === correctAns) {
             card.classList.add('correct');
             resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
-            playAudioFeedback('correct'); // تفعيل نغمة النجاح
+            playAudioFeedback('correct'); 
         } else {
             card.classList.add('wrong');
             resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
-            playAudioFeedback('wrong'); // تفعيل نغمة الخطأ
+            playAudioFeedback('wrong'); 
         }
         updateProgress();
         triggerGroupNextScroll(card);
     }
 
     function checkBlankAnswer(cardId) {
+        recordLocalAction(); // حظر إضافي عند التحقق
         const card = document.getElementById(cardId);
         const inputField = document.getElementById(`${cardId}-input`);
         const resultBox = card.querySelector('.result-box');
@@ -823,17 +824,18 @@
         if (userValue === targetValue || targetValue.includes(userValue) && userValue.length > 2) {
             card.classList.add('correct');
             resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
-            playAudioFeedback('correct'); // تفعيل نغمة النجاح
+            playAudioFeedback('correct'); 
         } else {
             card.classList.add('wrong');
             resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
-            playAudioFeedback('wrong'); // تفعيل نغمة الخطأ
+            playAudioFeedback('wrong'); 
         }
         updateProgress();
         triggerGroupNextScroll(card);
     }
 
     function triggerGroupNextScroll(card) {
+        recordLocalAction(); // حماية فورية عند الانتقال التلقائي
         const currentIndex = parseInt(card.dataset.index);
         const nextIndex = currentIndex + 1;
         const nextCardId = `sheet-${currentSheetIndex}-${currentGlobalMode}-q-${nextIndex}`;
@@ -841,7 +843,6 @@
         
         if (typeof triggerUserActionBurst === 'function') triggerUserActionBurst();
         
-        // زيادة مدة الانتظار قليلاً (1000ms) لمنح المستخدم فرصة لسماع الصوت ورؤية ألوان النتيجة بوضوح قبل الحركة
         setTimeout(() => {
             if (nextCardExists) {
                 sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
@@ -979,7 +980,6 @@
         }, currentIntervalDelay);
     }
 
-    // تقليل معدل الاستنزاف عند حدوث فعل تفاعلي لتفادي حظر الشبكة
     function triggerUserActionBurst() {
         burstCountdown = 10;
         if (currentIntervalDelay !== 800) { 
@@ -988,7 +988,6 @@
         }
     }
 
-    // دالة محدد المهل والحد من التكرار عند الكتابة (Debounce) لتقليص الضغط عند إدخال النص
     function debounce(func, wait) {
         let timeout;
         return function(...args) {
@@ -1008,13 +1007,19 @@
             if (data) {
                 let structuralChanged = false;
 
-                if (data.current_sheet !== undefined && data.current_sheet !== currentSheetIndex) { 
-                    switchSheet(data.current_sheet); 
-                    structuralChanged = true; 
-                }
-                if (data.current_mode !== undefined && data.current_mode !== currentGlobalMode) { 
-                    globalSwitchMode(data.current_mode); 
-                    structuralChanged = true; 
+                // نقارن الوقت المنقضي منذ آخر فعل محلي نشط (Cooldown)
+                const isCooldownActive = (Date.now() - lastLocalActionTime) < 2000; // 2 ثانية حظر
+
+                // لا نقوم بتحديث الملاحة أو الصفحات قسرياً إن كان هناك كولداون نشط على نفس الجهاز منعاً للتعارض
+                if (!isCooldownActive) {
+                    if (data.current_sheet !== undefined && data.current_sheet !== currentSheetIndex) { 
+                        switchSheet(data.current_sheet); 
+                        structuralChanged = true; 
+                    }
+                    if (data.current_mode !== undefined && data.current_mode !== currentGlobalMode) { 
+                        globalSwitchMode(data.current_mode); 
+                        structuralChanged = true; 
+                    }
                 }
 
                 const currentContainer = document.getElementById(`sheet-${currentSheetIndex}`);
@@ -1033,7 +1038,6 @@
                         if (!isFrozen && state.selectedIdx !== null) {
                             if (currentGlobalMode === 'blank') { 
                                 const i = document.getElementById(`${cardId}-input`); 
-                                // نمنع الكتابة التلقائية وتحديث النص إن كان هذا المستخدم يركز في الحقل ويكتب حالياً
                                 if (i && state.inputValue !== undefined && document.activeElement !== i) {
                                     i.value = state.inputValue; 
                                 }
@@ -1059,8 +1063,9 @@
                     const t = document.getElementById(data.active_card_id); 
                     if (t) { 
                         t.classList.add('focused-by-peer'); 
-                        // الميزة الذكية: نمنع تحريك الكاميرا والشاشة قسرياً إن كان هذا التحديث ناجم عن فعل المستخدم ذاته
-                        if (data.active_card_id !== lastSentState.activeCardId) {
+                        
+                        // نمنع التمرير التلقائي قسرياً في حالة وجود Cooldown نشط أو تماثل البطاقة المراد الانتقال إليها محلياً
+                        if (!isCooldownActive && data.active_card_id !== lastSentState.activeCardId) {
                             setTimeout(() => { 
                                 t.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
                             }, 100);
@@ -1083,7 +1088,6 @@
     async function sendStateToBackend(cardId, selectedIdx, status, inputValue = "", extraFields = {}) {
         if (!roomName) return;
 
-        // تسجيل البيانات محلياً قبل إرسالها لتفادي تعارض الكاميرا
         if (cardId) lastSentState.activeCardId = cardId;
         if (extraFields.active_card_id) lastSentState.activeCardId = extraFields.active_card_id;
         if (extraFields.current_sheet !== undefined) lastSentState.sheet = extraFields.current_sheet;
@@ -1112,13 +1116,13 @@
         sendStateToBackend(cardId, optionIndex, 'selected', "", { active_card_id: cardId });
     };
 
-    // حماية الإدخال النصي مع تفعيل تأخير الإرسال لمنع تراكم الطلبات (Debounce)
     const debouncedSendInput = debounce((cardId, value) => {
         sendStateToBackend(cardId, 0, 'selected', value, { active_card_id: cardId });
     }, 400);
 
     document.addEventListener('input', function(e) {
         if (roomName && e.target && e.target.classList.contains('inference-input')) {
+            recordLocalAction(); // حظر فوري للمستقبل عند الكتابة
             const inputId = e.target.id;
             const cardId = inputId.replace('-input', '');
             triggerUserActionBurst();
