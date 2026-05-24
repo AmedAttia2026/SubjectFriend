@@ -20,9 +20,9 @@
             --success: #10b981;
             --success-dim: rgba(16, 185, 129, 0.15);
             --success-glow: rgba(16, 185, 129, 0.5);
-            --danger: #f43f5e;
-            --danger-dim: rgba(244, 63, 94, 0.15);
-            --danger-glow: rgba(244, 63, 94, 0.5);
+            --danger: #ef4444; /* لون أحمر أكثر كثافة ووضوحاً */
+            --danger-dim: rgba(239, 68, 68, 0.15);
+            --danger-glow: rgba(239, 68, 68, 0.5);
             --warning: #f59e0b;
             --text-main: #f8fafc;
             --text-option: #cbd5e1;
@@ -64,7 +64,6 @@
             100% { transform: translate(80px, 60px) scale(1.15); }
         }
 
-        /* تأثيرات الانتقال لغطاء الهيدر وعناصره الداخلية لتسهيل الاختفاء الذاتي */
         header {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
             background: rgba(2, 6, 23, 0.85);
@@ -82,14 +81,13 @@
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
         }
 
-        /* تخصيص حالة الهيدر عند التمرير لأسفل واختفاء الـ NAV */
         header.hide-nav {
             background: rgba(2, 6, 23, 0) !important;
             backdrop-filter: blur(0px) !important;
             -webkit-backdrop-filter: blur(0px) !important;
             box-shadow: none !important;
             border-bottom-color: transparent !important;
-            pointer-events: none; /* يسمح بلمس محتوى الصفحة من تحت الهيدر المخفي */
+            pointer-events: none;
         }
 
         header.hide-nav .brand-title,
@@ -135,14 +133,13 @@
         }
         .stats-badge span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
 
-        /* تعديل زر المايك ليظل ثابتاً وقابلاً للضغط والتفاعل بصورة مستقلة */
         .voice-mic-btn {
             background: var(--danger-dim); border: 1px solid var(--danger);
             color: var(--danger); padding: 8px 14px; border-radius: 12px;
             font-weight: 800; font-size: 0.85rem; cursor: pointer;
             display: flex; align-items: center; gap: 6px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-shadow: 0 0 5px var(--danger-glow);
-            pointer-events: auto !important; /* ضمان بقائه قابلاً للضغط */
+            pointer-events: auto !important;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
         .voice-mic-btn.active-streaming {
@@ -150,9 +147,8 @@
             color: var(--success); text-shadow: 0 0 5px var(--success-glow);
         }
 
-        /* تحسين مظهر المايك وتثبيته عند إخفاء بقية عناصر الملاحة */
         header.hide-nav .voice-mic-btn {
-            transform: translateY(12px); /* إزاحة خفيفة لأسفل ليكون بوضعية مريحة على زاوية الشاشة */
+            transform: translateY(12px);
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 12px var(--danger-glow);
@@ -244,8 +240,17 @@
         }
 
         .container { max-width: 850px; margin: 15px auto 40px; padding: 0 15px; }
+        
+        /* تفعيل تنقل سلس وتلاشي ناعم للـ Sheets لمنع الوميض المزعج */
+        @keyframes fadeInSlide {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         .assignment-sheet { display: none; }
-        .assignment-sheet.active { display: block; }
+        .assignment-sheet.active { 
+            display: block; 
+            animation: fadeInSlide 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
         .card {
             background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -284,6 +289,7 @@
         .custom-radio {
             width: 18px; height: 18px; border: 2px solid var(--text-muted); border-radius: 50%;
             margin-right: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+            transition: all 0.25s ease;
         }
         .custom-radio::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); transform: scale(0); transition: transform 0.2s; }
 
@@ -291,7 +297,52 @@
         .option-label.selected::before { width: 100%; }
         .option-label.selected .custom-radio { border-color: var(--primary); }
         .option-label.selected .custom-radio::after { transform: scale(1); }
-        .option-label.true-answer { border-color: var(--success) !important; color: #fff !important; font-weight: 700; }
+
+        /* =========================================================================
+           --- ألوان مكثفة وقوية وحواف معززة عند تفعيل التحقق من الإجابات ---
+           ========================================================================= */
+        .card.correct .option-label.selected { 
+            border: 2.5px solid var(--success) !important; 
+            background: rgba(16, 185, 129, 0.25) !important;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
+            color: #fff !important;
+            font-weight: 800;
+        }
+        .card.correct .custom-radio { 
+            border-color: var(--success) !important; 
+            background: var(--success) !important;
+        }
+        .card.correct .custom-radio::after { 
+            background: #020617 !important; 
+            transform: scale(1.1);
+        }
+
+        .card.wrong .option-label.selected { 
+            border: 2.5px solid var(--danger) !important; 
+            background: rgba(239, 68, 68, 0.25) !important;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.35);
+            color: #fff !important;
+            font-weight: 800;
+        }
+        .card.wrong .custom-radio { 
+            border-color: var(--danger) !important; 
+            background: var(--danger) !important;
+        }
+        .card.wrong .custom-radio::after { 
+            background: #fff !important; 
+            transform: scale(1.1);
+        }
+
+        /* تحديد واضح للإجابة النموذجية بلون أخضر منقط عند الوقوع في الخطأ */
+        .card.wrong .option-label.true-answer {
+            border: 2px dashed var(--success) !important;
+            background: rgba(16, 185, 129, 0.1) !important;
+            color: var(--success) !important;
+            font-weight: 700;
+        }
+        .card.wrong .option-label.true-answer .custom-radio {
+            border-color: var(--success) !important;
+        }
 
         .blank-input-wrapper { margin: 15px 0; width: 100%; }
         .inference-input {
@@ -325,17 +376,11 @@
         .card.correct { border-color: var(--success); box-shadow: 0 8px 25px var(--success-dim); }
         .card.correct::before { background: var(--success); }
         .card.correct .result-box { background: var(--success-dim); color: var(--success); }
-        .card.correct .option-label.selected { border-color: var(--success); }
-        .card.correct .custom-radio { border-color: var(--success); }
-        .card.correct .custom-radio::after { background: var(--success); }
         .card.correct .inference-input { border-color: var(--success); background: var(--success-dim); color: #fff; }
 
         .card.wrong { border-color: var(--danger); box-shadow: 0 8px 25px var(--danger-dim); animation: shake 0.4s; }
         .card.wrong::before { background: var(--danger); }
         .card.wrong .result-box { background: var(--danger-dim); color: var(--danger); }
-        .card.wrong .option-label.selected { border-color: var(--danger); }
-        .card.wrong .custom-radio { border-color: var(--danger); }
-        .card.wrong .custom-radio::after { background: var(--danger); }
         .card.wrong .inference-input { border-color: var(--danger); background: var(--danger-dim); }
 
         .score-board {
@@ -524,6 +569,74 @@
     let lastRenderedSheet = null;
     let lastRenderedMode = null;
 
+    // =========================================================================
+    // --- محرك الصوت الذكي المدمج دون الحاجة لملفات خارجية (Web Audio API) ---
+    // =========================================================================
+    function playAudioFeedback(type) {
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            const ctx = new AudioContext();
+            
+            if (type === 'correct') {
+                // نغمة رنين تصاعدية جميلة
+                const osc1 = ctx.createOscillator();
+                const osc2 = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc1.type = 'sine';
+                osc2.type = 'triangle';
+                
+                // نوتات تصاعدية سريعة ومبهجة
+                osc1.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                osc1.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08); // E5
+                osc1.frequency.setValueAtTime(783.99, ctx.currentTime + 0.16); // G5
+                osc1.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.24); // C6
+                
+                osc2.frequency.setValueAtTime(261.63, ctx.currentTime); // C4
+                osc2.frequency.setValueAtTime(329.63, ctx.currentTime + 0.08); // E4
+                osc2.frequency.setValueAtTime(392.00, ctx.currentTime + 0.16); // G4
+                
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.45);
+                
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc1.start();
+                osc2.start();
+                osc1.stop(ctx.currentTime + 0.45);
+                osc2.stop(ctx.currentTime + 0.45);
+            } else if (type === 'wrong') {
+                // نغمة خطأ منخفضة وهادئة
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                const filter = ctx.createBiquadFilter();
+                
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(160, ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.35);
+                
+                // فلتر لتنعيم الصوت وجعله غير حاد للسمع
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(380, ctx.currentTime);
+                
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 0.4);
+            }
+        } catch (e) {
+            console.warn("Audio Context not allowed or supported by browser policy", e);
+        }
+    }
+
     function formatNumber(num) {
         return num < 10 ? '0' + num : num;
     }
@@ -567,7 +680,6 @@
     }
 
     function renderCurrentView() {
-        // حماية هامة جداً: نمنع إعادة رندرة عناصر الدوم وتدميرها إن كان الرندر الحالي متطابقاً بالفعل
         const needsRender = (currentSheetIndex !== lastRenderedSheet || currentGlobalMode !== lastRenderedMode);
 
         assignmentsConfig.forEach(sheet => {
@@ -676,9 +788,11 @@
         if (parseInt(selectedInput.value) === correctAns) {
             card.classList.add('correct');
             resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
+            playAudioFeedback('correct'); // تفعيل نغمة النجاح
         } else {
             card.classList.add('wrong');
             resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
+            playAudioFeedback('wrong'); // تفعيل نغمة الخطأ
         }
         updateProgress();
         triggerGroupNextScroll(card);
@@ -697,6 +811,7 @@
             inputField.disabled = true;
             card.classList.add('wrong'); 
             resultBox.innerHTML = `NODE REVEALED`;
+            playAudioFeedback('wrong');
             updateProgress();
             triggerGroupNextScroll(card);
             return; 
@@ -708,9 +823,11 @@
         if (userValue === targetValue || targetValue.includes(userValue) && userValue.length > 2) {
             card.classList.add('correct');
             resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
+            playAudioFeedback('correct'); // تفعيل نغمة النجاح
         } else {
             card.classList.add('wrong');
             resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
+            playAudioFeedback('wrong'); // تفعيل نغمة الخطأ
         }
         updateProgress();
         triggerGroupNextScroll(card);
@@ -724,6 +841,7 @@
         
         if (typeof triggerUserActionBurst === 'function') triggerUserActionBurst();
         
+        // زيادة مدة الانتظار قليلاً (1000ms) لمنح المستخدم فرصة لسماع الصوت ورؤية ألوان النتيجة بوضوح قبل الحركة
         setTimeout(() => {
             if (nextCardExists) {
                 sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
@@ -735,7 +853,7 @@
                     currentGlobalMode === 'blank' ? document.getElementById(`${card.id}-input`).value.trim() : ""
                 );
             }
-        }, 600); 
+        }, 1000); 
     }
 
     function updateProgress() {
@@ -1105,11 +1223,9 @@
         const header = document.getElementById('mainHeader');
         if (!header) return;
         
-        // التمرير لأسفل يتجاوز 80 بكسل يفعل الإخفاء الذاتي للـ NAV
         if (window.scrollY > lastScrollY && window.scrollY > 80) {
             header.classList.add('hide-nav');
         } else if (window.scrollY < lastScrollY) {
-            // التمرير لأعلى يعيد إظهار القائمة كاملة
             header.classList.remove('hide-nav');
         }
         lastScrollY = window.scrollY;
