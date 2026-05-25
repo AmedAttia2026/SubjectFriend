@@ -1017,15 +1017,70 @@
                 // نقارن الوقت المنقضي منذ آخر فعل محلي نشط (Cooldown)
                 const isCooldownActive = (Date.now() - lastLocalActionTime) < 2000; // 2 ثانية حظر
 
-                // لا نقوم بتحديث الملاحة أو الصفحات قسرياً إن كان هناك كولداون نشط على نفس الجهاز منعاً للتعارض
-                if (!isCooldownActive) {
-                    if (data.current_sheet !== undefined && data.current_sheet !== null && data.current_sheet !== currentSheetIndex) { 
-                        switchSheet(data.current_sheet); 
-                        structuralChanged = true; 
+                // =========================================================================
+                // --- محرك الشفاء الذاتي النشط وحماية الجلسة من التصفير الذاتي من السيرفر ---
+                // =========================================================================
+                if (data.answers) {
+                    const serverSolvedCount = Object.keys(data.answers).length;
+                    const localSolvedCount = document.querySelectorAll('.card.correct, .card.wrong').length;
+                    
+                    // إذا أرجع السيرفر 0 إجابات بينما محلياً قمنا بحل أسئلة، فهذا يعني أن السيرفر فقد ذاكرته
+                    if (serverSolvedCount === 0 && localSolvedCount > 0) {
+                        console.log("[Self-Healing] Server wipe detected. Re-asserting local answers and state.");
+                        
+                        // إعادة فرض الشيت والنمط الحالي فوراً لترميم السيرفر
+                        sendStateToBackend(null, null, null, "", { current_sheet: currentSheetIndex, current_mode: currentGlobalMode });
+                        
+                        // إعادة رفع كافة الإجابات المحلولة محلياً لتسجيلها مجدداً على السيرفر دون فقدان العمل
+                        document.querySelectorAll('.card').forEach(card => {
+                            const cardId = card.id;
+                            const isCorrect = card.classList.contains('correct');
+                            const isWrong = card.classList.contains('wrong');
+                            if (isCorrect || isWrong) {
+                                const status = isCorrect ? 'correct' : 'wrong';
+                                let selectedIdx = null;
+                                let inputValue = "";
+                                if (currentGlobalMode === 'blank') {
+                                    const input = document.getElementById(`${cardId}-input`);
+                                    if (input) inputValue = input.value;
+                                } else {
+                                    const checkedInput = card.querySelector('input:checked');
+                                    if (checkedInput) selectedIdx = parseInt(checkedInput.value);
+                                }
+                                sendStateToBackend(cardId, selectedIdx, status, inputValue);
+                            }
+                        });
+                        isSyncingFromServer = false;
+                        return; // نتخطى المزامنة هذه الدورة لحماية الدوم المحلي من المسح
                     }
+                }
+
+                // حماية التنقل والمزامنة: نرفض التحول للشيت 0 أو الوضع TF إذا كان ناجماً عن تصفير صامت في السيرفر
+                if (!isCooldownActive) {
+                    const serverSolvedCount = data.answers ? Object.keys(data.answers).length : 0;
+                    const localSolvedCount = document.querySelectorAll('.card.correct, .card.wrong').length;
+
+                    // مزامنة الشيت
+                    if (data.current_sheet !== undefined && data.current_sheet !== null && data.current_sheet !== currentSheetIndex) { 
+                        // إذا كان السيرفر يأمرنا بالرجوع للشيت الأول (0) والأسئلة فارغة لديه ولكن لدينا إجابات محلية، نرفض ونقوم بالشفاء
+                        if (data.current_sheet === 0 && currentSheetIndex !== 0 && serverSolvedCount === 0 && localSolvedCount > 0) {
+                            console.log("[Self-Healing] Preventing silent reset to Sheet 0. Re-asserting Sheet:", currentSheetIndex);
+                            sendStateToBackend(null, null, null, "", { current_sheet: currentSheetIndex, current_mode: currentGlobalMode });
+                        } else {
+                            switchSheet(data.current_sheet); 
+                            structuralChanged = true; 
+                        }
+                    }
+                    
+                    // مزامنة النمط
                     if (data.current_mode !== undefined && data.current_mode !== null && data.current_mode !== currentGlobalMode) { 
-                        globalSwitchMode(data.current_mode); 
-                        structuralChanged = true; 
+                        if (data.current_mode === 'tf' && currentGlobalMode !== 'tf' && serverSolvedCount === 0 && localSolvedCount > 0) {
+                            console.log("[Self-Healing] Preventing silent reset to TF mode. Re-asserting Mode:", currentGlobalMode);
+                            sendStateToBackend(null, null, null, "", { current_sheet: currentSheetIndex, current_mode: currentGlobalMode });
+                        } else {
+                            globalSwitchMode(data.current_mode); 
+                            structuralChanged = true; 
+                        }
                     }
                 }
 
