@@ -837,6 +837,12 @@
         if(sendToServer) {
             recordLocalAction(); triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_sheet: index, active_card_id: `sheet-${index}-${currentGlobalMode}-q-0` });
+            
+            // مزامنة فورية دون تأخير عبر قنوات الـ RTC P2P
+            broadcastP2PState({
+                type: 'sheet',
+                index: index
+            });
         }
     }
 
@@ -859,6 +865,12 @@
         if(sendToServer) {
             recordLocalAction(); triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_mode: mode, active_card_id: `sheet-${currentSheetIndex}-${mode}-q-0` });
+            
+            // مزامنة فورية دون تأخير عبر قنوات الـ RTC P2P
+            broadcastP2PState({
+                type: 'mode',
+                mode: mode
+            });
         }
     }
 
@@ -906,6 +918,12 @@
             card.addEventListener('click', () => {
                 recordLocalAction(); triggerUserActionBurst();
                 sendStateToBackend(null, null, null, "", { active_card_id: cardId });
+                
+                // مزامنة التركيز على الكارت المختار فوراً دون انتظار خادم المزامنة
+                broadcastP2PState({
+                    type: 'focus',
+                    cardId: cardId
+                });
             });
             
             let html = `
@@ -967,6 +985,13 @@
             selectedInput.checked = true;
             selectedInput.parentElement.classList.add('selected');
         }
+
+        // إرسال الاختيار لحظياً بالكامل لجميع الطلاب عبر الـ RTC
+        broadcastP2PState({
+            type: 'select',
+            cardId: cardId,
+            optionIdx: optionIndex
+        });
     }
 
     function checkRadioAnswer(cardId) {
@@ -992,11 +1017,27 @@
             card.classList.add('correct-status');
             resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
             playAudioFeedback('correct'); 
+            sendStateToBackend(cardId, parseInt(selectedInput.value), 'correct', "");
+            
+            // بث فوري لحظي لحل السؤال لجميع الطلاب في نفس الكسر من الثانية
+            broadcastP2PState({
+                type: 'freeze',
+                cardId: cardId,
+                status: 'correct'
+            });
         } else {
             card.classList.add('wrong');
             card.classList.add('wrong-status');
             resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
             playAudioFeedback('wrong'); 
+            sendStateToBackend(cardId, parseInt(selectedInput.value), 'wrong', "");
+            
+            // بث فوري لحظي لحل السؤال لجميع الطلاب في نفس الكسر من الثانية
+            broadcastP2PState({
+                type: 'freeze',
+                cardId: cardId,
+                status: 'wrong'
+            });
         }
         updateProgress();
         triggerGroupNextScroll(card);
@@ -1014,10 +1055,26 @@
             card.classList.add('correct');
             card.classList.add('correct-status');
             playAudioFeedback('correct');
+            sendStateToBackend(cardId, null, 'correct', "");
+            
+            // بث فوري للتقييم المقالي
+            broadcastP2PState({
+                type: 'freeze',
+                cardId: cardId,
+                status: 'correct'
+            });
         } else {
             card.classList.add('wrong');
             card.classList.add('wrong-status');
             playAudioFeedback('wrong');
+            sendStateToBackend(cardId, null, 'wrong', "");
+            
+            // بث فوري للتقييم المقالي
+            broadcastP2PState({
+                type: 'freeze',
+                cardId: cardId,
+                status: 'wrong'
+            });
         }
         updateProgress();
         triggerGroupNextScroll(card);
@@ -1039,6 +1096,12 @@
                 nextCardExists.classList.add('focused-by-peer');
 
                 sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', "", { active_card_id: nextCardId });
+                
+                // بث حركة التنقل والتركيز تلقائياً عبر قناة البيانات للزميل
+                broadcastP2PState({
+                    type: 'focus',
+                    cardId: nextCardId
+                });
             } else {
                 sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', "");
             }
@@ -1267,6 +1330,9 @@
             card.classList.add(isCorrect ? 'correct-status' : 'wrong-status');
             const actionRow = card.querySelector('.written-action-row'); if(actionRow) actionRow.style.display = 'none';
         }
+        
+        // تشغيل الصوت الفوري لجميع أفراد الغرفة عندما يقوم أي طالب بحل سؤال
+        playAudioFeedback(isCorrect ? 'correct' : 'wrong');
     }
 
     async function sendStateToBackend(cardId, selectedIdx, status, inputValue = "", extraFields = {}) {
@@ -1298,6 +1364,8 @@
     // --- محرك محادثات الصوت الجماعية الحية المستقرة (Signaling Mesh Network) ---
     // =========================================================================
     let localAudioStream = null; let peerInstance = null; let connectedVoicePeersList = new Set();
+    let activeCallsList = {};
+    let dataConnections = {}; // تخزين قنوات البيانات المفتوحة بين الزملاء لحظياً
 
     function initializeVoiceEngine() {
         const btn = document.getElementById('micToggleBtn');
@@ -1312,9 +1380,18 @@
                     if (roomName) startAdaptiveSyncLoop();
                 });
 
+                // استقبال خطوط الاتصال بالبيانات اللحظية والموجات الصوتية
+                peerInstance.on('connection', (conn) => {
+                    handleDataConnection(conn);
+                });
+
                 peerInstance.on('call', (call) => {
+                    connectedVoicePeersList.add(call.peer);
+                    activeCallsList[call.peer] = call;
                     call.answer(localAudioStream);
                     call.on('stream', (remoteStream) => { handleRemoteAudioPlayback(call.peer, remoteStream); });
+                    call.on('close', () => { removeRemoteAudioPlayback(call.peer); });
+                    call.on('error', () => { removeRemoteAudioPlayback(call.peer); });
                 });
             })
             .catch(err => {
@@ -1325,12 +1402,125 @@
 
     function handleAudioMeshSignaling(serverPeers) {
         serverPeers.forEach(remotePeerId => {
-            if (remotePeerId !== localVoicePeerId && !connectedVoicePeersList.has(remotePeerId)) {
-                connectedVoicePeersList.add(remotePeerId);
-                const call = peerInstance.call(remotePeerId, localAudioStream);
-                if (call) { call.on('stream', (remoteStream) => { handleRemoteAudioPlayback(remotePeerId, remoteStream); }); }
+            if (remotePeerId === localVoicePeerId) return;
+
+            // Lexicographical sorting لمنع حدوث اتصال مزدوج أو تداخل للخطوط الصوتية والبيانات بين نفس العضوين
+            if (remotePeerId > localVoicePeerId) {
+                // الاتصال الصوتي
+                if (!connectedVoicePeersList.has(remotePeerId)) {
+                    connectedVoicePeersList.add(remotePeerId);
+                    const call = peerInstance.call(remotePeerId, localAudioStream);
+                    if (call) {
+                        activeCallsList[remotePeerId] = call;
+                        call.on('stream', (remoteStream) => { handleRemoteAudioPlayback(remotePeerId, remoteStream); });
+                        call.on('close', () => { removeRemoteAudioPlayback(remotePeerId); });
+                        call.on('error', () => { removeRemoteAudioPlayback(remotePeerId); });
+                    }
+                }
+                // اتصال قنوات البيانات الفورية اللحظية (WebRTC DataChannel)
+                if (!dataConnections[remotePeerId]) {
+                    const conn = peerInstance.connect(remotePeerId);
+                    if (conn) {
+                        handleDataConnection(conn);
+                    }
+                }
             }
         });
+
+        // إغلاق اتصالات الأعضاء الذين غادروا الغرفة لإخلاء الموارد فوراً
+        connectedVoicePeersList.forEach(remotePeerId => {
+            if (!serverPeers.includes(remotePeerId) && remotePeerId !== localVoicePeerId) {
+                removeRemoteAudioPlayback(remotePeerId);
+            }
+        });
+
+        // تنظيف قنوات البيانات المغلقة
+        Object.keys(dataConnections).forEach(remotePeerId => {
+            if (!serverPeers.includes(remotePeerId)) {
+                if (dataConnections[remotePeerId]) {
+                    dataConnections[remotePeerId].close();
+                }
+                delete dataConnections[remotePeerId];
+            }
+        });
+    }
+
+    // إدارة قنوات بث البيانات اللحظية والتحكم السريع
+    function handleDataConnection(conn) {
+        dataConnections[conn.peer] = conn;
+        conn.on('data', (data) => {
+            handleIncomingDataMessage(data);
+        });
+        conn.on('close', () => {
+            delete dataConnections[conn.peer];
+        });
+        conn.on('error', () => {
+            delete dataConnections[conn.peer];
+        });
+    }
+
+    // معالجة البيانات والتحركات المستقبلة فوراً عبر الـ RTC
+    function handleIncomingDataMessage(data) {
+        if (!data) return;
+        const isCooldownActive = (Date.now() - lastLocalActionTime) < 1500;
+        if (isCooldownActive) return; // حماية اختياراتك الحالية من التداخل
+
+        if (data.type === 'select') {
+            const card = document.getElementById(data.cardId);
+            if (card && !card.classList.contains('correct') && !card.classList.contains('wrong')) {
+                card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+                const targetInp = card.querySelector(`input[value="${data.optionIdx}"]`);
+                if (targetInp) {
+                    targetInp.checked = true;
+                    targetInp.parentElement.classList.add('selected');
+                }
+            }
+        } else if (data.type === 'freeze') {
+            const card = document.getElementById(data.cardId);
+            if (card && !card.classList.contains('correct') && !card.classList.contains('wrong')) {
+                executeRemoteFreeze(card, data.cardId, data.status === 'correct');
+                updateProgress();
+            }
+        } else if (data.type === 'sheet') {
+            if (currentSheetIndex !== data.index) {
+                switchSheet(data.index, false);
+            }
+        } else if (data.type === 'mode') {
+            if (currentGlobalMode !== data.mode) {
+                globalSwitchMode(data.mode, false);
+            }
+        } else if (data.type === 'focus') {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
+            const t = document.getElementById(data.cardId);
+            if (t) {
+                t.classList.add('focused-by-peer');
+                t.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    }
+
+    // دالة بث البيانات الفورية لجميع زملاء الغرفة مباشرة عبر الـ WebRTC
+    function broadcastP2PState(payload) {
+        Object.values(dataConnections).forEach(conn => {
+            if (conn && conn.open) {
+                try {
+                    conn.send(payload);
+                } catch(e) {}
+            }
+        });
+    }
+
+    function removeRemoteAudioPlayback(peerId) {
+        connectedVoicePeersList.delete(peerId);
+        if (activeCallsList[peerId]) {
+            try { activeCallsList[peerId].close(); } catch(e){}
+            delete activeCallsList[peerId];
+        }
+        const audioNode = document.getElementById(`audio_${peerId}`);
+        if (audioNode) {
+            audioNode.srcObject = null;
+            audioNode.remove();
+        }
     }
 
     function handleRemoteAudioPlayback(peerId, remoteStream) {
