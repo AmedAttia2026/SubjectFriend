@@ -70,7 +70,7 @@
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border-bottom: 1px solid var(--glass-border);
             box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-            transition: background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .brand-title, 
@@ -341,20 +341,23 @@
         .blank-input-wrapper { margin: 15px 0; width: 100%; }
         .inference-input {
             width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
-            padding: 14px 18px; border-radius: 12px; color: #fff; font-size: 1.05rem;
+            padding: 14px 18px; border-radius: 12px; color: #fff; font-size: 1.15rem;
             font-family: 'Outfit', sans-serif; font-weight: 600; transition: all 0.3s;
         }
         .inference-input:focus { border-color: var(--warning); background: rgba(245, 158, 11, 0.03); box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); }
         .inference-input:disabled { opacity: 0.6; cursor: not-allowed; }
         
+        /* 🌟 تكبير وتجميل وعرض الإجابة النموذجية للإكمال والمقالي بشكل مريح جداً 🌟 */
         .expected-answer-box {
-            display: none; background: rgba(16, 185, 129, 0.1); border: 1px dashed var(--success);
-            padding: 16px; border-radius: 12px; font-size: 0.95rem; margin-top: 15px; color: #fff; text-align: left;
+            display: none; background: rgba(16, 185, 129, 0.08); border: 1.5px dashed var(--success);
+            padding: 20px; border-radius: 14px; font-size: 1.25rem; margin-top: 15px; color: #f8fafc; text-align: left;
+            line-height: 1.7; box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
         }
-        .card.wrong .expected-answer-box, .card.correct .expected-answer-box { display: block; animation: fadeInSlide 0.3s ease; }
+        .card.wrong .expected-answer-box, .card.correct .expected-answer-box { display: block; animation: fadeInSlide 0.35s ease; }
         
-        .text-highlight { background-color: #fde047; color: #0f172a; padding: 0 4px; border-radius: 4px; font-weight: bold; }
-        .text-bold { font-weight: 900; color: white; }
+        /* 🌟 استايل الكلمات المفتاحية باللون الأصفر الفاخر والعريض 🌟 */
+        .text-highlight { background-color: #fde047; color: #020617; padding: 2px 6px; border-radius: 6px; font-weight: 900; box-shadow: 0 2px 8px rgba(253, 224, 71, 0.3); }
+        .text-bold { font-weight: 900; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
 
         .check-btn {
             background: rgba(255,255,255,0.02); color: var(--text-main); border: 1px solid var(--glass-border);
@@ -365,7 +368,7 @@
         .check-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
         .written-action-row { display: flex; gap: 12px; margin-top: 15px; }
-        .written-btn { flex: 1; padding: 12px; border-radius: 10px; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; transition: all 0.25s; border: none; }
+        .written-btn { flex: 1; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; text-transform: uppercase; transition: all 0.25s; border: none; font-family: 'Cairo', sans-serif; }
         .written-btn.correct-assert { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid var(--success); }
         .written-btn.correct-assert:hover { background: var(--success); color: #000; box-shadow: 0 0 15px var(--success-glow); }
         .written-btn.wrong-assert { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid var(--danger); }
@@ -604,7 +607,7 @@
                 { q: "HBase is best described as:", options: ["Relational database", "NoSQL wide-column database", "Visualization tool", "Monitoring tool"], ans: 1 },
                 { q: "Which company is known as a leading Big Data vendor?", options: ["Cloudera", "Adobe", "Intel", "Oracle Forms"], ans: 0 },
                 { q: "Spark is preferred over MapReduce because:", options: ["It is slower", "It lacks scalability", "It supports in-memory processing", "It does not support ML"], ans: 2 },
-                { q: "Hadoop supports which type of data?", options: ["Only structured", "Only unstructured", "Structured, semi-structured, and unstructured", "Only relational"], ans: 2 }
+                { q: "Hadoop supports which type of data?", options: ["AOnly structured", "Only unstructured", "Structured, semi-structured, and unstructured", "Only relational"], ans: 2 }
             ],
             written: [
                 { q: "Why is **RDBMS** not suitable for Big Data workloads?", a: "RDBMS is designed for structured data and smaller volumes. Main limits:\n• **==Scalability==**: Vertical scaling only.\n• **==Size==**: Petabyte-scale data is too large.\n• **==Data types==**: Cannot handle unstructured/semi-structured data well.\n• **==Velocity==**: Not built for high-speed data.\n• **==Cost==**: Very expensive to scale.", at: "تم تصميم RDBMS للبيانات المهيكلة والأحجام الأصغر. حدوده الرئيسية هي:\n• **==قابلية التوسع==**: التوسع الرأسي فقط.\n• **==الحجم==**: بيانات بحجم بيتابايت كبيرة جداً.\n• **==أنواع البيانات==**: لا يمكنه التعامل جيداً مع البيانات غير المهيكلة أو شبه المهيكلة.\n• **==السرعة==**: غير مبني للبيانات عالية السرعة.\n• **==التكلفة==**: مكلف جداً للتوسع." },
@@ -661,9 +664,12 @@
 
     function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
+    /* 🌟 محرك الفلترة المتطور لحذف الرموز وتحويلها إلى خط عريض وخلفية صفراء مضيئة 🌟 */
     function formatText(text) {
         if(!text) return "";
-        text = text.replace(/\\*\\*(.*?)\\*\\*/g, '<span class="text-bold">$1</span>');
+        // تحويل الكلام المحاط بنجمتين إلى خط عريض وحذف النجوم
+        text = text.replace(/\*\*(.*?)\*\*/g, '<span class="text-bold">$1</span>');
+        // تحويل الكلام المحاط بعلامتين يساوي إلى خلفية صفراء وحذف اليساوي
         text = text.replace(/==(.*?)==/g, '<span class="text-highlight">$1</span>');
         return text;
     }
@@ -817,18 +823,21 @@
                 html += `
                     <div class="blank-input-wrapper">
                         <input type="text" class="inference-input" placeholder="Type your full exact answer here..." id="${cardId}-input" autocomplete="off">
-                        <div class="expected-answer-box"><b>Correct Answer Model:</b> ${exactCorrectText}</div>
+                        <div class="expected-answer-box" style="font-size: 1.35rem; font-weight:800;">
+                            <span style="color:var(--success); font-weight:900;"><i class="fa-solid fa-square-check"></i> Correct Answer Model:</span> 
+                            <span style="color:#fff; margin-left:5px;">${exactCorrectText}</span>
+                        </div>
                     </div>
                     <button class="check-btn" onclick="checkBlankAnswer('${cardId}')">COMPUTE INFERENCE</button>
                 `;
             } else if (currentGlobalMode === 'written') {
                 html += `
                     <div class="blank-input-wrapper" style="margin-bottom:10px;">
-                        <textarea class="inference-input" rows="3" placeholder="Type your conceptual structural thoughts here..." id="${cardId}-input" style="resize:vertical; font-size:0.95rem;"></textarea>
+                        <textarea class="inference-input" rows="3" placeholder="Type your conceptual structural thoughts here..." id="${cardId}-input" style="resize:vertical; font-size:1.1rem;"></textarea>
                         <div class="expected-answer-box" style="text-align:right;" dir="rtl">
-                            <div style="color:var(--primary); font-weight:900; margin-bottom:6px; font-size:0.85rem; letter-spacing:1px; text-transform:uppercase;">📌 MODEL ANSWER VAULT</div>
-                            <div style="margin-bottom:8px; font-weight:700; color:#fff;" dir="ltr"><b>EN:</b> ${formatText(item.a)}</div>
-                            <div style="font-weight:700; color:rgba(255,255,255,0.85);"><b>AR:</b> ${formatText(item.at)}</div>
+                            <div style="color:var(--primary); font-weight:900; margin-bottom:10px; font-size:1.05rem; letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;"><i class="fa-solid fa-key"></i> 📌 MODEL ANSWER VAULT</div>
+                            <div style="margin-bottom:15px; font-weight:700; color:#fff; font-size:1.3rem; line-height:1.8;" dir="ltr"><b style="color:var(--primary);">EN:</b> ${formatText(item.a)}</div>
+                            <div style="font-weight:700; color:rgba(255,255,255,0.95); font-size:1.3rem; line-height:1.8;"><b style="color:var(--primary);">AR:</b> ${formatText(item.at)}</div>
                         </div>
                     </div>
                     <div class="written-action-row" id="${cardId}-action-row">
@@ -984,7 +993,7 @@
                     (currentGlobalMode === 'blank' || currentGlobalMode === 'written') ? document.getElementById(`${card.id}-input`).value.trim() : ""
                 );
             }
-        }, 1200); 
+        }, 1250); 
     }
 
     function updateProgress() {
