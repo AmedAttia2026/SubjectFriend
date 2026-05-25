@@ -294,6 +294,7 @@
         .option-label.selected .custom-radio { border-color: var(--primary); }
         .option-label.selected .custom-radio::after { transform: scale(1); }
 
+        /* تعديل كود الـ CSS وتضييق نطاقه ليعمل على الدائرة المختارة فقط */
         .card.correct .option-label.selected { 
             border: 2.5px solid var(--success) !important; 
             background: rgba(16, 185, 129, 0.25) !important;
@@ -301,8 +302,14 @@
             color: #fff !important;
             font-weight: 800;
         }
-        .card.correct .custom-radio { border-color: var(--success) !important; background: var(--success) !important; }
-        .card.correct .custom-radio::after { background: #020617 !important; transform: scale(1.1); }
+        .card.correct .option-label.selected .custom-radio { 
+            border-color: var(--success) !important; 
+            background: var(--success) !important; 
+        }
+        .card.correct .option-label.selected .custom-radio::after { 
+            background: #020617 !important; 
+            transform: scale(1.1); 
+        }
 
         .card.wrong .option-label.selected { 
             border: 2.5px solid var(--danger) !important; 
@@ -311,13 +318,24 @@
             color: #fff !important;
             font-weight: 800;
         }
-        .card.wrong .custom-radio { border-color: var(--danger) !important; background: var(--danger) !important; }
-        .card.wrong .custom-radio::after { background: #fff !important; transform: scale(1.1); }
+        .card.wrong .option-label.selected .custom-radio { 
+            border-color: var(--danger) !important; 
+            background: var(--danger) !important; 
+        }
+        .card.wrong .option-label.selected .custom-radio::after { 
+            background: #fff !important; 
+            transform: scale(1.1); 
+        }
 
         .card.wrong .option-label.true-answer {
-            border: 2px dashed var(--success) !important; background: rgba(16, 185, 129, 0.1) !important; color: var(--success) !important; font-weight: 700;
+            border: 2px dashed var(--success) !important; 
+            background: rgba(16, 185, 129, 0.1) !important; 
+            color: var(--success) !important; 
+            font-weight: 700;
         }
-        .card.wrong .option-label.true-answer .custom-radio { border-color: var(--success) !important; }
+        .card.wrong .option-label.true-answer .custom-radio { 
+            border-color: var(--success) !important; 
+        }
 
         .blank-input-wrapper { margin: 8px 0 0 0; width: 100%; position: relative; }
         
@@ -1012,31 +1030,35 @@
             if(parseInt(lbl.querySelector('input').value) === correctAns) lbl.classList.add('true-answer');
         });
 
-        if (parseInt(selectedInput.value) === correctAns) {
+        const selectedVal = parseInt(selectedInput.value);
+
+        if (selectedVal === correctAns) {
             card.classList.add('correct');
             card.classList.add('correct-status');
             resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
             playAudioFeedback('correct'); 
-            sendStateToBackend(cardId, parseInt(selectedInput.value), 'correct', "");
+            sendStateToBackend(cardId, selectedVal, 'correct', "");
             
-            // بث فوري لحظي لحل السؤال لجميع الطلاب في نفس الكسر من الثانية
+            // بث فوري لحظي لحل السؤال لجميع الطلاب مع تمرير الخيار المختار بالتحديد
             broadcastP2PState({
                 type: 'freeze',
                 cardId: cardId,
-                status: 'correct'
+                status: 'correct',
+                selectedIdx: selectedVal
             });
         } else {
             card.classList.add('wrong');
             card.classList.add('wrong-status');
             resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
             playAudioFeedback('wrong'); 
-            sendStateToBackend(cardId, parseInt(selectedInput.value), 'wrong', "");
+            sendStateToBackend(cardId, selectedVal, 'wrong', "");
             
-            // بث فوري لحظي لحل السؤال لجميع الطلاب في نفس الكسر من الثانية
+            // بث فوري لحظي لحل السؤال لجميع الطلاب مع تمرير الخيار المختار بالتحديد
             broadcastP2PState({
                 type: 'freeze',
                 cardId: cardId,
-                status: 'wrong'
+                status: 'wrong',
+                selectedIdx: selectedVal
             });
         }
         updateProgress();
@@ -1361,7 +1383,7 @@
     };
 
     // =========================================================================
-    // --- محرك محادثات الصوت الجماعية الحية المستقرة (Signaling Mesh Network) ---
+    // --- محادثات الصوت الجماعية الحية المستقرة وسرعة انتقال البيانات ---
     // =========================================================================
     let localAudioStream = null; let peerInstance = null; let connectedVoicePeersList = new Set();
     let activeCallsList = {};
@@ -1478,6 +1500,15 @@
         } else if (data.type === 'freeze') {
             const card = document.getElementById(data.cardId);
             if (card && !card.classList.contains('correct') && !card.classList.contains('wrong')) {
+                // تفعيل الاختيار المحدد من الطرف الآخر أولاً لضمان التطابق التام
+                if (data.selectedIdx !== null && data.selectedIdx !== undefined) {
+                    card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+                    const targetInp = card.querySelector(`input[value="${data.selectedIdx}"]`);
+                    if (targetInp) {
+                        targetInp.checked = true;
+                        targetInp.parentElement.classList.add('selected');
+                    }
+                }
                 executeRemoteFreeze(card, data.cardId, data.status === 'correct');
                 updateProgress();
             }
