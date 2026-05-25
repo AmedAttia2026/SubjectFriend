@@ -23,7 +23,8 @@
             --danger: #ef4444; 
             --danger-dim: rgba(239, 68, 68, 0.15);
             --danger-glow: rgba(239, 68, 68, 0.5);
-            --warning: #f59e0b;
+            --gold: #f59e0b;
+            --gold-glow: rgba(245, 158, 11, 0.4);
             --text-main: #f8fafc;
             --text-option: #cbd5e1;
             --text-muted: #64748b;
@@ -250,7 +251,7 @@
 
         .card {
             background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border); border-radius: 18px; padding: 25px; margin-bottom: 25px;
+            border: 1px solid var(--glass-border); border-radius: 18px; padding: 20px; margin-bottom: 25px;
             position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: all 0.4s; }
@@ -262,12 +263,12 @@
             background: rgba(168, 85, 247, 0.04) !important;
         }
 
-        .question-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+        .question-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; position: relative; width: 100%; }
         .q-number {
             background: var(--primary-dim); border: 1px solid rgba(168, 85, 247, 0.2); color: var(--primary);
             font-size: 0.8rem; font-weight: 900; padding: 4px 8px; border-radius: 6px; flex-shrink: 0;
         }
-        .question-text { font-size: 1.15rem; font-weight: 600; line-height: 1.5; color: #fff; text-align: left; }
+        .question-text { font-size: 1.15rem; font-weight: 600; line-height: 1.5; color: #fff; text-align: left; padding-right: 75px; }
 
         .options-grid { display: flex; flex-direction: column; gap: 10px; }
         .option-label {
@@ -300,14 +301,8 @@
             color: #fff !important;
             font-weight: 800;
         }
-        .card.correct .custom-radio { 
-            border-color: var(--success) !important; 
-            background: var(--success) !important;
-        }
-        .card.correct .custom-radio::after { 
-            background: #020617 !important; 
-            transform: scale(1.1);
-        }
+        .card.correct .custom-radio { border-color: var(--success) !important; background: var(--success) !important; }
+        .card.correct .custom-radio::after { background: #020617 !important; transform: scale(1.1); }
 
         .card.wrong .option-label.selected { 
             border: 2.5px solid var(--danger) !important; 
@@ -316,75 +311,50 @@
             color: #fff !important;
             font-weight: 800;
         }
-        .card.wrong .custom-radio { 
-            border-color: var(--danger) !important; 
-            background: var(--danger) !important;
-        }
-        .card.wrong .custom-radio::after { 
-            background: #fff !important; 
-            transform: scale(1.1);
-        }
+        .card.wrong .custom-radio { border-color: var(--danger) !important; background: var(--danger) !important; }
+        .card.wrong .custom-radio::after { background: #fff !important; transform: scale(1.1); }
 
         .card.wrong .option-label.true-answer {
-            border: 2px dashed var(--success) !important;
-            background: rgba(16, 185, 129, 0.1) !important;
-            color: var(--success) !important;
-            font-weight: 700;
+            border: 2px dashed var(--success) !important; background: rgba(16, 185, 129, 0.1) !important; color: var(--success) !important; font-weight: 700;
         }
-        .card.wrong .option-label.true-answer .custom-radio {
-            border-color: var(--success) !important;
-        }
+        .card.wrong .option-label.true-answer .custom-radio { border-color: var(--success) !important; }
 
-        .blank-input-wrapper { margin: 15px 0; width: 100%; position: relative; }
-        .inference-input {
-            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
-            padding: 14px 18px; border-radius: 12px; color: #fff; font-size: 1.15rem;
-            font-family: 'Outfit', sans-serif; font-weight: 600; transition: all 0.3s;
-        }
-        .inference-input:focus { border-color: var(--warning); background: rgba(245, 158, 11, 0.03); box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); }
-        .inference-input:disabled { opacity: 0.6; cursor: not-allowed; }
+        .blank-input-wrapper { margin: 8px 0 0 0; width: 100%; position: relative; }
         
-        /* 📌 تم إضافة التباعد السطري العمودي والـ Margin لمنع الالتصاق والمحافظة على التنسيق */
         .expected-answer-box {
-            display: none; background: rgba(16, 185, 129, 0.08); border: 1.5px dashed var(--success);
-            padding: 20px; border-radius: 14px; font-size: 1.35rem; margin-top: 15px; color: #f8fafc;
-            text-align: left; line-height: 1.9 !important; box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
-            direction: ltr !important; white-space: pre-line;
+            display: none; background: rgba(245, 158, 11, 0.05); border: 1.5px dashed var(--gold);
+            padding: 16px; border-radius: 14px; font-size: 1.35rem; color: #f8fafc;
+            text-align: left; line-height: 1.6 !important; box-shadow: 0 6px 25px rgba(245, 158, 11, 0.15);
+            direction: ltr !important; white-space: pre-line; margin-top: 10px;
+            animation: fadeInSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        .card.wrong .expected-answer-box, .card.correct .expected-answer-box { display: block; animation: fadeInSlide 0.35s ease; }
         
-        /* 📌 صندوق الترجمة العربية الفاخر مع عزل الأسطر ومسافة مريحة جداً لمنع الالتصاق */
         .ar-translation-vault {
-            display: none; background: rgba(168, 85, 247, 0.06); border-right: 4px solid var(--primary);
-            padding: 20px; border-radius: 12px; font-size: 1.35rem; margin-top: 18px; color: #f1f5f9;
-            text-align: right; line-height: 2.0 !important; font-family: 'Cairo', sans-serif;
+            display: none; background: rgba(168, 85, 247, 0.04); border-right: 4px solid var(--primary);
+            padding: 16px; border-radius: 12px; font-size: 1.35rem; color: #f1f5f9;
+            text-align: right; line-height: 1.7 !important; font-family: 'Cairo', sans-serif;
             direction: rtl !important; white-space: pre-line;
             box-shadow: 0 4px 15px rgba(168, 85, 247, 0.05);
-            animation: fadeInSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            margin-top: 10px;
+            animation: fadeInSlide 0.35s ease-out forwards;
         }
-        .ar-translation-vault.visible { display: block; }
 
-        /* زر الترجمة الفاخر المخصص للغة العربية فقط */
+        .card.revealed-vault .expected-answer-box { display: block; }
+        .card.revealed-vault .ar-translation-vault { display: none; }
+        .card.revealed-vault .ar-translation-vault.visible { display: block; }
+
         .trans-trigger-btn {
-            background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
-            color: var(--text-option); font-size: 0.85rem; font-weight: 800; padding: 6px 14px;
+            position: absolute; top: 0; right: 0;
+            background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border);
+            color: var(--text-option); font-size: 0.8rem; font-weight: 800; padding: 5px 12px;
             border-radius: 20px; cursor: pointer; transition: all 0.2s; display: inline-flex;
-            align-items: center; gap: 4px; font-family: 'Cairo', sans-serif; float: right; margin-top: -5px;
+            align-items: center; gap: 4px; font-family: 'Cairo', sans-serif; z-index: 10;
         }
         .trans-trigger-btn:hover { background: var(--primary-dim); border-color: var(--primary); color: #fff; }
-        .trans-trigger-btn.active-state { background: var(--primary); color: #020617; border-color: var(--primary); font-weight: 900; }
+        .trans-trigger-btn.active-state { background: var(--primary); color: #020617; border-color: var(--primary); font-weight: 900; box-shadow: 0 0 10px var(--primary-glow); }
 
-        /* تعديل الـ Display للكلمات المفتاحية لإضفاء طابع منسق ومتباعد */
         .text-highlight { background-color: #fde047; color: #020617; padding: 2px 6px; border-radius: 6px; font-weight: 900; display: inline-block; margin: 2px 0; box-shadow: 0 2px 8px rgba(253, 224, 71, 0.3); }
         .text-bold { font-weight: 900; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
-
-        .check-btn {
-            background: rgba(255,255,255,0.02); color: var(--text-main); border: 1px solid var(--glass-border);
-            width: 100%; padding: 14px; border-radius: 12px; font-size: 0.9rem; font-weight: 800; letter-spacing: 1.5px;
-            margin-top: 20px; cursor: pointer; text-transform: uppercase; transition: all 0.3s;
-        }
-        .check-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(255,255,255,0.04); }
-        .check-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
         .written-action-row { display: flex; gap: 12px; margin-top: 15px; }
         .written-btn { flex: 1; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; text-transform: uppercase; transition: all 0.25s; border: none; font-family: 'Cairo', sans-serif; }
@@ -398,17 +368,10 @@
             font-size: 0.95rem; opacity: 0; height: 0; overflow: hidden; transition: all 0.3s;
             display: flex; align-items: center; justify-content: center; gap: 6px;
         }
-
-        .card.correct .result-box, .card.wrong .result-box { opacity: 1; height: auto; margin-top: 15px; }
-        .card.correct { border-color: var(--success); box-shadow: 0 8px 25px var(--success-dim); }
-        .card.correct::before { background: var(--success); }
-        .card.correct .result-box { background: var(--success-dim); color: var(--success); }
-        .card.correct .inference-input { border-color: var(--success); background: var(--success-dim); color: #fff; }
-
-        .card.wrong { border-color: var(--danger); box-shadow: 0 8px 25px var(--danger-dim); }
-        .card.wrong::before { background: var(--danger); }
-        .card.wrong .result-box { background: var(--danger-dim); color: var(--danger); }
-        .card.wrong .inference-input { border-color: var(--danger); background: var(--danger-dim); }
+        .card.correct-status { border-color: var(--success); box-shadow: 0 8px 25px var(--success-dim); }
+        .card.correct-status::before { background: var(--success); }
+        .card.wrong-status { border-color: var(--danger); box-shadow: 0 8px 25px var(--danger-dim); }
+        .card.wrong-status::before { background: var(--danger); }
 
         .score-board {
             display: none; background: var(--glass-bg); backdrop-filter: blur(20px);
@@ -438,6 +401,26 @@
         .score-msg { font-size: 1.05rem; font-weight: 600; color: var(--text-option); }
 
         @keyframes scaleUp { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .check-btn {
+            background: var(--glass-bg); color: var(--primary); border: 1px solid rgba(168, 85, 247, 0.3);
+            width: 100%; margin-top: 15px; padding: 12px; border-radius: 12px; font-weight: 800; font-size: 0.9rem;
+            cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .check-btn:hover { background: var(--primary); color: #020617; box-shadow: 0 0 15px var(--primary-glow); }
+        .check-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .bottom-nav-replica-title {
+            text-align: center; font-size: 0.85rem; font-weight: 800; color: var(--text-muted);
+            letter-spacing: 2px; text-transform: uppercase; margin-top: 35px; margin-bottom: 10px;
+        }
+        .progress-container {
+            width: 100%; height: 4px; background: rgba(255,255,255,0.02); position: relative; overflow: hidden;
+        }
+        .progress-bar {
+            width: 0%; height: 100%; background: linear-gradient(to right, var(--primary), var(--accent));
+            transition: width 0.4s ease;
+        }
     </style>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
@@ -551,23 +534,48 @@
                 { q: "Scalability is not a challenge in Big Data systems.", options: ["True", "False"], ans: 1 }
             ],
             mcq: [
-                { q: "Which of the following contributes most to the data explosion?", options: ["Manual record keeping", "IoT devices", "Typewriters", "Fax machines"], ans: 1 },
-                { q: "Which “V” represents the scale of data?", options: ["Velocity", "Value", "Volume", "Variety"], ans: 2 },
-                { q: "Which layer is responsible for collecting data from different sources?", options: ["Storage", "Analytics", "Ingestion", "Visualization"], ans: 2 },
-                { q: "Which of the following is an example of unstructured data?", options: ["Excel table", "SQL database", "Social media image", "CSV file"], ans: 2 },
-                { q: "Traditional systems mainly rely on:", options: ["Distributed clusters", "Single-server architecture", "Cloud-native systems", "Edge computing"], ans: 1 },
-                { q: "Velocity mainly concerns:", options: ["Data size", "Data speed", "Data quality", "Data storage cost"], ans: 1 },
-                { q: "Which industry uses Big Data for fraud detection?", options: ["Agriculture", "Finance", "Construction", "Manufacturing"], ans: 1 },
-                { q: "Veracity is related to:", options: ["Data truthfulness", "Data format", "Data speed", "Data storage cost"], ans: 0 },
-                { q: "Distributed computing improves:", options: ["Manual processing", "Scalability", "Paper documentation", "Data entry speed"], ans: 1 },
-                { q: "One key challenge in Big Data implementation is:", options: ["Low internet usage", "Data security", "Small datasets", "Limited software options"], ans: 1 }
+                { q: "Which of the following contributes most to the data explosion?", options: ["a) Manual record keeping", "b) IoT devices", "c) Typewriters", "d) Fax machines"], ans: 1 },
+                { q: "Which “V” represents the scale of data?", options: ["a) Velocity", "b) Value", "c) Volume", "d) Variety"], ans: 2 },
+                { q: "Which layer is responsible for collecting data from different sources?", options: ["a) Storage", "b) Analytics", "c) Ingestion", "d) Visualization"], ans: 2 },
+                { q: "Which of the following is an example of unstructured data?", options: ["a) Excel table", "b) SQL database", "c) Social media image", "d) CSV file"], ans: 2 },
+                { q: "Traditional systems mainly rely on:", options: ["a) Distributed clusters", "b) Single-server architecture", "c) Cloud-native systems", "d) Edge computing"], ans: 1 },
+                { q: "Velocity mainly concerns:", options: ["a) Data size", "b) Data speed", "c) Data quality", "d) Data storage cost"], ans: 1 },
+                { q: "Which industry uses Big Data for fraud detection?", options: ["a) Agriculture", "b) Finance", "c) Construction", "d) Manufacturing"], ans: 1 },
+                { q: "Veracity is related to:", options: ["a) Data truthfulness", "b) Data format", "c) Data speed", "d) Data duplication"], ans: 0 },
+                { q: "Distributed computing improves:", options: ["a) Manual processing", "b) Scalability", "c) Paper documentation", "d) Data entry speed"], ans: 1 },
+                { q: "One key challenge in Big Data implementation is:", options: ["a) Low internet usage", "b) Data security", "c) Small datasets", "d) Limited software options"], ans: 1 }
             ],
             written: [
-                { q: "Define **Big Data** in your own words.", a: "Big Data refers to datasets so **==large or complex==** that **==traditional data processing application software is inadequate==** to deal with them.\n\nIt requires **==advanced technologies==** to extract **==useful insights==**.", at: "البيانات الضخمة تشير إلى مجموعات بيانات **==كبيرة أو معقدة جدًا==** لدرجة أن **==برامج معالجة البيانات التقليدية غير قادرة==** على التعامل معها.\n\nوتتطلب **==تقنيات متقدمة==** لاستخراج **==رؤى مفيدة==**." },
-                { q: "Explain the difference between **Volume** and **Velocity**.", a: "Volume:\nThe **==sheer quantity of data==** generated and stored (terabytes to zettabytes).\n\nVelocity:\nThe **==speed at which data is generated, collected, and processed==** (real-time data streams).", at: "الحجم (Volume):\n**==الكمية الهائلة من البيانات==** التي يتم إنشاؤها وتخزينها (من تيرابايت إلى زيتابايت).\n\nالسرعة (Velocity):\n**==السرعة التي يتم بها إنشاء البيانات وجمعها ومعالجتها==** (تدفقات البيانات في الوقت الفعلي)." },
-                { q: "Why do **traditional systems** struggle with Big Data?", a: "Traditional systems rely on **==vertical scaling (single server)==** which becomes **==expensive and insufficient==** for the huge volume and velocity of Big Data, causing **==single-node bottlenecks==**.", at: "تعتمد الأنظمة التقليدية على **==التوسع الرأسي (خادم واحد)==** والذي يصبح **==مكلفًا وغير كافٍ==** للحجم الهائل والسرعة العالية للبيانات الضخمة، مما يتسبب في **==اختناقات العقدة المفردة==**." },
-                { q: "List the main components of the **Big Data technology stack**.", a: "**==1. Ingestion\n2. Storage\n3. Processing\n4. Analytics==**", at: "**==1. الاستيعاب/الإدخال (Ingestion)\n2. التخزين (Storage)\n3. المعالجة (Processing)\n4. التحليلات (Analytics)==**" },
-                { q: "Mention two Big Data **use cases** in healthcare or e-commerce.", a: "Healthcare:\nLeveraging patient records and wearable data to **==improve diagnostic accuracy, personalize treatments, and predict disease outbreaks==**.\n\nE-commerce:\nEnhancing customer experience through **==personalized recommendations, optimizing supply chains, and forecasting demand==**.", at: "الرعاية الصحية:\nالاستفادة من سجلات المرضى وبيانات الأجهزة القابلة للارتداء لـ **==تحسين دقة التشخيص، وتخصيص العلاجات، والتنبؤ بتفشي الأمراض==**.\n\nالتجارة الإلكترونية:\nتحسين تجربة العملاء من خلال **==التوصيات المخصصة، وتحسين سلاسل التوريد، والتنبؤ بالطلب==**." }
+                { 
+                    q: "Define **Big Data** in your own words.", 
+                    a: "Big Data refers to datasets so **==large or complex==** that **==traditional data processing application software is inadequate==** to deal with them. It requires **==advanced technologies==** to extract **==useful insights==**.", 
+                    qt: "1. عرف **البيانات الضخمة (Big Data)** بكلماتك الخاصة.", 
+                    at: "البيانات الضخمة تشير إلى مجموعات بيانات **==كبيرة أو معقدة جدًا==** لدرجة أن **==برامج معالجة البيانات التقليدية غير قادرة==** على التعامل معها. وتتطلب **==تقنيات متقدمة==** لاستخراج **==رؤى مفيدة==**." 
+                },
+                { 
+                    q: "Explain the difference between **Volume** and **Velocity**.", 
+                    a: "Volume: The **==sheer quantity of data==** generated and stored (terabytes to zettabytes).\nVelocity: The **==speed at which data is generated, collected, and processed==** (real-time data streams).", 
+                    qt: "2. اشرح الفرق بين **الحجم (Volume)** و **السرعة (Velocity)**.", 
+                    at: "الحجم (Volume): **==الكمية الهائلة من البيانات==** التي يتم إنشاؤها وتخزينها (من تيرابايت إلى زيتابايت).\nالسرعة (Velocity): **==السرعة التي يتم بها إنشاء البيانات وجمعها ومعالجتها==** (تدفقات البيانات في الوقت الفعلي)." 
+                },
+                { 
+                    q: "Why do **traditional systems** struggle with Big Data?", 
+                    a: "Traditional systems rely on **==vertical scaling (single server)==** which becomes **==expensive and insufficient==** for the huge volume and velocity of Big Data, causing **==single-node bottlenecks==**.", 
+                    qt: "3. لماذا تواجه **الأنظمة التقليدية** صعوبة في التعامل مع البيانات الضخمة؟", 
+                    at: "تعتمد الأنظمة التقليدية على **==التوسع الرأسي (خادم واحد)==** والذي يصبح **==مكلفًا وغير كافٍ==** للحجم الهائل والسرعة العالية للبيانات الضخمة، مما يتسبب في **==اختناقات العقدة المفردة==**." 
+                },
+                { 
+                    q: "List the main components of the **Big Data technology stack**.", 
+                    a: "**==1. Ingestion\n2. Storage\n3. Processing\n4. Analytics==**", 
+                    qt: "4. اذكر المكونات الرئيسية لـ **حزمة تقنيات البيانات الضخمة (Big Data technology stack)**.", 
+                    at: "**==1. الاستيعاب/الإدخال (Ingestion)\n2. التخزين (Storage)\n3. المعالجة (Processing)\n4. التحليلات (Analytics)==**" 
+                },
+                { 
+                    q: "Mention two Big Data **use cases** in healthcare or e-commerce.", 
+                    a: "Healthcare: Leveraging patient records and wearable data to **==improve diagnostic accuracy, personalize treatments, and predict disease outbreaks==**.\nE-commerce: Enhancing customer experience through **==personalized recommendations, optimizing supply chains, and forecasting demand==**.", 
+                    qt: "5. اذكر **حالتي استخدام (Use cases)** للبيانات الضخمة في الرعاية الصحية أو التجارة الإلكترونية.", 
+                    at: "الرعاية الصحية: الاستفادة من سجلات المرضى وبيانات الأجهزة القابلة للارتداء لـ **==تحسين دقة التشخيص، وتخصيص العلاجات، والتنبؤ بتفشي الأمراض==**.\nالتجارة الإلكترونية: تحسين تجربة العملاء من خلال **==التوصيات المخصصة، وتحسين سلاسل التوريد، والتنبؤ بالطلب==**." 
+                }
             ]
         },
         {
@@ -583,23 +591,48 @@
                 { q: "Encryption is part of the security layer in Big Data architecture.", options: ["True", "False"], ans: 0 }
             ],
             mcq: [
-                { q: "Which layer is responsible for storing large volumes of data?", options: ["Ingestion", "Storage", "Analytics", "Monitoring"], ans: 1 },
-                { q: "Which of the following is an example of streaming ingestion tool?", options: ["Power BI", "Apache Kafka", "MySQL", "Excel"], ans: 1 },
-                { q: "Which storage option is commonly used in Hadoop ecosystems?", options: ["HDFS", "FTP", "HTML", "SMTP"], ans: 0 },
-                { q: "ELT differs from ETL because transformation happens:", options: ["Before loading", "During ingestion", "After loading", "Outside the system"], ans: 2 },
-                { q: "Sharding is mainly used for:", options: ["Backup", "Partitioning data", "Encryption", "Visualization"], ans: 1 },
-                { q: "Geo-replication improves:", options: ["Data formatting", "Geographic availability", "Dashboard design", "Programming speed"], ans: 1 },
-                { q: "Which tool is commonly used for monitoring cluster metrics?", options: ["Kafka", "Prometheus", "HDFS", "SQL Server"], ans: 1 },
-                { q: "Data lakes are beneficial because they:", options: ["Reduce flexibility", "Store only structured data", "Support machine learning readiness", "Eliminate scalability"], ans: 2 },
-                { q: "Stateless services are important for:", options: ["Security only", "Scalability and autoscaling", "Manual processing", "Backup operations"], ans: 1 },
-                { q: "In high availability systems, automated failover ensures:", options: ["Manual restart", "Immediate recovery from failure", "Data deletion", "Reduced monitoring"], ans: 1 }
+                { q: "Which layer is responsible for storing large volumes of data?", options: ["a) Ingestion", "b) Storage", "c) Analytics", "d) Monitoring"], ans: 1 },
+                { q: "Which of the following is an example of streaming ingestion tool?", options: ["a) Power BI", "b) Apache Kafka", "c) MySQL", "d) Excel"], ans: 1 },
+                { q: "Which storage option is commonly used in Hadoop ecosystems?", options: ["a) HDFS", "b) FTP", "c) HTML", "d) SMTP"], ans: 0 },
+                { q: "ELT differs from ETL because transformation happens:", options: ["a) Before loading", "b) During ingestion", "c) After loading", "d) Outside the system"], ans: 2 },
+                { q: "Sharding is mainly used for:", options: ["a) Backup", "b) Partitioning data", "c) Encryption", "d) Visualization"], ans: 1 },
+                { q: "Geo-replication improves:", options: ["a) Data formatting", "b) Geographic availability", "c) Dashboard design", "d) Programming speed"], ans: 1 },
+                { q: "Which tool is commonly used for monitoring cluster metrics?", options: ["a) Kafka", "b) Prometheus", "c) HDFS", "d) SQL Server"], ans: 1 },
+                { q: "Data lakes are beneficial because they:", options: ["a) Reduce flexibility", "b) Store only structured data", "c) Support machine learning readiness", "d) Eliminate scalability"], ans: 2 },
+                { q: "Stateless services are important for:", options: ["a) Security only", "b) Scalability and autoscaling", "c) Manual processing", "d) Backup operations"], ans: 1 },
+                { q: "In high availability systems, automated failover ensures:", options: ["a) Manual restart", "b) Immediate recovery from failure", "c) Data deletion", "d) Reduced monitoring"], ans: 1 }
             ],
             written: [
-                { q: "Explain the main components of **Big Data Architecture**.", a: "• Ingestion:\n**==Capture raw data==** from sources.\n\n• Storage:\n**==Durable, distributed storage==** optimized for data patterns.\n\n• Processing:\n**==Transformations, enrichment and model training==**.\n\n• Analytics:\n**==Serving results to BI tools and dashboards==**.", at: "• الاستيعاب (Ingestion):\n**==التقاط البيانات الخام==** من المصادر.\n\n• التخزين (Storage):\n**==تخزين متين وموزع غالباً==** مُحسّن للتكلفة وسرعة الاسترجاع.\n\n• المعالجة (Processing):\n**==التحويلات، والإثراء، وتدريب النماذج الاستدلالية==**.\n\n• التحليلات (Analytics):\n**==تقديم النتائج لأدوات ذكاء الأعمال ولوحات المعلومات الفورية==**." },
-                { q: "What is the difference between **ETL** and **ELT**?", a: "• ETL (Extract, Transform, Load):\n**==Transform data before loading==** → predefined schema.\n\n• ELT (Extract, Load, Transform):\n**==Load raw data first, then transform==** → schema-on-read.", at: "• ETL (استخراج، تحويل، تحميل):\n**==تحويل البيانات قبل التحميل==** ← مخطط هيلكلي محدد مسبقاً للبيانات.\n\n• ELT (استخراج، تحميل، تحويل):\n**==تحميل البيانات الخام أولاً، ثم تحويلها==** ← تطبيق المخطط المرن عند القراءة." },
-                { q: "Define **fault tolerance** and give one **replication strategy** example.", a: "Fault tolerance:\n**==System continues working when components fail==**.\n\nExample:\n**==Geo-replication==** copies data across different regions.", at: "التسامح مع الأخطاء (Fault Tolerance):\n**==قدرة النظام الموزع على الاستمرار في العمل بشكل طبيعي عند فشل المكونات==**.\n\nمثال:\n**==النسخ المتماثل الجغرافي (Geo-replication)==** لنسخ البيانات بالكامل عبر مناطق جغرافية مختلفة." },
-                { q: "What are the benefits of a **Data Lake**?", a: "• **==Cost-efficient storage==** for volumes.\n• **==Schema-on-read agility==** without rigid ETL.\n• **==Machine learning readiness==** for feature engineering.\n• Supports **==structured, semi-structured, and unstructured data==**.", at: "• **==تخزين فعال من حيث التكلفة==** للأحجام الهائلة والمستمرة.\n• **==مرونة المخطط عند القراءة==** دون الخضوع لقيود خطية معقدة.\n• **==الجاهزية الكاملة لنماذج تعلم الآلة==** وهندسة الميزات (Feature Engineering).\n• يدعم معالجة **==البيانات المهيكلة، شبه المهيكلة، وغير المهيكلة==** معاً." },
-                { q: "Explain the importance of **monitoring** in distributed systems.", a: "• Provides **==operational visibility==** for performance.\n• Combines metrics and logs for **==rapid incident response==**.\n• Tools: **==Ambari, Prometheus, Grafana==**.", at: "• يوفر **==رؤية تشغيلية وتحليلية==** شاملة للأداء الحالي والسعة.\n• يدمج المقاييس والسجلات لـ **==الاستجابة الفورية والسريعة للحوادث والأعطال==**.\n• الأدوات الشائعة: **==Ambari, Prometheus, Grafana==**." }
+                { 
+                    q: "Explain the main components of **Big Data Architecture**.", 
+                    a: "• Ingestion: **==Capture raw data==** from sources (streaming and batch) and deliver to storage or processing systems.\n• Storage: **==Durable, often distributed storage==** optimized for cost and access patterns (cold vs hot data).\n• Processing: **==Transformations, enrichment, aggregations and model training==** using batch or stream compute frameworks.\n• Analytics: **==Serving results to BI tools, dashboards, or ML inference endpoints==**; support for ad-hoc queries and exploratory analysis.", 
+                    qt: "1. اشرح المكونات الرئيسية لـ **بنية البيانات الضخمة (Big Data Architecture)**.", 
+                    at: "• الاستيعاب (Ingestion): **==التقاط البيانات الخام==** من المصادر (التدفق والدفعات) وتوصيلها إلى أنظمة التخزين أو المعالجة.\n• التخزين (Storage): **==تخزين متين وموزع غالباً==** مُحسّن من حيث التكلفة وأنماط الوصول (البيانات الباردة مقابل الساخنة).\n• المعالجة (Processing): **==التحويلات، والإثراء، والتجميعات، وتدريب النماذج==** باستخدام أطر عمل الحوسبة بالدفعات أو التدفق.\n• التحليلات (Analytics): **==تقديم النتائج لأدوات ذكاء الأعمال، لوحات المعلومات، أو نقاط نهاية استدلال تعلم الآلة==**؛ ودعم الاستعلامات المخصصة والتحليل الاستكشافي." 
+                },
+                { 
+                    q: "What is the difference between **ETL** and **ELT**?", 
+                    a: "• ETL (Extract, Transform, Load): **==Transform data before loading==** → traditional for data warehouses, **==predefined schema==**.\n• ELT (Extract, Load, Transform): **==Load raw data first into data lake, then transform==** → modern for Big Data, **==schema-on-read==**, faster for ad-hoc analytics & ML.", 
+                    qt: "2. ما الفرق بين **ETL** و **ELT**؟", 
+                    at: "• ETL (استخراج، تحويل، تحميل): **==تحويل البيانات قبل التحميل==** ← تقليدي لمستودعات البيانات، وله **==مخطط محدد مسبقاً==**.\n• ELT (استخراج، تحميل، تحويل): **==تحميل البيانات الخام أولاً في بحيرة بيانات، ثم تحويلها==** ← حديث للبيانات الضخمة، يعتمد على **==المخطط عند القراءة==**، وأسرع للتحليلات الفورية وتعلم الآلة." 
+                },
+                { 
+                    q: "Define **fault tolerance** and give one **replication strategy** example.", 
+                    a: "Fault tolerance: **==Ability of the system to continue working when some components fail==** (high availability & no data loss).\nExample: **==Geo-replication==** (copies data across different geographic regions for disaster recovery).", 
+                    qt: "3. عرف **التسامح مع الأخطاء (fault tolerance)** واذكر مثالاً على **استراتيجية النسخ المتماثل (replication strategy)**.", 
+                    at: "التسامح مع الأخطاء: **==قدرة النظام على الاستمرار في العمل عند فشل بعض المكونات==** (توافر عالي وبدون فقدان للبيانات).\nمثال: **==النسخ المتماثل الجغرافي (Geo-replication)==** (نسخ البيانات عبر مناطق جغرافية مختلفة للتعافي من الكوارث)." 
+                },
+                { 
+                    q: "What are the benefits of a **Data Lake**?", 
+                    a: "• **==Cost-efficient storage==** for large volumes.\n• **==Schema-on-read agility==** (flexible exploration without rigid ETL).\n• **==Machine learning readiness==** (raw data for feature engineering).\n• Supports **==structured, semi-structured, and unstructured data==**.", 
+                    qt: "4. ما هي فوائد **بحيرة البيانات (Data Lake)**؟", 
+                    at: "• **==تخزين فعال من حيث التكلفة==** للأحجام الكبيرة.\n• **==مرونة المخطط عند القراءة==** (استكشاف مرن بدون قيود ETL الصارمة).\n• **==الجاهزية لتعلم الآلة==** (بيانات خام لهندسة الميزات).\n• يدعم **==البيانات المهيكلة، شبه المهيكلة، وغير المهيكلة==**." 
+                },
+                { 
+                    q: "Explain the importance of **monitoring** in distributed systems.", 
+                    a: "• Provides **==operational visibility==** for performance, health, and capacity planning.\n• Combines metrics, logs, and traces for **==rapid incident response==**.\n• Tools: **==Ambari, Prometheus, Grafana==**.", 
+                    qt: "5. اشرح أهمية **المراقبة (monitoring)** في الأنظمة الموزعة.", 
+                    at: "• يوفر **==رؤية تشغيلية==** للأداء والصحة وتخطيط السعة.\n• يجمع بين المقاييس والسجلات والتتبعات من أجل **==الاستجابة السريعة للحوادث==**.\n• الأدوات: **==Ambari, Prometheus, Grafana==**." 
+                }
             ]
         },
         {
@@ -617,23 +650,48 @@
                 { q: "Hadoop is only suitable for structured relational data.", options: ["True", "False"], ans: 1 }
             ],
             mcq: [
-                { q: "Which of the following is a limitation of RDBMS in Big Data?", options: ["High scalability", "Low cost storage", "Limited scalability", "Built-in fault tolerance"], ans: 2 },
-                { q: "Hadoop mainly solves problems related to:", options: ["Small datasets", "Distributed storage and processing", "Desktop computing", "Word processing"], ans: 1 },
-                { q: "Which tool belongs to the Hadoop ingestion layer?", options: ["Hive", "Spark", "Flume", "HDFS"], ans: 2 },
-                { q: "Component used for distributed storage is called:", options: ["HDFS", "Pig", "Hive", "Oozie"], ans: 0 },
-                { q: "MapReduce primarily processes data in:", options: ["Real-time memory", "Distributed batch mode", "Manual mode", "Local spreadsheets"], ans: 1 },
-                { q: "Which language is commonly used with Hive?", options: ["SQL", "HQL", "Python", "C++"], ans: 1 },
-                { q: "HBase is best described as:", options: ["Relational database", "NoSQL wide-column database", "Visualization tool", "Monitoring tool"], ans: 1 },
-                { q: "Which company is known as a leading Big Data vendor?", options: ["Cloudera", "Adobe", "Intel", "Oracle Forms"], ans: 0 },
-                { q: "Spark is preferred over MapReduce because:", options: ["It is slower", "It lacks scalability", "It supports in-memory processing", "It does not support ML"], ans: 2 },
-                { q: "Hadoop supports which type of data?", options: ["Only structured", "Only unstructured", "Structured, semi-structured, and unstructured", "Only relational"], ans: 2 }
+                { q: "Which of the following is a limitation of RDBMS in Big Data?", options: ["a) High scalability", "b) Low cost storage", "c) Limited scalability", "d) Built-in fault tolerance"], ans: 2 },
+                { q: "Hadoop mainly solves problems related to:", options: ["a) Small datasets", "b) Distributed storage and processing", "c) Desktop computing", "d) Word processing"], ans: 1 },
+                { q: "Which tool belongs to the Hadoop ingestion layer?", options: ["a) Hive", "b) Spark", "c) Flume", "d) HDFS"], ans: 2 },
+                { q: "Component used for distributed storage is called:", options: ["a) HDFS", "b) Pig", "c) Hive", "d) Oozie"], ans: 0 },
+                { q: "MapReduce primarily processes data in:", options: ["a) Real-time memory", "b) Distributed batch mode", "c) Manual mode", "d) Local spreadsheets"], ans: 1 },
+                { q: "Which language is commonly used with Hive?", options: ["a) SQL", "b) HQL", "c) Python", "d) C++"], ans: 1 },
+                { q: "HBase is best described as:", options: ["a) Relational database", "b) NoSQL wide-column database", "c) Visualization tool", "d) Monitoring tool"], ans: 1 },
+                { q: "Which company is known as a leading Big Data vendor?", options: ["a) Cloudera", "b) Adobe", "c) Intel", "d) Oracle Forms"], ans: 0 },
+                { q: "Spark is preferred over MapReduce because:", options: ["a) It is slower", "b) It lacks scalability", "c) It supports in-memory processing", "d) It does not support ML"], ans: 2 },
+                { q: "Hadoop supports which type of data?", options: ["a) Only structured", "b) Only unstructured", "c) Structured, semi-structured, and unstructured", "d) Only relational"], ans: 2 }
             ],
             written: [
-                { q: "Why is **RDBMS** not suitable for Big Data workloads?", a: "Main limits:\n• **==Scalability==**: Vertical scaling only.\n• **==Size==**: Petabyte data is too large.\n• **==Data types==**: Struct only, no multi-format support.\n• **==Velocity==**: Low structural speed capacity.", at: "الحدود القيادية لعدم التوافق:\n• **==قابلية التوسع==**: التوسع الرأسي فقط (Vertical Scaling) عبر ترقية خادم مفرد.\n• **==الحجم==**: حجم البيانات بيتابايت هائل جداً ويؤدي لانهيار محرك الفهارس.\n• **==أنواع البيانات==**: تدعم المخططات الجداول الصارمة فقط ولا تدعم تعدد الصيغ الحية.\n• **==السرعة==**: غير مصممة لسرعات معالجة التدفقات الفورية العالية (Streaming Data)." },
-                { q: "What are the main advantages of **Hadoop**?", a: "Advantages:\n• **==Scalability==**: Linear cluster growth.\n• **==Flexibility==**: Handles unstructured format.\n• **==Fault tolerance==**: Built-in data block replication.\n• **==Low cost==**: Uses commodity server hardware.", at: "المزايا العالية التشغيلية:\n• **==قابلية التوسع==**: نمو خطي مرن عبر إضافة خوادم عادية للـ Cluster بشكل أفقي.\n• **==المرونة==**: معالجة البيانات غير المهيكلة بمختلف الصيغ والامتدادات الرقمية.\n• **==التسامح مع الأخطاء==**: نسخ متماثل تلقائي ومدمج للكتل (Data Blocks).\n• **==تكلفة منخفضة==**: يعتمد على أجهزة وخوادم تجارية عادية ومنخفضة الثمن (Commodity Hardware)." },
-                { q: "Explain the difference between **HDFS** and **HBase**.", a: "• **==HDFS==**:\nDistributed file system for **==large file storage==**.\n\n• **==HBase==**:\n**==NoSQL wide-column database==** adding **==random read/write access==**.", at: "• **==نظام HDFS==**:\nنظام ملفات موزع عملاق مخصص لقسمة و **==تخزين الملفات الكبيرة==** بنظام البلوكات.\n\n• **==نظام HBase==**:\n**==قاعدة بيانات NoSQL واسعة الأعمدة==** مضافة فوق HDFS لتوفير آليات **==وصول عشوائي فوري وسريع للقراءة والكتابة==**." },
-                { q: "Compare **MapReduce** and **Spark**.", a: "• **==MapReduce==**:\nProcesses data using **==disk-based batch steps (slower)==**.\n\n• **==Spark==**:\nIn-memory architecture, making it **==much faster==**.", at: "• **==محرك MapReduce==**:\nمحرك معالجة دفعات يعتمد بالكامل على قراءة وكتابة البيانات الوسيطة على **==القرص الصلب (مما يجعله أبطأ)==**.\n\n• **==محرك Spark==**:\nمحرك معالجة متطور يعتمد على إبقاء البيانات في **==الذاكرة العشوائية (In-memory computing) مما يجعله أسرع بكثير==**." },
-                { q: "What is the role of **Apache Ambari** in Hadoop?", a: "Provides UI for:\n• **==Provisioning==** resources.\n• **==Monitoring==** metrics health.\n• **==Managing==** stack cluster layers.", at: "يوفر واجهة مستخدم رسومية ويب متكاملة لإدارة الـ Cluster تسمح بـ:\n• **==تهيئة (Provisioning)==** وإعداد وتنصيب الموارد والخدمات.\n• **==مراقبة (Monitoring)==** المقاييس والتحذيرات والصحة التشغيلية فورياً.\n• **==إدارة (Managing)==** كافة طبقات وتعديلات نظام Hadoop البيئي." }
+                { 
+                    q: "Why is **RDBMS** not suitable for Big Data workloads?", 
+                    a: "RDBMS is designed for structured data and smaller volumes. Main limits:\n• **==Scalability==**: Vertical scaling only.\n• **==Size==**: Petabyte-scale data is too large.\n• **==Data types==**: Cannot handle unstructured/semi-structured data well.\n• **==Velocity==**: Not built for high-speed data.\n• **==Cost==**: Very expensive to scale.", 
+                    qt: "1. لماذا لا يعد نظام **RDBMS** مناسباً لأحمال عمل البيانات الضخمة؟", 
+                    at: "تم تصميم RDBMS للبيانات المهيكلة والأحجام الأصغر. حدوده الرئيسية هي:\n• **==قابلية التوسع==**: التوسع الرأسي فقط.\n• **==الحجم==**: بيانات بحجم بيتابايت كبيرة جداً.\n• **==أنواع البيانات==**: لا يمكنه التعامل جيداً مع البيانات غير المهيكلة أو شبه المهيكلة.\n• **==السرعة==**: غير مبني للبيانات عالية السرعة.\n• **==التكلفة==**: مكلف جداً للتوسع." 
+                },
+                { 
+                    q: "What are the main advantages of **Hadoop**?", 
+                    a: "It stores and processes huge amounts of any kind of data quickly. Advantages:\n• **==Scalability==**: Scales linearly.\n• **==Flexibility==**: Handles structured, semi-structured, and unstructured data.\n• **==Fault tolerance==**: Built-in data replication.\n• **==Low cost==**: Uses commodity hardware.\n• **==Computing power==**: High distributed processing power.", 
+                    qt: "2. ما هي المزايا الرئيسية لـ **Hadoop**؟", 
+                    at: "يقوم بتخزين ومعالجة كميات ضخمة من أي نوع من البيانات بسرعة. المزايا تشمل:\n• **==قابلية التوسع==**: يتوسع بشكل خطي.\n• **==المرونة==**: يتعامل مع البيانات المهيكلة، شبه المهيكلة، وغير المهيكلة.\n• **==التسامح مع الأخطاء==**: نسخ متماثل مدمج للبيانات.\n• **==تكلفة منخفضة==**: يستخدم أجهزة عادية غير مكلفة.\n• **==قوة الحوسبة==**: قوة معالجة موزعة وعالية." 
+                },
+                { 
+                    q: "Explain the difference between **HDFS** and **HBase**.", 
+                    a: "• **==HDFS==**: Hadoop Distributed File System → The **==storage layer for large files==** with replication and fault tolerance.\n• **==HBase==**: A **==NoSQL wide-column database==** running on top of HDFS. It adds **==random read/write access==** and supports point queries.", 
+                    qt: "3. اشرح الفرق بين **HDFS** و **HBase**.", 
+                    at: "• **==نظام HDFS==**: نظام ملفات هادوب الموزع ← هو **==طبقة التخزين للملفات الكبيرة==** مع النسخ المتماثل والتسامح مع الأخطاء.\n• **==نظام HBase==**: **==قاعدة بيانات NoSQL واسعة الأعمدة==** تعمل فوق HDFS. يضيف **==وصول قراءة وكتابة عشوائي==** ويدعم الاستعلامات النقطية." 
+                },
+                { 
+                    q: "Compare **MapReduce** and **Spark**.", 
+                    a: "• **==MapReduce==**: A **==batch processing==** engine that writes intermediate data to **==disk (slower)==**.\n• **==Spark==**: An **==in-memory processing==** engine, making it **==much faster==** for iterative tasks and analytics.", 
+                    qt: "4. قارن بين **MapReduce** و **Spark**.", 
+                    at: "• **==محرك MapReduce==**: محرك **==معالجة دفعات (Batch processing)==** يكتب البيانات الوسيطة على **==القرص (مما يجعله أبطأ)==**.\n• **==محرك Spark==**: محرك **==معالجة في الذاكرة (In-memory processing)==**، مما يجعله **==أسرع بكثير==** للمهام التكرارية والتحليلات." 
+                },
+                { 
+                    q: "What is the role of **Apache Ambari** in Hadoop?", 
+                    a: "Apache Ambari provides an **==intuitive, easy-to-use web UI==** for Hadoop cluster management. It allows:\n• **==Provisioning==** resources.\n• **==Monitoring==** health and performance.\n• **==Managing==** the entire Hadoop ecosystem (HDFS, MapReduce, Hive, HBase, etc.).", 
+                    qt: "5. ما هو دور **Apache Ambari** في نظام Hadoop؟", 
+                    at: "يوفر Apache Ambari **==واجهة مستخدم ويب سهلة الاستخدام==** لإدارة مجموعة Hadoop. ويسمح بـ:\n• **==تهيئة (Provisioning)==** الموارد.\n• **==مراقبة (Monitoring)==** الصحة والأداء.\n• **==إدارة (Managing)==** نظام Hadoop البيئي بأكمله (مثل HDFS و MapReduce و Hive و HBase)." 
+                }
             ]
         },
         {
@@ -651,20 +709,30 @@
                 { q: "Scatter plots are used for visualizing relationships between two variables.", options: ["True", "False"], ans: 0 }
             ],
             mcq: [
-                { q: "What is the main goal of EDA?", options: ["Data storage", "Data exploration and understanding", "Data deletion", "Data encryption"], ans: 1 },
-                { q: "Which measure represents central tendency?", options: ["Variance", "Mean", "Range", "Standard deviation"], ans: 1 },
-                { q: "Which plot is used for distribution analysis?", options: ["Histogram", "Pie chart", "Line chart", "Bar chart"], ans: 0 },
-                { q: "Which plot is used to detect outliers?", options: ["Scatter plot", "Box plot", "Heatmap", "Line chart"], ans: 1 },
-                { q: "Which library is commonly used for visualization in Python?", options: ["NumPy", "Pandas", "Matplotlib", "TensorFlow"], ans: 2 },
-                { q: "Correlation matrix is used to:", options: ["Store data", "Measure relationships between variables", "Clean data", "Encode data"], ans: 1 },
-                { q: "Which plot is used for multivariate analysis?", options: ["Histogram", "Box plot", "Scatter matrix", "Density plot"], ans: 2 },
-                { q: "Dispersion includes:", options: ["Mean", "Median", "Standard deviation", "Mode"], ans: 2 },
-                { q: "Density plots are used to:", options: ["Show data categories", "Show data distribution smoothly", "Show exact values", "Store data"], ans: 1 },
-                { q: "Data visualization in ML helps in:", options: ["Ignoring data", "Understanding features and patterns", "Deleting models", "Avoiding preprocessing"], ans: 1 }
+                { q: "What is the main goal of EDA?", options: ["a) Data storage", "b) Data exploration and understanding", "c) Data deletion", "d) Data encryption"], ans: 1 },
+                { q: "Which measure represents central tendency?", options: ["a) Variance", "b) Mean", "c) Range", "d) Standard deviation"], ans: 1 },
+                { q: "Which plot is used for distribution analysis?", options: ["a) Histogram", "b) Pie chart", "c) Line chart", "d) Bar chart"], ans: 0 },
+                { q: "Which plot is used to detect outliers?", options: ["a) Scatter plot", "b) Box plot", "c) Heatmap", "d) Line chart"], ans: 1 },
+                { q: "Which library is commonly used for visualization in Python?", options: ["a) NumPy", "b) Pandas", "c) Matplotlib", "d) TensorFlow"], ans: 2 },
+                { q: "Correlation matrix is used to:", options: ["a) Store data", "b) Measure relationships between variables", "c) Clean data", "d) Encode data"], ans: 1 },
+                { q: "Which plot is used for multivariate analysis?", options: ["a) Histogram", "b) Box plot", "c) Scatter matrix", "d) Density plot"], ans: 2 },
+                { q: "Dispersion includes:", options: ["a) Mean", "b) Median", "c) Standard deviation", "d) Mode"], ans: 2 },
+                { q: "Density plots are used to:", options: ["a) Show data categories", "b) Show data distribution smoothly", "c) Show exact values", "d) Store data"], ans: 1 },
+                { q: "Data visualization in ML helps in:", options: ["a) Ignoring data", "b) Understanding features and patterns", "c) Deleting models", "d) Avoiding preprocessing"], ans: 1 }
             ],
             written: [
-                { q: "Define **Exploratory Data Analysis (EDA)**.", a: "Exploratory Data Analysis (EDA) is an **==iterative process of examining datasets==** to **==identify patterns, detect outliers, and test hypotheses==**.", at: "تحليل البيانات الاستكشافي (EDA) هو **==عملية تكرارية فاحصة ومستمرة لمجموعات البيانات الرقمية==** للتمكن من **==تحديد الأنماط الخفية، واكتشاف القيم المتطرفة (Outliers)، واختبار الفرضيات المبدئية==**." },
-                { q: "Explain the difference between **univariate** and **multivariate** plots.", a: "• Univariate Analysis:\n**==Analyzing one variable at a time==** (e.g., histograms).\n\n• Multivariate Analysis:\n**==Analyzing relationships between multiple variables==** (e.g., heatmaps).", at: "• التحليل أحادي المتغير (Univariate):\n**==تحليل وفحص متغير واحد فقط في كل مرة==** لفهم توزيعه (مثل المخططات التكرارية Histograms).\n\n• التحليل متعدد المتغيرات (Multivariate):\n**==تحليل ودراسة العلاقات والارتباطات المعقدة بين متغيرين أو أكثر معاً==** (مثل الخرائط الحرارية Heatmaps)." }
+                { 
+                    q: "Define **Exploratory Data Analysis (EDA)**.", 
+                    a: "Exploratory Data Analysis (EDA) using data visualization is a critical, **==iterative process of examining datasets==** to **==identify patterns, detect outliers, and test hypotheses==** using plots like **==scatter plots, histograms, and heatmaps==**.", 
+                    qt: "عرف **تحليل البيانات الاستكشافي (EDA)**.", 
+                    at: "تحليل البيانات الاستكشافي (EDA) باستخدام تصوير البيانات هو **==عملية تكرارية حاسمة لفحص مجموعات البيانات==** من أجل **==تحديد الأنماط، واكتشاف القيم المتطرفة، واختبار الفرضيات==** باستخدام مخططات مثل **==مخططات التشتت والمدرجات التكرارية والخرائط الحرارية==**." 
+                },
+                { 
+                    q: "Explain the difference between **univariate** and **multivariate** plots.", 
+                    a: "• Univariate Analysis: **==Analyzing one variable at a time==** (e.g., histograms).\n• Bivariate/Multivariate Analysis: **==Analyzing relationships between two or more variables==** (e.g., scatter plots, heatmaps).", 
+                    qt: "اشرح الفرق بين المخططات **أحادية المتغير (univariate)** و **متعددة المتغيرات (multivariate)**.", 
+                    at: "• التحليل أحادي المتغير: **==تحليل متغير واحد في كل مرة==** (مثل المدرجات التكرارية).\n• التحليل ثنائي/متعدد المتغيرات: **==تحليل العلاقات بين متغيرين أو أكثر==** (مثل مخططات التشتت والخرائط الحرارية)." 
+                }
             ]
         }
     ];
@@ -699,11 +767,9 @@
         if (isVisible) {
             vault.classList.remove('visible');
             btn.classList.remove('active-state');
-            btn.innerHTML = `🌐 ترجمة الإجابة`;
         } else {
             vault.classList.add('visible');
             btn.classList.add('active-state');
-            btn.innerHTML = `🙈 إخفاء الترجمة`;
         }
     }
 
@@ -844,42 +910,30 @@
             
             let html = `
                 <div class="question-header">
+                    <button class="trans-trigger-btn" onclick="toggleArabicTranslation(this, '${vaultId}')">🌐 AR</button>
                     <div class="q-number">${formatNumber(index + 1)} / ${data.length}</div>
                     <div class="question-text">${formatText(item.q)}</div>
                 </div>
             `;
 
-            if (currentGlobalMode === 'blank') {
-                const exactCorrectText = item.options[item.ans];
-                card.dataset.correctString = exactCorrectText.toLowerCase().trim();
+            if (currentGlobalMode === 'blank' || currentGlobalMode === 'written') {
+                const exactCorrectText = item.options ? item.options[item.ans] : item.a;
                 html += `
                     <div class="blank-input-wrapper">
-                        <input type="text" class="inference-input" placeholder="Type your full exact answer here..." id="${cardId}-input" autocomplete="off">
-                        <div class="expected-answer-box" style="font-size: 1.35rem; font-weight:800; direction: ltr !important;">
-                            <span style="color:var(--success); font-weight:900;"><i class="fa-solid fa-square-check"></i> Correct Answer Model:</span> 
-                            <span style="color:#fff; margin-left:5px;">${exactCorrectText}</span>
+                        <div class="written-action-row" id="${cardId}-action-row">
+                            <button class="written-btn wrong-assert" onclick="assertStudyStatus('${cardId}', false)">أحتاج مراجعته ❌</button>
+                            <button class="written-btn correct-assert" onclick="assertStudyStatus('${cardId}', true)">أجبت صحيح ✅</button>
                         </div>
-                    </div>
-                    <button class="check-btn" onclick="checkBlankAnswer('${cardId}')">COMPUTE INFERENCE</button>
-                `;
-            } else if (currentGlobalMode === 'written') {
-                html += `
-                    <div class="blank-input-wrapper" style="margin-bottom:10px; overflow:hidden;">
-                        <textarea class="inference-input" rows="3" placeholder="Type your conceptual structural thoughts here..." id="${cardId}-input" style="resize:vertical; font-size:1.1rem;"></textarea>
-                        
-                        <div class="expected-answer-box" style="text-align:left; direction: ltr !important;">
-                            <button class="trans-trigger-btn" onclick="toggleArabicTranslation(this, '${vaultId}')">🌐 ترجمة الإجابة</button>
-                            <div style="color:var(--primary); font-weight:900; margin-bottom:10px; font-size:1.05rem; letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;"><i class="fa-solid fa-key"></i> 📌 MODEL ANSWER VAULT</div>
-                            <div style="font-weight:700; color:#fff; font-size:1.3rem; line-height:1.8;">${formatText(item.a)}</div>
-                            
-                            <div class="ar-translation-vault" id="${vaultId}">
-                                ${formatText(item.at)}
-                            </div>
+
+                        <div class="expected-answer-box">
+                            <div style="color:var(--gold); font-weight:900; font-size:1.1rem; border-bottom:1px solid rgba(245,158,11,0.2); padding-bottom:6px; margin-bottom:10px; text-shadow: 0 0 12px var(--gold-glow); letter-spacing:1px;"><i class="fa-solid fa-gem"></i> ⚜️ ROYAL ANSWER VAULT</div>
+                            <div style="font-weight:700; color:#fff; font-size:1.3rem; line-height:1.8;">${formatText(exactCorrectText)}</div>
                         </div>
-                    </div>
-                    <div class="written-action-row" id="${cardId}-action-row">
-                        <button class="written-btn wrong-assert" onclick="assertWrittenAnswer('${cardId}', false)">أحتاج مراجعته ❌</button>
-                        <button class="written-btn correct-assert" onclick="assertWrittenAnswer('${cardId}', true)">أجبت صحيح ✅</button>
+
+                        <div class="ar-translation-vault" id="${vaultId}">
+                            <div style="margin-bottom:12px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:8px;"><b style="color:var(--primary);">السؤال مترجم:</b> ${formatText(item.qt || item.q)}</div>
+                            <div><b style="color:var(--success);">الإجابة النموذجية:</b> ${formatText(item.at || exactCorrectText)}</div>
+                        </div>
                     </div>
                 `;
             } else {
@@ -889,7 +943,7 @@
                         <label class="option-label" onclick="selectOption('${cardId}', ${i})">
                             <input type="radio" name="${cardId}" value="${i}">
                             <div class="custom-radio"></div>
-                            <span><b>${currentGlobalMode === 'tf' ? opt : ['A', 'B', 'C', 'D'][i] + '. ' + opt}</b></span>
+                            <span><b>${opt}</b></span>
                         </label>
                     `;
                 });
@@ -935,10 +989,12 @@
 
         if (parseInt(selectedInput.value) === correctAns) {
             card.classList.add('correct');
+            card.classList.add('correct-status');
             resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
             playAudioFeedback('correct'); 
         } else {
             card.classList.add('wrong');
+            card.classList.add('wrong-status');
             resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
             playAudioFeedback('wrong'); 
         }
@@ -946,59 +1002,21 @@
         triggerGroupNextScroll(card);
     }
 
-    function checkBlankAnswer(cardId) {
+    function assertStudyStatus(cardId, isCorrect) {
         recordLocalAction();
         const card = document.getElementById(cardId);
-        const inputField = document.getElementById(`${cardId}-input`);
-        const resultBox = card.querySelector('.result-box');
-        const btn = card.querySelector('.check-btn');
-        const userValue = inputField.value.trim().toLowerCase();
-        const targetValue = card.dataset.correctString;
-
-        if (userValue === '') {
-            btn.disabled = true; btn.innerText = "SKIPPED / REVEALED";
-            inputField.disabled = true;
-            card.classList.add('wrong'); 
-            resultBox.innerHTML = `NODE REVEALED`;
-            playAudioFeedback('wrong');
-            updateProgress();
-            triggerGroupNextScroll(card);
-            return; 
-        }
-
-        btn.disabled = true; btn.innerText = "INFERENCE LOCKED";
-        inputField.disabled = true;
-
-        if (userValue === targetValue || targetValue.includes(userValue) && userValue.length > 2) {
-            card.classList.add('correct');
-            resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
-            playAudioFeedback('correct'); 
-        } else {
-            card.classList.add('wrong');
-            resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
-            playAudioFeedback('wrong'); 
-        }
-        updateProgress();
-        triggerGroupNextScroll(card);
-    }
-
-    function assertWrittenAnswer(cardId, isCorrect) {
-        recordLocalAction();
-        const card = document.getElementById(cardId);
-        const txtArea = document.getElementById(`${cardId}-input`);
         const actionRow = document.getElementById(`${cardId}-action-row`);
-        const resultBox = card.querySelector('.result-box');
-
-        if(txtArea) txtArea.disabled = true;
+        
         if(actionRow) actionRow.style.display = 'none';
+        card.classList.add('revealed-vault');
 
         if(isCorrect) {
             card.classList.add('correct');
-            resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
+            card.classList.add('correct-status');
             playAudioFeedback('correct');
         } else {
             card.classList.add('wrong');
-            resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
+            card.classList.add('wrong-status');
             playAudioFeedback('wrong');
         }
         updateProgress();
@@ -1017,18 +1035,12 @@
         setTimeout(() => {
             if (nextCardExists) {
                 nextCardExists.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                
                 document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
                 nextCardExists.classList.add('focused-by-peer');
 
-                sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
-                    (currentGlobalMode === 'blank' || currentGlobalMode === 'written') ? document.getElementById(`${card.id}-input`).value.trim() : "", 
-                    { active_card_id: nextCardId }
-                );
+                sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', "", { active_card_id: nextCardId });
             } else {
-                sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
-                    (currentGlobalMode === 'blank' || currentGlobalMode === 'written') ? document.getElementById(`${card.id}-input`).value.trim() : ""
-                );
+                sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', "");
             }
         }, 1250); 
     }
@@ -1079,7 +1091,7 @@
     }
 
     function resetCardState(card) {
-        card.classList.remove('wrong', 'correct');
+        card.classList.remove('wrong', 'correct', 'correct-status', 'wrong-status', 'revealed-vault');
         const btn = card.querySelector('.check-btn');
         if(btn) { btn.disabled = false; btn.innerText = "COMPUTE INFERENCE"; }
         const rb = card.querySelector('.result-box');
@@ -1088,10 +1100,7 @@
         const actionRow = card.querySelector('.written-action-row');
         if(actionRow) actionRow.style.display = 'flex';
 
-        if (currentGlobalMode === 'blank' || currentGlobalMode === 'written') {
-            const inputField = card.querySelector('.inference-input');
-            if(inputField) { inputField.disabled = false; inputField.value = ''; }
-        } else {
+        if (currentGlobalMode !== 'blank' && currentGlobalMode !== 'written') {
             card.querySelectorAll('.option-label').forEach(lbl => {
                 lbl.classList.remove('selected', 'true-answer');
                 lbl.style.pointerEvents = 'auto';
@@ -1127,13 +1136,7 @@
                 [labels[i], labels[j]] = [labels[j], labels[i]];
             }
             grid.innerHTML = '';
-            const optLetters = ['A', 'B', 'C', 'D'];
-            labels.forEach((lbl, index) => {
-                const spanTag = lbl.querySelector('span b');
-                if(spanTag) {
-                    const exactText = spanTag.innerText.substring(3);
-                    spanTag.innerText = optLetters[index] + '. ' + exactText;
-                }
+            labels.forEach((lbl) => {
                 grid.appendChild(lbl);
             });
         });
@@ -1171,14 +1174,6 @@
         if (currentIntervalDelay !== 800) { currentIntervalDelay = 800; startAdaptiveSyncLoop(); }
     }
 
-    function debounce(func, wait) {
-        let timeout;
-        return function(...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
-        };
-    }
-
     async function fetchRoomState() {
         if (!roomName || isSyncingFromServer) return;
         try {
@@ -1197,23 +1192,6 @@
                     
                     if (serverSolvedCount === 0 && localSolvedCount > 0) {
                         sendStateToBackend(null, null, null, "", { current_sheet: currentSheetIndex, current_mode: currentGlobalMode });
-                        document.querySelectorAll('.card').forEach(card => {
-                            const cardId = card.id;
-                            const isCorrect = card.classList.contains('correct');
-                            const isWrong = card.classList.contains('wrong');
-                            if (isCorrect || isWrong) {
-                                const status = isCorrect ? 'correct' : 'wrong';
-                                let selectedIdx = null; let inputValue = "";
-                                if (currentGlobalMode === 'blank' || currentGlobalMode === 'written') {
-                                    const input = document.getElementById(`${cardId}-input`);
-                                    if (input) inputValue = input.value;
-                                } else {
-                                    const checkedInput = card.querySelector('input:checked');
-                                    if (checkedInput) selectedIdx = parseInt(checkedInput.value);
-                                }
-                                sendStateToBackend(cardId, selectedIdx, status, inputValue);
-                            }
-                        });
                         isSyncingFromServer = false; return;
                     }
                 }
@@ -1247,18 +1225,13 @@
                         const state = data.answers[cardId];
                         const isFrozen = card.classList.contains('correct') || card.classList.contains('wrong');
 
-                        if (!isFrozen && state.selectedIdx !== null) {
-                            if (currentGlobalMode === 'blank' || currentGlobalMode === 'written') { 
-                                const i = document.getElementById(`${cardId}-input`); 
-                                if (i && state.inputValue !== undefined && document.activeElement !== i) { i.value = state.inputValue; }
-                            } else {
-                                card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
-                                const targetInp = card.querySelector(`input[value="${state.selectedIdx}"]`);
-                                if(targetInp) { targetInp.checked = true; targetInp.parentElement.classList.add('selected'); }
-                            }
+                        if (!isFrozen && state.selectedIdx !== null && currentGlobalMode !== 'blank' && currentGlobalMode !== 'written') {
+                            card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+                            const targetInp = card.querySelector(`input[value="${state.selectedIdx}"]`);
+                            if(targetInp) { targetInp.checked = true; targetInp.parentElement.classList.add('selected'); }
                         }
-                        if (state.status === 'correct' && !card.classList.contains('correct')) executeRemoteFreeze(card, cardId, true, state.inputValue || "");
-                        else if (state.status === 'wrong' && !card.classList.contains('wrong')) executeRemoteFreeze(card, cardId, false, state.inputValue || "");
+                        if (state.status === 'correct' && !card.classList.contains('correct')) executeRemoteFreeze(card, cardId, true);
+                        else if (state.status === 'wrong' && !card.classList.contains('wrong')) executeRemoteFreeze(card, cardId, false);
                     });
                 }
 
@@ -1281,16 +1254,19 @@
         } catch (error) { isSyncingFromServer = false; }
     }
 
-    function executeRemoteFreeze(card, cardId, isCorrect, remoteValue) {
-        const btn = card.querySelector('.check-btn'); if(btn) { btn.disabled = true; btn.innerText = "WEIGHTS FROZEN"; }
-        const actionRow = card.querySelector('.written-action-row'); if(actionRow) actionRow.style.display = 'none';
-        if (currentGlobalMode === 'blank' || currentGlobalMode === 'written') { 
-            const i = document.getElementById(`${cardId}-input`); if (i) { i.disabled = true; if (remoteValue) i.value = remoteValue; } 
-        } else { 
+    function executeRemoteFreeze(card, cardId, isCorrect) {
+        if (currentGlobalMode !== 'blank' && currentGlobalMode !== 'written') {
+            const btn = card.querySelector('.check-btn'); if(btn) { btn.disabled = true; btn.innerText = "WEIGHTS FROZEN"; }
             card.querySelectorAll('input').forEach(inp => inp.disabled = true); 
             card.querySelectorAll('.option-label').forEach(lbl => { lbl.style.pointerEvents = 'none'; if(parseInt(lbl.querySelector('input').value) === parseInt(card.dataset.correct)) lbl.classList.add('true-answer'); }); 
+            card.classList.add(isCorrect ? 'correct' : 'wrong');
+            card.classList.add(isCorrect ? 'correct-status' : 'wrong-status');
+        } else {
+            card.classList.add('revealed-vault');
+            card.classList.add(isCorrect ? 'correct' : 'wrong');
+            card.classList.add(isCorrect ? 'correct-status' : 'wrong-status');
+            const actionRow = card.querySelector('.written-action-row'); if(actionRow) actionRow.style.display = 'none';
         }
-        card.classList.add(isCorrect ? 'correct' : 'wrong');
     }
 
     async function sendStateToBackend(cardId, selectedIdx, status, inputValue = "", extraFields = {}) {
@@ -1317,18 +1293,6 @@
         triggerUserActionBurst();
         sendStateToBackend(cardId, optionIndex, 'selected', "", { active_card_id: cardId });
     };
-
-    const debouncedSendInput = debounce((cardId, value) => {
-        sendStateToBackend(cardId, 0, 'selected', value, { active_card_id: cardId });
-    }, 400);
-
-    document.addEventListener('input', function(e) {
-        if (roomName && e.target && e.target.classList.contains('inference-input')) {
-            recordLocalAction();
-            const inputId = e.target.id; const cardId = inputId.replace('-input', '');
-            triggerUserActionBurst(); debouncedSendInput(cardId, e.target.value);
-        }
-    });
 
     // =========================================================================
     // --- محرك محادثات الصوت الجماعية الحية المستقرة (Signaling Mesh Network) ---
