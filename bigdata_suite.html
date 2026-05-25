@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Big Data & Analytics Workspace - Fullscreen Optimization</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800;900&family=Cairo:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght=300;400;500;600;800;900&family=Cairo:wght=400;700;900&display=swap');
 
         :root {
             --bg-dark: #020617;
@@ -219,25 +219,19 @@
         .mode-select-card.active-mcq { color: #db2777; border-color: #db2777; background: rgba(219, 39, 119, 0.12); box-shadow: 0 0 20px rgba(219, 39, 119, 0.15); }
         .mode-select-card.active-blank { color: var(--warning); border-color: var(--warning); background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
 
-        .bottom-nav-replica-title {
-            text-align: center; font-size: 0.85rem; font-weight: 800; letter-spacing: 2px;
-            color: var(--text-muted); text-transform: uppercase; margin: 40px 0 15px;
-        }
-        .bottom-navigator-deck {
+        .scroll-top-btn {
+            position: fixed; bottom: 25px; right: 25px; width: 48px; height: 48px;
             background: var(--glass-bg); border: 1px solid var(--glass-border);
-            border-radius: 16px; padding: 10px; display: flex; justify-content: center;
-            gap: 10px; flex-wrap: wrap; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            color: var(--primary); border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; z-index: 99;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5), 0 0 15px var(--primary-glow);
+            opacity: 0; transform: translateY(20px); pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .bottom-nav-btn {
-            background: rgba(255,255,255,0.02); color: var(--text-option); border: 1px solid var(--glass-border);
-            padding: 10px 18px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;
-            cursor: pointer; transition: all 0.25s ease; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .bottom-nav-btn:hover { border-color: var(--primary); color: #fff; }
-        .bottom-nav-btn.active {
-            background: var(--primary-dim); color: var(--primary); border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.1); font-weight: 900;
-        }
+        .scroll-top-btn.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .scroll-top-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); transform: translateY(-3px); }
+        .scroll-top-btn svg { width: 22px; height: 22px; transition: transform 0.3s; }
+        .scroll-top-btn:hover svg { transform: translateY(-2px); }
 
         .container { max-width: 850px; margin: 15px auto 40px; padding: 0 15px; }
         
@@ -255,7 +249,6 @@
             background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border); border-radius: 18px; padding: 25px; margin-bottom: 25px;
             position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
         }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: all 0.4s; }
         .card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
@@ -373,16 +366,39 @@
         .card.correct .result-box { background: var(--success-dim); color: var(--success); }
         .card.correct .inference-input { border-color: var(--success); background: var(--success-dim); color: #fff; }
 
-        .card.wrong { border-color: var(--danger); box-shadow: 0 8px 25px var(--danger-dim); animation: shake 0.4s; }
+        .card.wrong { border-color: var(--danger); box-shadow: 0 8px 25px var(--danger-dim); }
         .card.wrong::before { background: var(--danger); }
         .card.wrong .result-box { background: var(--danger-dim); color: var(--danger); }
         .card.wrong .inference-input { border-color: var(--danger); background: var(--danger-dim); }
 
         .score-board {
-            display: none; background: var(--glass-bg); border: 1px solid var(--glass-border);
-            border-radius: 20px; padding: 40px 25px; text-align: center; margin-top: 30px;
+            display: none; background: var(--glass-bg); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 20px; padding: 40px 25px;
+            text-align: center; box-shadow: 0 20px 45px rgba(0,0,0,0.6); margin-top: 30px;
         }
-        .score-board.active { display: block; }
+        .score-board.active { display: block; animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15); }
+
+        .score-circle {
+            width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 25px;
+            display: flex; align-items: center; justify-content: center;
+            background: conic-gradient(var(--primary) 0%, rgba(255,255,255,0.03) 0%);
+        }
+        .score-circle-inner {
+            width: 96px; height: 96px; border-radius: 50%; background: var(--bg-dark);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .score-circle-inner .pct { font-size: 2rem; font-weight: 900; }
+        .score-circle-inner .lbl { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 1px; }
+
+        .score-stats { display: flex; justify-content: center; gap: 40px; margin-bottom: 20px; }
+        .stat-item { display: flex; flex-direction: column; }
+        .stat-val { font-size: 2rem; font-weight: 900; }
+        .stat-val.correct-text { color: var(--success); }
+        .stat-val.wrong-text { color: var(--danger); }
+        .stat-lbl { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+        .score-msg { font-size: 1.05rem; font-weight: 600; color: var(--text-option); }
+
+        @keyframes scaleUp { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
@@ -391,6 +407,10 @@
 <div class="bg-grid"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
+
+<button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
 
 <header id="mainHeader">
     <div class="header-content">
@@ -432,6 +452,13 @@
     <div id="sheet-2" class="assignment-sheet"></div>
     <div id="sheet-3" class="assignment-sheet"></div>
 
+    <div class="bottom-nav-replica-title">Quick Mode Switcher</div>
+    <div class="mode-selection-deck" style="margin: 10px auto 25px;">
+        <div class="mode-select-card" id="bottom-card-btn-tf" onclick="globalSwitchMode('tf', true)">True / False</div>
+        <div class="mode-select-card" id="bottom-card-btn-mcq" onclick="globalSwitchMode('mcq', true)">MCQ</div>
+        <div class="mode-select-card" id="bottom-card-btn-blank" onclick="globalSwitchMode('blank', true)">وا اكمل</div>
+    </div>
+
     <div class="bottom-nav-replica-title">Quick Sheet Switcher</div>
     <div class="bottom-navigator-deck" id="bottomSheetNav">
         <button class="bottom-nav-btn" onclick="switchSheet(0, true)">Sheet 1</button>
@@ -441,8 +468,28 @@
     </div>
 
     <div id="score-board" class="score-board">
-        <h2 style="margin-bottom:20px; color:var(--primary); font-size: 1.3rem;">BLOCK EXECUTION COMPLETE</h2>
-        <button class="action-btn retry" style="width: 100%; padding: 14px;" onclick="retryMode()">RE-RUN CLUSTER RUN</button>
+        <h2 style="margin-bottom:20px; letter-spacing: 2px; color:var(--primary); font-size: 1.3rem;">BLOCK EXECUTION COMPLETE</h2>
+        <div class="score-circle" id="score-circle">
+            <div class="score-circle-inner">
+                <span class="pct" id="score-pct">0%</span>
+                <span class="lbl">ACCURACY METRIC</span>
+            </div>
+        </div>
+        <div class="score-stats">
+            <div class="stat-item">
+                <span class="stat-val correct-text" id="stat-correct">0</span>
+                <span class="stat-lbl">TRUE PREDICTIONS</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-val wrong-text" id="stat-wrong">0</span>
+                <span class="stat-lbl">FALSE LOSS</span>
+            </div>
+        </div>
+        <div class="score-msg" id="score-msg">Processing data...</div>
+
+        <button class="action-btn retry" style="margin: 30px auto 0; font-size: 1rem; padding: 14px 25px; width: 100%; justify-content: center; border-radius:12px;" onclick="retryMode()">
+            RE-RUN CLUSTER RUN (RETRY)
+        </button>
     </div>
 </div>
 
@@ -563,13 +610,12 @@
     let lastRenderedSheet = null;
     let lastRenderedMode = null;
 
-    // =========================================================================
-    // --- متتبع وبادئ مؤقت كولداون تفاعل المستخدم لمنع القفز والاهتزاز العشوائي ---
-    // =========================================================================
     let lastLocalActionTime = 0;
     function recordLocalAction() {
         lastLocalActionTime = Date.now();
     }
+
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
     function playAudioFeedback(type) {
         try {
@@ -652,9 +698,10 @@
         
         document.getElementById('score-board').classList.remove('active');
         renderCurrentView();
+        scrollToTop();
 
         if(sendToServer) {
-            recordLocalAction(); // تسجيل الحدث المحلي
+            recordLocalAction();
             triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_sheet: index, active_card_id: `sheet-${index}-${currentGlobalMode}-q-0` });
         }
@@ -666,11 +713,16 @@
         document.getElementById('card-btn-mcq').classList.toggle('active-mcq', mode === 'mcq');
         document.getElementById('card-btn-blank').classList.toggle('active-blank', mode === 'blank');
         
+        document.getElementById('bottom-card-btn-tf').classList.toggle('active-tf', mode === 'tf');
+        document.getElementById('bottom-card-btn-mcq').classList.toggle('active-mcq', mode === 'mcq');
+        document.getElementById('bottom-card-btn-blank').classList.toggle('active-blank', mode === 'blank');
+
         document.getElementById('score-board').classList.remove('active');
         renderCurrentView();
+        scrollToTop();
 
         if(sendToServer) {
-            recordLocalAction(); // تسجيل الحدث المحلي
+            recordLocalAction();
             triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_mode: mode, active_card_id: `sheet-${currentSheetIndex}-${mode}-q-0` });
         }
@@ -683,7 +735,7 @@
             const container = document.getElementById(`sheet-${sheet.id}`);
             if (sheet.id === currentSheetIndex) {
                 if (needsRender || container.innerHTML === "") {
-                    const targetData = (currentGlobalMode === 'mcq') ? sheet.mcq : sheet.tf; 
+                    const targetData = (currentGlobalMode === 'mcq' || currentGlobalMode === 'blank') ? sheet.mcq : sheet.tf; 
                     renderBlock(container, sheet.id, targetData);
                 }
             } else {
@@ -710,7 +762,7 @@
             card.style.animationDelay = `${index * 0.04}s`;
             
             card.addEventListener('click', () => {
-                recordLocalAction(); // عند نقر الكارد يتم حظر أي تدخل خارجي فوراً
+                recordLocalAction();
                 triggerUserActionBurst();
                 sendStateToBackend(null, null, null, "", { active_card_id: cardId });
             });
@@ -753,7 +805,7 @@
     }
 
     function selectOption(cardId, optionIndex) {
-        recordLocalAction(); // حماية فورية عند الاختيار
+        recordLocalAction();
         const card = document.getElementById(cardId);
         if(!card || card.classList.contains('correct') || card.classList.contains('wrong')) return;
 
@@ -766,7 +818,7 @@
     }
 
     function checkRadioAnswer(cardId) {
-        recordLocalAction(); // حظر إضافي عند التحقق
+        recordLocalAction();
         const card = document.getElementById(cardId);
         const correctAns = parseInt(card.dataset.correct);
         const selectedInput = card.querySelector('input:checked');
@@ -799,7 +851,7 @@
     }
 
     function checkBlankAnswer(cardId) {
-        recordLocalAction(); // حظر إضافي عند التحقق
+        recordLocalAction();
         const card = document.getElementById(cardId);
         const inputField = document.getElementById(`${cardId}-input`);
         const resultBox = card.querySelector('.result-box');
@@ -835,7 +887,7 @@
     }
 
     function triggerGroupNextScroll(card) {
-        recordLocalAction(); // حماية فورية عند الانتقال التلقائي
+        recordLocalAction();
         const currentIndex = parseInt(card.dataset.index);
         const nextIndex = currentIndex + 1;
         const nextCardId = `sheet-${currentSheetIndex}-${currentGlobalMode}-q-${nextIndex}`;
@@ -845,10 +897,8 @@
         
         setTimeout(() => {
             if (nextCardExists) {
-                // ميزة التمرير التلقائي الفوري للمستخدم الحالي محلياً لتسريع الاستجابة
                 nextCardExists.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 
-                // تظليل الكارد النشط الحالي فوراً لتنبيهه بالانتقال
                 document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
                 nextCardExists.classList.add('focused-by-peer');
 
@@ -877,6 +927,22 @@
         document.getElementById('progressBar').style.width = `${(solved / total) * 100}%`;
         document.getElementById('live-score').innerText = `${formatNumber(correct)} / ${total}`;
         
+        // تحديث لوحة الإحصائيات الدائرية والعداد الشامل
+        const pct = total === 0 ? 0 : Math.round((correct / total) * 100);
+        const scoreCircle = document.getElementById('score-circle');
+        if(scoreCircle) scoreCircle.style.background = `conic-gradient(var(--primary) ${pct}%, rgba(255,255,255,0.03) ${pct}%)`;
+        
+        const scorePct = document.getElementById('score-pct'); if(scorePct) scorePct.innerText = `${pct}%`;
+        const statCorrect = document.getElementById('stat-correct'); if(statCorrect) statCorrect.innerText = correct;
+        const statWrong = document.getElementById('stat-wrong'); if(statWrong) statWrong.innerText = wrong;
+        
+        const scoreMsg = document.getElementById('score-msg');
+        if(scoreMsg) {
+            if(pct >= 85) scoreMsg.innerText = "CLUSTER PERFORMANCE: OPTIMAL META-LEARNING generalisation!";
+            else if(pct >= 50) scoreMsg.innerText = "CLUSTER PERFORMANCE: STABLE CONVERGENCE WITH MINIMAL LOSS.";
+            else scoreMsg.innerText = "CLUSTER PERFORMANCE: CRITICAL GRADIENT EXPLOSION (HIGH LOSS).";
+        }
+
         if(solved === total && total > 0){
             document.getElementById('score-board').classList.add('active');
         } else {
@@ -960,10 +1026,8 @@
     let roomName = urlParams.get('room');
     const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost:5000' ? 'http://127.0.0.1:5000/api' : '/api';
 
-    // معرف فريد للمتصفح الحالي لتفادي تداخل العمليات والمزامنة المتكررة لنفس المستخدم
     const myClientId = 'client-' + Math.random().toString(36).substring(2, 9);
     
-    // متتبع آخر حالة مرسلة محلياً لعدم إثارة حركة المزامنة مع الذات
     let lastSentState = {
         sheet: null,
         mode: null,
@@ -1013,9 +1077,7 @@
             const data = await response.json();
             if (data) {
                 let structuralChanged = false;
-
-                // نقارن الوقت المنقضي منذ آخر فعل محلي نشط (Cooldown)
-                const isCooldownActive = (Date.now() - lastLocalActionTime) < 2000; // 2 ثانية حظر
+                const isCooldownActive = (Date.now() - lastLocalActionTime) < 2000;
 
                 // =========================================================================
                 // --- محرك الشفاء الذاتي النشط وحماية الجلسة من التصفير الذاتي من السيرفر ---
@@ -1024,14 +1086,10 @@
                     const serverSolvedCount = Object.keys(data.answers).length;
                     const localSolvedCount = document.querySelectorAll('.card.correct, .card.wrong').length;
                     
-                    // إذا أرجع السيرفر 0 إجابات بينما محلياً قمنا بحل أسئلة، فهذا يعني أن السيرفر فقد ذاكرته
                     if (serverSolvedCount === 0 && localSolvedCount > 0) {
                         console.log("[Self-Healing] Server wipe detected. Re-asserting local answers and state.");
-                        
-                        // إعادة فرض الشيت والنمط الحالي فوراً لترميم السيرفر
                         sendStateToBackend(null, null, null, "", { current_sheet: currentSheetIndex, current_mode: currentGlobalMode });
                         
-                        // إعادة رفع كافة الإجابات المحلولة محلياً لتسجيلها مجدداً على السيرفر دون فقدان العمل
                         document.querySelectorAll('.card').forEach(card => {
                             const cardId = card.id;
                             const isCorrect = card.classList.contains('correct');
@@ -1051,18 +1109,15 @@
                             }
                         });
                         isSyncingFromServer = false;
-                        return; // نتخطى المزامنة هذه الدورة لحماية الدوم المحلي من المسح
+                        return;
                     }
                 }
 
-                // حماية التنقل والمزامنة: نرفض التحول للشيت 0 أو الوضع TF إذا كان ناجماً عن تصفير صامت في السيرفر
                 if (!isCooldownActive) {
                     const serverSolvedCount = data.answers ? Object.keys(data.answers).length : 0;
                     const localSolvedCount = document.querySelectorAll('.card.correct, .card.wrong').length;
 
-                    // مزامنة الشيت
                     if (data.current_sheet !== undefined && data.current_sheet !== null && data.current_sheet !== currentSheetIndex) { 
-                        // إذا كان السيرفر يأمرنا بالرجوع للشيت الأول (0) والأسئلة فارغة لديه ولكن لدينا إجابات محلية، نرفض ونقوم بالشفاء
                         if (data.current_sheet === 0 && currentSheetIndex !== 0 && serverSolvedCount === 0 && localSolvedCount > 0) {
                             console.log("[Self-Healing] Preventing silent reset to Sheet 0. Re-asserting Sheet:", currentSheetIndex);
                             sendStateToBackend(null, null, null, "", { current_sheet: currentSheetIndex, current_mode: currentGlobalMode });
@@ -1072,7 +1127,6 @@
                         }
                     }
                     
-                    // مزامنة النمط
                     if (data.current_mode !== undefined && data.current_mode !== null && data.current_mode !== currentGlobalMode) { 
                         if (data.current_mode === 'tf' && currentGlobalMode !== 'tf' && serverSolvedCount === 0 && localSolvedCount > 0) {
                             console.log("[Self-Healing] Preventing silent reset to TF mode. Re-asserting Mode:", currentGlobalMode);
@@ -1125,8 +1179,6 @@
                     const t = document.getElementById(data.active_card_id); 
                     if (t) { 
                         t.classList.add('focused-by-peer'); 
-                        
-                        // نمنع التمرير التلقائي قسرياً في حالة وجود Cooldown نشط أو تماثل البطاقة المراد الانتقال إليها محلياً
                         if (!isCooldownActive && data.active_card_id !== lastSentState.activeCardId) {
                             setTimeout(() => { 
                                 t.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
@@ -1165,7 +1217,6 @@
                     status: status, 
                     inputValue: inputValue, 
                     senderId: myClientId, 
-                    // نرسل دائماً رقم الصفحة الحالية والنمط الحالي مع كل طلب تعديل تجنباً لمسحها في قاعدة البيانات!
                     current_sheet: currentSheetIndex,
                     current_mode: currentGlobalMode,
                     ...extraFields 
@@ -1187,7 +1238,7 @@
 
     document.addEventListener('input', function(e) {
         if (roomName && e.target && e.target.classList.contains('inference-input')) {
-            recordLocalAction(); // حظر فوري للمستقبل عند الكتابة
+            recordLocalAction();
             const inputId = e.target.id;
             const cardId = inputId.replace('-input', '');
             triggerUserActionBurst();
@@ -1284,14 +1335,18 @@
         }
     }
 
-    // =========================================================================
-    // --- مستشعر التمرير لإخفاء الملاحة تلقائياً مع الحفاظ على المايك ---
-    // =========================================================================
     let lastScrollY = window.scrollY;
     window.addEventListener('scroll', () => {
         const header = document.getElementById('mainHeader');
+        const scrollBtn = document.getElementById('scrollTopBtn');
         if (!header) return;
         
+        if (window.scrollY > 250) {
+            if(scrollBtn) scrollBtn.classList.add('visible');
+        } else {
+            if(scrollBtn) scrollBtn.classList.remove('visible');
+        }
+
         if (window.scrollY > lastScrollY && window.scrollY > 80) {
             header.classList.add('hide-nav');
         } else if (window.scrollY < lastScrollY) {
