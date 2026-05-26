@@ -38,7 +38,6 @@
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
-            scroll-behavior: smooth;
             padding-top: 185px; 
             padding-bottom: 60px;
         }
@@ -649,7 +648,7 @@
                     q: "Explain the importance of **monitoring** in distributed systems.", 
                     a: "• Provides **==operational visibility==** for performance, health, and capacity planning.\n• Combines metrics, logs, and traces for **==rapid incident response==**.\n• Tools: **==Ambari, Prometheus, Grafana==**.", 
                     qt: "5. اشرح أهمية **المراقبة (monitoring)** في الأنظمة الموزعة.", 
-                    at: "• يوفر **==رؤية تشغيلية==** للأداء والصحة وتخطيط السعة.\n• يجمع بين المقاييس والسجلات والتتبعات من أجل **==الاستجابة السريعة للحوادث==**.\n• الأدوات: **==Ambari, Prometheus, Grafana==**." 
+                    at: "• يوفر **==رؤية تشغيلية==** للأداء والصحة وتخطيط السعة.\n• يجمع بين المقاييس والسجلات والتتبعات من أجل **==الاستجابة السريعة للحوادث==**." 
                 }
             ]
         },
@@ -767,7 +766,45 @@
         lastLocalActionTime = Date.now();
     }
 
-    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    // دالة التمرير السريع المخصصة لأعلى الصفحة
+    function scrollToTop() {
+        const startTime = performance.now();
+        const startY = window.pageYOffset;
+        const duration = 250; // سرعة الانتقال بالمللي ثانية
+
+        function step(currentTime) {
+            const progress = Math.min((currentTime - startTime) / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 3);
+            window.scrollTo(0, startY * (1 - ease));
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            }
+        }
+        requestAnimationFrame(step);
+    }
+
+    // دالة التمرير الرياضي السلس وفائق السرعة للكروت
+    function fastScrollTo(element) {
+        if (!element) return;
+        const elementRect = element.getBoundingClientRect();
+        const absoluteElementTop = elementRect.top + window.pageYOffset;
+        const middle = absoluteElementTop - (window.innerHeight / 2) + (elementRect.height / 2);
+        
+        const startTime = performance.now();
+        const startY = window.pageYOffset;
+        const difference = middle - startY;
+        const duration = 250; // سرعة الانتقال المحددة بـ 250ms فقط بدلاً من بطء المتصفح الافتراضي
+
+        function step(currentTime) {
+            const progress = Math.min((currentTime - startTime) / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 3); // cubic ease out
+            window.scrollTo(0, startY + difference * ease);
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            }
+        }
+        requestAnimationFrame(step);
+    }
 
     function formatText(text) {
         if(!text) return "";
@@ -1111,9 +1148,10 @@
         
         if (typeof triggerUserActionBurst === 'function') triggerUserActionBurst();
         
+        // تم تسريع المهلة الزمنية من 1250ms إلى 450ms لتوفير تنقل أسرع وثلاثي القوة
         setTimeout(() => {
             if (nextCardExists) {
-                nextCardExists.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                fastScrollTo(nextCardExists);
                 document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
                 nextCardExists.classList.add('focused-by-peer');
 
@@ -1127,7 +1165,7 @@
             } else {
                 sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', "");
             }
-        }, 1250); 
+        }, 450); 
     }
 
     function updateProgress() {
@@ -1329,7 +1367,7 @@
                     if (t) { 
                         t.classList.add('focused-by-peer'); 
                         if (!isCooldownActive && data.active_card_id !== lastSentState.activeCardId) {
-                            setTimeout(() => { t.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
+                            setTimeout(() => { fastScrollTo(t); }, 50); // استبدال scrollIntoView بالدالة السريعة المخصصة
                         }
                     } 
                 }
@@ -1525,7 +1563,7 @@
             const t = document.getElementById(data.cardId);
             if (t) {
                 t.classList.add('focused-by-peer');
-                t.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                fastScrollTo(t); // استخدام دالة التمرير فائقة السرعة
             }
         }
     }
