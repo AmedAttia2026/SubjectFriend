@@ -219,7 +219,7 @@
         .mode-select-card:hover { border-color: rgba(255, 255, 255, 0.15); color: #fff; transform: translateY(-2px); }
         .mode-select-card.active-tf { color: var(--primary); border-color: var(--primary); background: var(--primary-dim); box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
         .mode-select-card.active-mcq { color: #db2777; border-color: #db2777; background: rgba(219, 39, 119, 0.12); box-shadow: 0 0 20px rgba(219, 39, 119, 0.15); }
-        .mode-select-card.active-blank { color: var(--gold); border-color: var(--gold); background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
+        .mode-select-card.active-blank { color: var(--warning); border-color: var(--warning); background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
         .mode-select-card.active-written { color: #10b981; border-color: #10b981; background: rgba(16, 185, 129, 0.12); box-shadow: 0 0 20px rgba(16, 185, 129, 0.15); }
 
         .scroll-top-btn {
@@ -293,6 +293,7 @@
         .option-label.selected .custom-radio { border-color: var(--primary); }
         .option-label.selected .custom-radio::after { transform: scale(1); }
 
+        /* تعديل كود الـ CSS وتضييق نطاقه ليعمل على الدائرة المختارة فقط */
         .card.correct .option-label.selected { 
             border: 2.5px solid var(--success) !important; 
             background: rgba(16, 185, 129, 0.25) !important;
@@ -339,7 +340,7 @@
         
         .expected-answer-box {
             display: none; background: rgba(245, 158, 11, 0.05); border: 1.5px dashed var(--gold);
-            padding: 16px; border-radius: 14px; font-size: 1.15rem; color: #f8fafc;
+            padding: 16px; border-radius: 14px; font-size: 1.35rem; color: #f8fafc;
             text-align: left; line-height: 1.6 !important; box-shadow: 0 6px 25px rgba(245, 158, 11, 0.15);
             direction: ltr !important; white-space: pre-line; margin-top: 10px;
             animation: fadeInSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -347,7 +348,7 @@
         
         .ar-translation-vault {
             display: none; background: rgba(168, 85, 247, 0.04); border-right: 4px solid var(--primary);
-            padding: 16px; border-radius: 12px; font-size: 1.15rem; color: #f1f5f9;
+            padding: 16px; border-radius: 12px; font-size: 1.35rem; color: #f1f5f9;
             text-align: right; line-height: 1.7 !important; font-family: 'Cairo', sans-serif;
             direction: rtl !important; white-space: pre-line;
             box-shadow: 0 4px 15px rgba(168, 85, 247, 0.05);
@@ -564,33 +565,33 @@
             written: [
                 { 
                     q: "Define **Big Data** in your own words.", 
-                    a: "Big Data refers to datasets that are too **large or complex** for ==traditional data processing software== to handle. It requires ==advanced, distributed technologies== to store, process, and analyze the data to extract ==valuable insights==.", 
-                    qt: "1. عرّف **البيانات الضخمة (Big Data)** بأسلوبك الخاص.", 
-                    at: "تشير البيانات الضخمة إلى مجموعات بيانات ضخمة ومعقدة للغاية بحيث ==تعجز برامج معالجة البيانات التقليدية== عن التعامل معها. وهي تتطلب ==تقنيات متقدمة وموزعة== لتخزينها ومعالجتها وتحليلها لاستخلاص ==رؤى قيمة==." 
+                    a: "Big Data refers to datasets so **==large or complex==** that **==traditional data processing application software is inadequate==** to deal with them. It requires **==advanced technologies==** to extract **==useful insights==**.", 
+                    qt: "1. عرف **البيانات الضخمة (Big Data)** بكلماتك الخاصة.", 
+                    at: "البيانات الضخمة تشير إلى مجموعات بيانات **==كبيرة أو معقدة جدًا==** لدرجة أن **==برامج معالجة البيانات التقليدية غير قادرة==** على التعامل معها. وتتطلب **==تقنيات متقدمة==** لاستخراج **==رؤى مفيدة==**." 
                 },
                 { 
                     q: "Explain the difference between **Volume** and **Velocity**.", 
-                    a: "• **Volume**: Represents the ==sheer physical size and quantity of data== generated and stored (ranging from Terabytes to Zettabytes).\n• **Velocity**: Represents the ==speed at which data is generated, collected, and processed== in real-time or near-real-time.", 
+                    a: "Volume: The **==sheer quantity of data==** generated and stored (terabytes to zettabytes).\nVelocity: The **==speed at which data is generated, collected, and processed==** (real-time data streams).", 
                     qt: "2. اشرح الفرق بين **الحجم (Volume)** و **السرعة (Velocity)**.", 
-                    at: "• **الحجم (Volume)**: يمثل ==الكمية والحجم الفعلي الهائل للبيانات== التي يتم إنشاؤها وتخزينها (تتراوح من تيرابايت إلى زيتابايت).\n• **السرعة (Velocity)**: تمثل ==السرعة العالية التي يتم بها إنشاء البيانات وجمعها ومعالجتها== في الوقت الفعلي أو شبه الفعلي." 
+                    at: "الحجم (Volume): **==الكمية الهائلة من البيانات==** التي يتم إنشاؤها وتخزينها (من تيرابايت إلى زيتابايت).\nالسرعة (Velocity): **==السرعة التي يتم بها إنشاء البيانات وجمعها ومعالجتها==** (تدفقات البيانات في الوقت الفعلي)." 
                 },
                 { 
                     q: "Why do **traditional systems** struggle with Big Data?", 
-                    a: "Traditional systems rely on **vertical scaling** (adding resources to a single server). This approach becomes ==prohibitively expensive== and is architecturally ==insufficient== to process the immense volume and speed of Big Data, resulting in severe ==single-node bottlenecks==.", 
+                    a: "Traditional systems rely on **==vertical scaling (single server)==** which becomes **==expensive and insufficient==** for the huge volume and velocity of Big Data, causing **==single-node bottlenecks==**.", 
                     qt: "3. لماذا تواجه **الأنظمة التقليدية** صعوبة في التعامل مع البيانات الضخمة؟", 
-                    at: "تعتمن الأنظمة التقليدية على **التوسع الرأسي** (زيادة موارد خادم واحد). هذا الأسلوب يصبح ==مكلفًا للغاية== وغير ==كافٍ== من الناحية الهيكلية لمعالجة الحجم الهائل والسرعة العالية للبيانات الضخمة، مما يؤدي إلى ==اختناقات حادة في الخادم الفردي==." 
+                    at: "تعتمد الأنظمة التقليدية على **==التوسع الرأسي (خادم واحد)==** والذي يصبح **==مكلفًا وغير كافٍ==** للحجم الهائل والسرعة العالية للبيانات الضخمة، مما يتسبب في **==اختناقات العقدة المفردة==**." 
                 },
                 { 
                     q: "List the main components of the **Big Data technology stack**.", 
-                    a: "1. **==Ingestion==**: Collecting data from various raw sources.\n2. **==Storage==**: Storing data in distributed systems (like HDFS or cloud buckets).\n3. **==Processing==**: Transforming, cleaning, and computing data (like Spark or MapReduce).\n4. **==Analytics==**: Querying, visualising, and applying machine learning to extract value.", 
+                    a: "**==1. Ingestion\n2. Storage\n3. Processing\n4. Analytics==**", 
                     qt: "4. اذكر المكونات الرئيسية لـ **حزمة تقنيات البيانات الضخمة (Big Data technology stack)**.", 
-                    at: "1. **==الاستيعاب (Ingestion)==**: تجميع وجلب البيانات من مصادرها الخام المختلفة.\n2. **==التخزين (Storage)==**: حفظ البيانات في أنظمة موزعة (مثل HDFS أو السحابة).\n3. **==المعالجة (Processing)==**: تحويل وتنظيف وحوسبة البيانات (مثل Spark أو MapReduce).\n4. **==التحليلات (Analytics)==**: استعلام وتصوير البيانات وتطبيق تعلم الآلة لاستخلاص القيمة." 
+                    at: "**==1. الاستيعاب/الإدخال (Ingestion)\n2. التخزين (Storage)\n3. المعالجة (Processing)\n4. التحليلات (Analytics)==**" 
                 },
                 { 
                     q: "Mention two Big Data **use cases** in healthcare or e-commerce.", 
-                    a: "• **Healthcare**: Analyzing electronic health records and wearable sensor data to ==predict disease outbreaks== and create ==personalized treatment plans==.\n• **E-commerce**: Tracking customer browsing patterns and purchase history to provide ==personalized product recommendations== and ==optimize supply chain demand forecasting==.", 
-                    qt: "5. اذكر **حالتَي استخدام (Use cases)** للبيانات الضخمة في مجالات الرعاية الصحية أو التجارة الإلكترونية.", 
-                    at: "• **الرعاية الصحية**: تحليل السجلات الصحية الرقمية وبيانات الأجهزة القابلة للارتداء لـ ==التنبؤ بتفشي الأمراض== ووضع ==خطط علاج مخصصة للمرضى==.\n• **التجارة الإلكترونية**: تتبع سلوك تصفح العملاء وسجل الشراء لتقديم ==توصيات مخصصة للمنتجات== و==تحسين التنبؤ بالطلب في سلاسل التوريد==." 
+                    a: "Healthcare: Leveraging patient records and wearable data to **==improve diagnostic accuracy, personalize treatments, and predict disease outbreaks==**.\nE-commerce: Enhancing customer experience through **==personalized recommendations, optimizing supply chains, and forecasting demand==**.", 
+                    qt: "5. اذكر **حالتي استخدام (Use cases)** للبيانات الضخمة في الرعاية الصحية أو التجارة الإلكترونية.", 
+                    at: "الرعاية الصحية: الاستفادة من سجلات المرضى وبيانات الأجهزة القابلة للارتداء لـ **==تحسين دقة التشخيص، وتخصيص العلاجات، والتنبؤ بتفشي الأمراض==**.\nالتجارة الإلكترونية: تحسين تجربة العملاء من خلال **==التوصيات المخصصة، وتحسين سلاسل التوريد، والتنبؤ بالطلب==**." 
                 }
             ]
         },
@@ -621,33 +622,33 @@
             written: [
                 { 
                     q: "Explain the main components of **Big Data Architecture**.", 
-                    a: "• **Ingestion Layer**: ==Captures raw data== from streaming sources (Kafka) or batch transfers.\n• **Storage Layer**: Scalable repository like a ==Data Lake== or distributed file system for cold, warm, or hot data.\n• **Processing Layer**: Converts raw data into structured insights using ==batch processing or stream processing==.\n• **Analytics Layer**: Serves processed data to ==BI dashboards, ad-hoc query tools, or ML model endpoints==.", 
+                    a: "• Ingestion: **==Capture raw data==** from sources (streaming and batch) and deliver to storage or processing systems.\n• Storage: **==Durable, often distributed storage==** optimized for cost and access patterns (cold vs hot data).\n• Processing: **==Transformations, enrichment, aggregations and model training==** using batch or stream compute frameworks.\n• Analytics: **==Serving results to BI tools, dashboards, or ML inference endpoints==**; support for ad-hoc queries and exploratory analysis.", 
                     qt: "1. اشرح المكونات الرئيسية لـ **بنية البيانات الضخمة (Big Data Architecture)**.", 
-                    at: "• **طبقة الاستيعاب (Ingestion)**: ==تلتقط البيانات الخام== من مصادر التدفق الفوري (Kafka) أو النقل على دفعات.\n• **طبقة التخزين (Storage)**: مستودع مرن وقابل للتوسع مثل ==بحيرة البيانات== أو أنظمة الملفات الموزعة للبيانات الباردة أو الدافئة أو الساخنة.\n• **طبقة المعالجة (Processing)**: تحول البيانات الخام إلى رؤى منظمة باستخدام ==المعالجة بالدفعة أو المعالجة بالتدفق==.\n• **طبقة التحليلات (Analytics)**: تقدم البيانات المعالجة إلى ==لوحات معلومات ذكاء الأعمال، أدوات الاستعلام المخصصة، أو نماذج تعلم الآلة==." 
+                    at: "• الاستيعاب (Ingestion): **==التقاط البيانات الخام==** من المصادر (التدفق والدفعات) وتوصيلها إلى أنظمة التخزين أو المعالجة.\n• التخزين (Storage): **==تخزين متين وموزع غالباً==** مُحسّن من حيث التكلفة وأنماط الوصول (البيانات الباردة مقابل الساخنة).\n• المعالجة (Processing): **==التحويلات، والإثراء، والتجميعات، وتدريب النماذج==** باستخدام أطر عمل الحوسبة بالدفعات أو التدفق.\n• التحليلات (Analytics): **==تقديم النتائج لأدوات ذكاء الأعمال، لوحات المعلومات، أو نقاط نهاية استدلال تعلم الآلة==**؛ ودعم الاستعلامات المخصصة والتحليل الاستكشافي." 
                 },
                 { 
                     q: "What is the difference between **ETL** and **ELT**?", 
-                    a: "• **ETL (Extract, Transform, Load)**: Data is transformed ==before loading== into a target warehouse. Ideal for highly structured data with a ==predefined schema==.\n• **ELT (Extract, Load, Transform)**: Raw data is loaded directly into a database or data lake, and transformation happens ==after loading==. This offers high ==schema-on-read flexibility== and is faster for raw analytical processing.", 
+                    a: "• ETL (Extract, Transform, Load): **==Transform data before loading==** → traditional for data warehouses, **==predefined schema==**.\n• ELT (Extract, Load, Transform): **==Load raw data first into data lake, then transform==** → modern for Big Data, **==schema-on-read==**, faster for ad-hoc analytics & ML.", 
                     qt: "2. ما الفرق بين **ETL** و **ELT**؟", 
-                    at: "• **ETL (استخراج، تحويل، تحميل)**: يتم تحويل البيانات ==قبل تحميلها== في المستودع المستهدف. ممتاز للبيانات المنظمة ذات ==المخطط المحدد مسبقًا==.\n• **ELT (استخراج، تحميل، تحويل)**: يتم تحميل البيانات الخام مباشرة في قاعدة البيانات أو بحيرة البيانات، وتحدث عملية التحويل ==بعد التحميل==. هذا يوفر ==مرونة عالية للمخطط عند القراءة== وهو أسرع للمعالجة التحلية للبيانات الخام." 
+                    at: "• ETL (استخراج، تحويل، تحميل): **==تحويل البيانات قبل التحميل==** ← تقليدي لمستودعات البيانات، وله **==مخطط محدد مسبقاً==**.\n• ELT (استخراج، تحميل، تحويل): **==تحميل البيانات الخام أولاً في بحيرة بيانات، ثم تحويلها==** ← حديث للبيانات الضخمة، يعتمد على **==المخطط عند القراءة==**، وأسرع للتحليلات الفورية وتعلم الآلة." 
                 },
                 { 
                     q: "Define **fault tolerance** and give one **replication strategy** example.", 
-                    a: "• **Fault Tolerance**: The ability of a distributed system to ==continue functioning seamlessly== even if one or more hardware/software components fail.\n• **Example**: ==Geo-replication==, where identical copies of data are written to different geographic regions, preventing data loss during datacenter outages.", 
-                    qt: "3. عرّف **التسامح مع الأخطاء (Fault Tolerance)** واذكر مثالاً على **استراتيجية النسخ المتماثل (Replication Strategy)**.", 
-                    at: "• **التسامح مع الأخطاء**: قدرة النظام الموزع على ==الاستمرار في العمل بسلاسة== حتى في حال فشل جزء أو أكثر من الأجهزة أو البرمجيات.\n• **مثال**: ==النسخ المتماثل الجغرافي==، حيث يتم كتابة نسخ متطابقة من البيانات في مناطق جغرافية مختلفة، مما يمنع فقدان البيانات عند تعطل مراكز البيانات بالكامل." 
+                    a: "Fault tolerance: **==Ability of the system to continue working when some components fail==** (high availability & no data loss).\nExample: **==Geo-replication==** (copies data across different geographic regions for disaster recovery).", 
+                    qt: "3. عرف **التسامح مع الأخطاء (fault tolerance)** واذكر مثالاً على **استراتيجية النسخ المتماثل (replication strategy)**.", 
+                    at: "التسامح مع الأخطاء: **==قدرة النظام على الاستمرار في العمل عند فشل بعض المكونات==** (توافر عالي وبدون فقدان للبيانات).\nمثال: **==النسخ المتماثل الجغرافي (Geo-replication)==** (نسخ البيانات عبر مناطق جغرافية مختلفة للتعافي من الكوارث)." 
                 },
                 { 
                     q: "What are the benefits of a **Data Lake**?", 
-                    a: "1. Offers ==highly cost-efficient storage== for storing vast volumes of raw data.\n2. Provides high flexibility through ==schema-on-read agility==.\n3. Enables ==machine learning readiness== by preserving unprocessed data for feature engineering.\n4. Supports raw ==structured, semi-structured, and unstructured data formats== simultaneously.", 
+                    a: "• **==Cost-efficient storage==** for large volumes.\n• **==Schema-on-read agility==** (flexible exploration without rigid ETL).\n• **==Machine learning readiness==** (raw data for feature engineering).\n• Supports **==structured, semi-structured, and unstructured data==**.", 
                     qt: "4. ما هي فوائد **بحيرة البيانات (Data Lake)**؟", 
-                    at: "1. تقدم ==تخزينًا عالي الكفاءة من حيث التكلفة== لحفظ كميات ضخمة من البيانات الخام.\n2. توفر مرونة عالية عبر ==مخطط مرن عند القراءة (schema-on-read)==.\n3. تتيح ==الجاهزية لتطبيقات تعلم الآلة== بالاحتفاظ بالبيانات غير المعالجة لخدمة هندسة الميزات.\n4. تدعم ==البيانات المهيكلة، شبه المهيكلة، وغير المهيكلة== في نفس الوقت." 
+                    at: "• **==تخزين فعال من حيث التكلفة==** للأحجام الكبيرة.\n• **==مرونة المخطط عند القراءة==** (استكشاف مرن بدون قيود ETL الصارمة).\n• **==الجاهزية لتعلم الآلة==** (بيانات خام لهندسة الميزات).\n• يدعم **==البيانات المهيكلة، شبه المهيكلة، وغير المهيكلة==**." 
                 },
                 { 
                     q: "Explain the importance of **monitoring** in distributed systems.", 
-                    a: "Monitoring provides essential ==operational visibility== into system health, resource consumption, and query performance. By collecting metrics, logs, and traces, it allows engineers to perform ==rapid incident response== and plan cluster expansions before bottlenecks occur.", 
-                    qt: "5. اشرح أهمية **المراقبة (Monitoring)** في الأنظمة الموزعة.", 
-                    at: "توفر المراقبة ==رؤية تشغيلية ضرورية== لصحة النظام، واستهلاك الموارد، وأداء الاستعلامات. من خلال جمع المقاييس واللوغات والتتبعات، فإنها تتيح للمهندسين القيام بـ ==استجابة سريعة للمشاكل والحوادث== وتخطيط توسعة المجموعات البرمجية قبل حدوث الاختناقات." 
+                    a: "• Provides **==operational visibility==** for performance, health, and capacity planning.\n• Combines metrics, logs, and traces for **==rapid incident response==**.\n• Tools: **==Ambari, Prometheus, Grafana==**.", 
+                    qt: "5. اشرح أهمية **المراقبة (monitoring)** في الأنظمة الموزعة.", 
+                    at: "• يوفر **==رؤية تشغيلية==** للأداء والصحة وتخطيط السعة.\n• يجمع بين المقاييس والسجلات والتتبعات من أجل **==الاستجابة السريعة للحوادث==**." 
                 }
             ]
         },
@@ -680,33 +681,33 @@
             written: [
                 { 
                     q: "Why is **RDBMS** not suitable for Big Data workloads?", 
-                    a: "Traditional relational databases are constrained by:\n• **Scalability Limits**: They rely on ==expensive vertical scaling== (bigger servers) rather than horizontal scaling.\n• **Data Variety**: RDBMS requires a rigid structure and cannot easily store ==unstructured or semi-structured data==.\n• **Velocity & Volume**: They fail to maintain write speed and struggle to index ==petabyte-scale data== efficiently, causing database lockups.", 
+                    a: "RDBMS is designed for structured data and smaller volumes. Main limits:\n• **==Scalability==**: Vertical scaling only.\n• **==Size==**: Petabyte-scale data is too large.\n• **==Data types==**: Cannot handle unstructured/semi-structured data well.\n• **==Velocity==**: Not built for high-speed data.\n• **==Cost==**: Very expensive to scale.", 
                     qt: "1. لماذا لا يعد نظام **RDBMS** مناسباً لأحمال عمل البيانات الضخمة؟", 
-                    at: "قواعد البيانات العلاجية التقليدية مقيدة بـ:\n• **حدود قابلية التوسع**: تعتمد على ==التوسع الرأسي المكلف== (خوادم أكبر) بدلاً من التوسع الأفقي الموزع.\n• **تنوع البيانات**: تتطلب RDBMS هيكلاً صارماً مسبقاً ولا يمكنها تخزين ==البيانات غير المهيكلة أو شبه المهيكلة== بسهولة.\n• **السرعة والحجم**: تفشل في مجاراة سرعات الكتابة العالية وتواجه صعوبة في فهرسة ==البيانات بمقياس البيتابايت== بشكل فعال، مما يتسبب في توقف قاعدة البيانات." 
+                    at: "تم تصميم RDBMS للبيانات المهيكلة والأحجام الأصغر. حدوده الرئيسية هي:\n• **==قابلية التوسع==**: التوسع الرأسي فقط.\n• **==الحجم==**: بيانات بحجم بيتابايت كبيرة جداً.\n• **==أنواع البيانات==**: لا يمكنه التعامل جيداً مع البيانات غير المهيكلة أو شبه المهيكلة.\n• **==السرعة==**: غير مبني للبيانات عالية السرعة.\n• **==التكلفة==**: مكلف جداً للتوسع." 
                 },
                 { 
                     q: "What are the main advantages of **Hadoop**?", 
-                    a: "• **Horizontal Scalability**: Allows scaling out by adding ==commodity hardware nodes== to a cluster.\n• **Data Flexibility**: Can store and process any data type without needing a ==predefined schema==.\n• **High Fault Tolerance**: Automatically duplicates and replicates data across different nodes.\n• **Cost Efficiency**: Runs on relatively inexpensive, non-proprietary commodity servers.", 
+                    a: "It stores and processes huge amounts of any kind of data quickly. Advantages:\n• **==Scalability==**: Scales linearly.\n• **==Flexibility==**: Handles structured, semi-structured, and unstructured data.\n• **==Fault tolerance==**: Built-in data replication.\n• **==Low cost==**: Uses commodity hardware.\n• **==Computing power==**: High distributed processing power.", 
                     qt: "2. ما هي المزايا الرئيسية لـ **Hadoop**؟", 
-                    at: "• **قابلية التوسع الأفقي**: تتيح توسيع النظام بإضافة ==أجهزة عادية غير مكلفة (commodity hardware)== إلى المجموعة.\n• **مرونة البيانات**: يمكنها تخزين ومعالجة أي نوع من البيانات دون الحاجة إلى ==مخطط صارم محدد مسبقاً==.\n• **تسامح عالٍ مع الأخطاء**: تقوم تلقائيًا بنسخ وتوزيع البيانات عبر عقد مختلفة بالمجموعة.\n• **كفاءة التكلفة**: تعمل على خوادم تجارية عادية غير مكلفة نسبيًا وغير احتكارية." 
+                    at: "يقوم بتخزين ومعالجة كميات ضخمة من أي نوع من البيانات بسرعة. المزايا تشمل:\n• **==قابلية التوسع==**: يتوسع بشكل خطي.\n• **==المرونة==**: يتعامل مع البيانات المهيكلة، شبه المهيكلة، وغير المهيكلة.\n• **==التسامح مع الأخطاء==**: نسخ متماثل مدمج للبيانات.\n• **==تكلفة منخفضة==**: يستخدم أجهزة عادية غير مكلفة.\n• **==قوة الحوسبة==**: قوة معالجة موزعة وعالية." 
                 },
                 { 
                     q: "Explain the difference between **HDFS** and **HBase**.", 
-                    a: "• **HDFS**: The core ==distributed file system== of Hadoop. It is optimized for streaming access of large, sequential files but is restricted to ==write-once, read-many patterns==.\n• **HBase**: A distributed, ==NoSQL wide-column database== built on top of HDFS. It provides ==random, real-time read/write access== and is designed for low-latency row lookups.", 
+                    a: "• **==HDFS==**: Hadoop Distributed File System → The **==storage layer for large files==** with replication and fault tolerance.\n• **==HBase==**: A **==NoSQL wide-column database==** running on top of HDFS. It adds **==random read/write access==** and supports point queries.", 
                     qt: "3. اشرح الفرق بين **HDFS** و **HBase**.", 
-                    at: "• **HDFS**: نظام الملفات ==الموزع الأساسي== لهادوب. وهو مُحسَّن للوصول المتدفق للملفات الكبيرة والمتتالية ولكنه مقيد بنموذج ==الكتابة مرة واحدة والقراءة المتعددة==.\n• **HBase**: قاعدة بيانات ==NoSQL واسعة الأعمدة== موزعة تعمل فوق نظام HDFS. وهي توفر ==إمكانية الوصول العشوائي للقراءة والكتابة في الوقت الفعلي== ومصممة للاستعلامات ذات زمن الوصول المنخفض جداً." 
+                    at: "• **==نظام HDFS==**: نظام ملفات هادوب الموزع ← هو **==طبقة التخزين للملفات الكبيرة==** مع النسخ المتماثل والتسامح مع الأخطاء.\n• **==نظام HBase==**: **==قاعدة بيانات NoSQL واسعة الأعمدة==** تعمل فوق HDFS. يضيف **==وصول قراءة وكتابة عشوائي==** ويدعم الاستعلامات النقطية." 
                 },
                 { 
                     q: "Compare **MapReduce** and **Spark**.", 
-                    a: "• **MapReduce**: A legacy framework that processes data in sequential batches. It writes intermediate results to ==physical disks==, making it ==significantly slower==.\n• **Spark**: A modern framework that performs ==in-memory processing==. It holds intermediate datasets in memory (RAM), rendering it ==up to 100x faster== for iterative algorithms, machine learning, and interactive queries.", 
+                    a: "• **==MapReduce==**: A **==batch processing==** engine that writes intermediate data to **==disk (slower)==**.\n• **==Spark==**: An **==in-memory processing==** engine, making it **==much faster==** for iterative tasks and analytics.", 
                     qt: "4. قارن بين **MapReduce** و **Spark**.", 
-                    at: "• **MapReduce**: إطار عمل قديم يعالج البيانات في دفعات متتالية. يكتب النتائج الوسيطة على ==الأقراص المادية== مما يجعله ==أبطأ بشكل ملحوظ==.\n• **Spark**: إطار عمل حديث يعتمد على ==المعالج داخل الذاكرة (In-memory)==. يحتفظ بالبيانات الوسيطة في الذاكرة العشوائية (RAM) مما يجعله ==أسرع حتى 100 ضعف== في الخوارزميات التكرارية وتعلم الآلة والاستعلامات التفاعلية." 
+                    at: "• **==محرك MapReduce==**: محرك **==معالجة دفعات (Batch processing)==** يكتب البيانات الوسيطة على **==القرص (مما يجعله أبطأ)==**.\n• **==محرك Spark==**: محرك **==معالجة في الذاكرة (In-memory processing)==**، مما يجعله **==أسرع بكثير==** للمهام التكرارية والتحليلات." 
                 },
                 { 
                     q: "What is the role of **Apache Ambari** in Hadoop?", 
-                    a: "Apache Ambari provides an ==interactive web UI== and a set of REST APIs that simplify cluster administration. It is used for:\n• **Provisioning**: Installing and configuring Hadoop services automatically across nodes.\n• **Monitoring**: Visualizing cluster health, memory metrics, and host alerts.\n• **Management**: Starting, stopping, and updating configuration values across the Hadoop ecosystem.", 
+                    a: "Apache Ambari provides an **==intuitive, easy-to-use web UI==** for Hadoop cluster management. It allows:\n• **==Provisioning==** resources.\n• **==Monitoring==** health and performance.\n• **==Managing==** the entire Hadoop ecosystem (HDFS, MapReduce, Hive, HBase, etc.).", 
                     qt: "5. ما هو دور **Apache Ambari** في نظام Hadoop؟", 
-                    at: "يوفر Apache Ambari ==واجهة مستخدم ويب تفاعلية== ومجموعة واجهات برمجية REST تسهل إدارة مجموعات هادوب. ويستخدم في:\n• **التهيئة والتنصيب**: تثبيت وتكوين خدمات هادوب تلقائيًا عبر العقد المختلفة.\n• **المراقبة**: تصوير صحة المجموعة، مقاييس استهلاك الذاكرة، وتنبيهات الأجهزة.\n• **الإدارة التشغيلية**: تشغيل وإيقاف وتحديث إعدادات التكوين عبر بيئة هادوب بالكامل." 
+                    at: "يوفر Apache Ambari **==واجهة مستخدم ويب سهلة الاستخدام==** لإدارة مجموعة Hadoop. ويسمح بـ:\n• **==تهيئة (Provisioning)==** الموارد.\n• **==مراقبة (Monitoring)==** الصحة والأداء.\n• **==إدارة (Managing)==** نظام Hadoop البيئي بأكمله (مثل HDFS و MapReduce و Hive و HBase)." 
                 }
             ]
         },
@@ -739,15 +740,15 @@
             written: [
                 { 
                     q: "Define **Exploratory Data Analysis (EDA)**.", 
-                    a: "Exploratory Data Analysis (EDA) is an ==iterative, investigative process== where data analysts use statistical summaries and graphical representations to ==understand data distributions, detect anomalies/outliers, and test underlying hypotheses== before building predictive models.", 
-                    qt: "1. عرّف **تحليل البيانات الاستكشافي (EDA)**.", 
-                    at: "تحليل البيانات الاستكشافي (EDA) هو ==عملية استقصائية تكرارية== يستخدم فيها محللو البيانات الملخصات الإحصائية والتمثيلات الرسومية لـ ==فهم توزيعات البيانات، واكتشاف القيم الشاذة والمتطرفة، واختبار الفرضيات الأساسية== قبل بناء أي نماذج تنبؤية." 
+                    a: "Exploratory Data Analysis (EDA) using data visualization is a critical, **==iterative process of examining datasets==** to **==identify patterns, detect outliers, and test hypotheses==** using plots like **==scatter plots, histograms, and heatmaps==**.", 
+                    qt: "عرف **تحليل البيانات الاستكشافي (EDA)**.", 
+                    at: "تحليل البيانات الاستكشافي (EDA) باستخدام تصوير البيانات هو **==عملية تكرارية حاسمة لفحص مجموعات البيانات==** من أجل **==تحديد الأنماط، واكتشاف القيم المتطرفة، واختبار الفرضيات==** باستخدام مخططات مثل **==مخططات التشتت والمدرجات التكرارية والخرائط الحرارية==**." 
                 },
                 { 
                     q: "Explain the difference between **univariate** and **multivariate** plots.", 
-                    a: "• **Univariate Plots**: Analyze and visualize ==a single variable at a time== (e.g., Histograms to see distributions, Box Plots to see outliers of a single feature).\n• **Multivariate Plots**: Analyze and visualize the ==relationships and correlations among multiple variables== simultaneously (e.g., Scatter Plots for two continuous variables, Correlation Heatmaps for entire datasets).", 
-                    qt: "2. اشرح الفرق بين المخططات **أحادية المتغير (univariate)** و **متعددة المتغيرات (multivariate)**.", 
-                    at: "• **مخططات أحادية المتغير**: تحلل وتصور ==متغيرًا واحدًا فقط في كل مرة== (مثل المدرجات التكرارية لرؤية التوزيع، أو مخطط الصندوق لرؤية القيم المتطرفة لسمة واحدة).\n• **مخططات متعددة المتغيرات**: تحلل وتصور ==العلاقات والارتباطات بين متغيرات متعددة== في نفس الوقت (مثل مخططات التشتت لمتغيرين مستمرين، أو الخرائط الحرارية للارتباط لمجموعات البيانات بالكامل)." 
+                    a: "• Univariate Analysis: **==Analyzing one variable at a time==** (e.g., histograms).\n• Bivariate/Multivariate Analysis: **==Analyzing relationships between two or more variables==** (e.g., scatter plots, heatmaps).", 
+                    qt: "اشرح الفرق بين المخططات **أحادية المتغير (univariate)** و **متعددة المتغيرات (multivariate)**.", 
+                    at: "• التحليل أحادي المتغير: **==تحليل متغير واحد في كل مرة==** (مثل المدرجات التكرارية).\n• التحليل ثنائي/متعدد المتغيرات: **==تحليل العلاقات بين متغيرين أو أكثر==** (مثل مخططات التشتت والخرائط الحرارية)." 
                 }
             ]
         }
@@ -769,7 +770,7 @@
     function scrollToTop() {
         const startTime = performance.now();
         const startY = window.pageYOffset;
-        const duration = 250; 
+        const duration = 250; // سرعة الانتقال بالمللي ثانية
 
         function step(currentTime) {
             const progress = Math.min((currentTime - startTime) / duration, 1);
@@ -792,11 +793,11 @@
         const startTime = performance.now();
         const startY = window.pageYOffset;
         const difference = middle - startY;
-        const duration = 250; 
+        const duration = 250; // سرعة الانتقال المحددة بـ 250ms فقط بدلاً من بطء المتصفح الافتراضي
 
         function step(currentTime) {
             const progress = Math.min((currentTime - startTime) / duration, 1);
-            const ease = 1 - Math.pow(1 - progress, 3); 
+            const ease = 1 - Math.pow(1 - progress, 3); // cubic ease out
             window.scrollTo(0, startY + difference * ease);
             if (progress < 1) {
                 requestAnimationFrame(step);
@@ -892,6 +893,7 @@
             recordLocalAction(); triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_sheet: index, active_card_id: `sheet-${index}-${currentGlobalMode}-q-0` });
             
+            // مزامنة فورية دون تأخير عبر قنوات الـ RTC P2P
             broadcastP2PState({
                 type: 'sheet',
                 index: index
@@ -919,6 +921,7 @@
             recordLocalAction(); triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_mode: mode, active_card_id: `sheet-${currentSheetIndex}-${mode}-q-0` });
             
+            // مزامنة فورية دون تأخير عبر قنوات الـ RTC P2P
             broadcastP2PState({
                 type: 'mode',
                 mode: mode
@@ -971,6 +974,7 @@
                 recordLocalAction(); triggerUserActionBurst();
                 sendStateToBackend(null, null, null, "", { active_card_id: cardId });
                 
+                // مزامنة التركيز على الكارت المختار فوراً دون انتظار خادم المزامنة
                 broadcastP2PState({
                     type: 'focus',
                     cardId: cardId
@@ -996,7 +1000,7 @@
 
                         <div class="expected-answer-box">
                             <div style="color:var(--gold); font-weight:900; font-size:1.1rem; border-bottom:1px solid rgba(245,158,11,0.2); padding-bottom:6px; margin-bottom:10px; text-shadow: 0 0 12px var(--gold-glow); letter-spacing:1px;"><i class="fa-solid fa-gem"></i> ⚜️ ROYAL ANSWER VAULT</div>
-                            <div style="font-weight:700; color:#fff; font-size:1.15rem; line-height:1.8;">${formatText(exactCorrectText)}</div>
+                            <div style="font-weight:700; color:#fff; font-size:1.3rem; line-height:1.8;">${formatText(exactCorrectText)}</div>
                         </div>
 
                         <div class="ar-translation-vault" id="${vaultId}">
@@ -1037,6 +1041,7 @@
             selectedInput.parentElement.classList.add('selected');
         }
 
+        // إرسال الاختيار لحظياً بالكامل لجميع الطلاب عبر الـ RTC
         broadcastP2PState({
             type: 'select',
             cardId: cardId,
@@ -1071,6 +1076,7 @@
             playAudioFeedback('correct'); 
             sendStateToBackend(cardId, selectedVal, 'correct', "");
             
+            // بث فوري لحظي لحل السؤال لجميع الطلاب مع تمرير الخيار المختار بالتحديد
             broadcastP2PState({
                 type: 'freeze',
                 cardId: cardId,
@@ -1084,6 +1090,7 @@
             playAudioFeedback('wrong'); 
             sendStateToBackend(cardId, selectedVal, 'wrong', "");
             
+            // بث فوري لحظي لحل السؤال لجميع الطلاب مع تمرير الخيار المختار بالتحديد
             broadcastP2PState({
                 type: 'freeze',
                 cardId: cardId,
@@ -1109,6 +1116,7 @@
             playAudioFeedback('correct');
             sendStateToBackend(cardId, null, 'correct', "");
             
+            // بث فوري للتقييم المقالي
             broadcastP2PState({
                 type: 'freeze',
                 cardId: cardId,
@@ -1120,6 +1128,7 @@
             playAudioFeedback('wrong');
             sendStateToBackend(cardId, null, 'wrong', "");
             
+            // بث فوري للتقييم المقالي
             broadcastP2PState({
                 type: 'freeze',
                 cardId: cardId,
@@ -1139,6 +1148,7 @@
         
         if (typeof triggerUserActionBurst === 'function') triggerUserActionBurst();
         
+        // تم تسريع المهلة الزمنية من 1250ms إلى 450ms لتوفير تنقل أسرع وثلاثي القوة
         setTimeout(() => {
             if (nextCardExists) {
                 fastScrollTo(nextCardExists);
@@ -1147,6 +1157,7 @@
 
                 sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', "", { active_card_id: nextCardId });
                 
+                // بث حركة التنقل والتركيز تلقائياً عبر قناة البيانات للزميل
                 broadcastP2PState({
                     type: 'focus',
                     cardId: nextCardId
@@ -1356,7 +1367,7 @@
                     if (t) { 
                         t.classList.add('focused-by-peer'); 
                         if (!isCooldownActive && data.active_card_id !== lastSentState.activeCardId) {
-                            setTimeout(() => { fastScrollTo(t); }, 50); 
+                            setTimeout(() => { fastScrollTo(t); }, 50); // استبدال scrollIntoView بالدالة السريعة المخصصة
                         }
                     } 
                 }
@@ -1380,6 +1391,7 @@
             const actionRow = card.querySelector('.written-action-row'); if(actionRow) actionRow.style.display = 'none';
         }
         
+        // تشغيل الصوت الفوري لجميع أفراد الغرفة عندما يقوم أي طالب بحل سؤال
         playAudioFeedback(isCorrect ? 'correct' : 'wrong');
     }
 
@@ -1413,7 +1425,7 @@
     // =========================================================================
     let localAudioStream = null; let peerInstance = null; let connectedVoicePeersList = new Set();
     let activeCallsList = {};
-    let dataConnections = {}; 
+    let dataConnections = {}; // تخزين قنوات البيانات المفتوحة بين الزملاء لحظياً
 
     function initializeVoiceEngine() {
         const btn = document.getElementById('micToggleBtn');
@@ -1428,6 +1440,7 @@
                     if (roomName) startAdaptiveSyncLoop();
                 });
 
+                // استقبال خطوط الاتصال بالبيانات اللحظية والموجات الصوتية
                 peerInstance.on('connection', (conn) => {
                     handleDataConnection(conn);
                 });
@@ -1451,7 +1464,9 @@
         serverPeers.forEach(remotePeerId => {
             if (remotePeerId === localVoicePeerId) return;
 
+            // Lexicographical sorting لمنع حدوث اتصال مزدوج أو تداخل للخطوط الصوتية والبيانات بين نفس العضوين
             if (remotePeerId > localVoicePeerId) {
+                // الاتصال الصوتي
                 if (!connectedVoicePeersList.has(remotePeerId)) {
                     connectedVoicePeersList.add(remotePeerId);
                     const call = peerInstance.call(remotePeerId, localAudioStream);
@@ -1462,6 +1477,7 @@
                         call.on('error', () => { removeRemoteAudioPlayback(remotePeerId); });
                     }
                 }
+                // اتصال قنوات البيانات الفورية اللحظية (WebRTC DataChannel)
                 if (!dataConnections[remotePeerId]) {
                     const conn = peerInstance.connect(remotePeerId);
                     if (conn) {
@@ -1471,12 +1487,14 @@
             }
         });
 
+        // إغلاق اتصالات الأعضاء الذين غادروا الغرفة لإخلاء الموارد فوراً
         connectedVoicePeersList.forEach(remotePeerId => {
             if (!serverPeers.includes(remotePeerId) && remotePeerId !== localVoicePeerId) {
                 removeRemoteAudioPlayback(remotePeerId);
             }
         });
 
+        // تنظيف قنوات البيانات المغلقة
         Object.keys(dataConnections).forEach(remotePeerId => {
             if (!serverPeers.includes(remotePeerId)) {
                 if (dataConnections[remotePeerId]) {
@@ -1487,6 +1505,7 @@
         });
     }
 
+    // إدارة قنوات بث البيانات اللحظية والتحكم السريع
     function handleDataConnection(conn) {
         dataConnections[conn.peer] = conn;
         conn.on('data', (data) => {
@@ -1500,10 +1519,11 @@
         });
     }
 
+    // معالجة البيانات والتحركات المستقبلة فوراً عبر الـ RTC
     function handleIncomingDataMessage(data) {
         if (!data) return;
         const isCooldownActive = (Date.now() - lastLocalActionTime) < 1500;
-        if (isCooldownActive) return; 
+        if (isCooldownActive) return; // حماية اختياراتك الحالية من التداخل
 
         if (data.type === 'select') {
             const card = document.getElementById(data.cardId);
@@ -1518,6 +1538,7 @@
         } else if (data.type === 'freeze') {
             const card = document.getElementById(data.cardId);
             if (card && !card.classList.contains('correct') && !card.classList.contains('wrong')) {
+                // تفعيل الاختيار المحدد من الطرف الآخر أولاً لضمان التطابق التام
                 if (data.selectedIdx !== null && data.selectedIdx !== undefined) {
                     card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
                     const targetInp = card.querySelector(`input[value="${data.selectedIdx}"]`);
@@ -1542,11 +1563,12 @@
             const t = document.getElementById(data.cardId);
             if (t) {
                 t.classList.add('focused-by-peer');
-                fastScrollTo(t); 
+                fastScrollTo(t); // استخدام دالة التمرير فائقة السرعة
             }
         }
     }
 
+    // دالة بث البيانات الفورية لجميع زملاء الغرفة مباشرة عبر الـ WebRTC
     function broadcastP2PState(payload) {
         Object.values(dataConnections).forEach(conn => {
             if (conn && conn.open) {
