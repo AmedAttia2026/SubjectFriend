@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Big Data & Analytics Workspace - Fullscreen Optimization</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800;900&family=Cairo:wght=400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght=300;400;500;600;800;900&family=Cairo:wght=400;700;900&display=swap');
 
         :root {
             --bg-dark: #020617;
@@ -339,7 +339,7 @@
         
         .expected-answer-box {
             display: none; background: rgba(245, 158, 11, 0.05); border: 1.5px dashed var(--gold);
-            padding: 16px; border-radius: 14px; font-size: 1.35rem; color: #f8fafc;
+            padding: 16px; border-radius: 14px; font-size: 1.15rem; color: #f8fafc;
             text-align: left; line-height: 1.6 !important; box-shadow: 0 6px 25px rgba(245, 158, 11, 0.15);
             direction: ltr !important; white-space: pre-line; margin-top: 10px;
             animation: fadeInSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -347,7 +347,7 @@
         
         .ar-translation-vault {
             display: none; background: rgba(168, 85, 247, 0.04); border-right: 4px solid var(--primary);
-            padding: 16px; border-radius: 12px; font-size: 1.35rem; color: #f1f5f9;
+            padding: 16px; border-radius: 12px; font-size: 1.15rem; color: #f1f5f9;
             text-align: right; line-height: 1.7 !important; font-family: 'Cairo', sans-serif;
             direction: rtl !important; white-space: pre-line;
             box-shadow: 0 4px 15px rgba(168, 85, 247, 0.05);
@@ -369,17 +369,7 @@
         .trans-trigger-btn:hover { background: var(--primary-dim); border-color: var(--primary); color: #fff; }
         .trans-trigger-btn.active-state { background: var(--primary); color: #020617; border-color: var(--primary); font-weight: 900; box-shadow: 0 0 10px var(--primary-glow); }
 
-        .text-highlight { 
-            background-color: #fde047; 
-            color: #020617; 
-            padding: 2px 6px; 
-            border-radius: 6px; 
-            font-weight: 900; 
-            display: inline; 
-            margin: 0 2px; 
-            box-shadow: 0 2px 8px rgba(253, 224, 71, 0.3); 
-            word-break: break-word;
-        }
+        .text-highlight { background-color: #fde047; color: #020617; padding: 2px 6px; border-radius: 6px; font-weight: 900; display: inline-block; margin: 2px 0; box-shadow: 0 2px 8px rgba(253, 224, 71, 0.3); }
         .text-bold { font-weight: 900; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
 
         .written-action-row { display: flex; gap: 12px; margin-top: 15px; }
@@ -574,33 +564,33 @@
             written: [
                 { 
                     q: "Define **Big Data** in your own words.", 
-                    a: "Big Data refers to datasets so ==large or complex== that ==traditional data processing application software is inadequate== to deal with them. It requires ==advanced technologies== to extract ==useful insights==.", 
-                    qt: "1. عرف **البيانات الضخمة (Big Data)** بكلماتك الخاصة.", 
-                    at: "البيانات الضخمة تشير إلى مجموعات بيانات ==كبيرة أو معقدة جدًا== لدرجة أن ==برامج معالجة البيانات التقليدية غير قادرة== على التعامل معها. وتتطلب ==تقنيات متقدمة== لاستخراج ==رؤى مفيدة==." 
+                    a: "Big Data refers to datasets that are too **large or complex** for ==traditional data processing software== to handle. It requires ==advanced, distributed technologies== to store, process, and analyze the data to extract ==valuable insights==.", 
+                    qt: "1. عرّف **البيانات الضخمة (Big Data)** بأسلوبك الخاص.", 
+                    at: "تشير البيانات الضخمة إلى مجموعات بيانات ضخمة ومعقدة للغاية بحيث ==تعجز برامج معالجة البيانات التقليدية== عن التعامل معها. وهي تتطلب ==تقنيات متقدمة وموزعة== لتخزينها ومعالجتها وتحليلها لاستخلاص ==رؤى قيمة==." 
                 },
                 { 
                     q: "Explain the difference between **Volume** and **Velocity**.", 
-                    a: "• **Volume:** The ==sheer quantity of data== generated and stored (from terabytes to zettabytes).\n\n• **Velocity:** The ==speed at which data is generated, collected, and processed== (such as real-time streaming data).", 
+                    a: "• **Volume**: Represents the ==sheer physical size and quantity of data== generated and stored (ranging from Terabytes to Zettabytes).\n• **Velocity**: Represents the ==speed at which data is generated, collected, and processed== in real-time or near-real-time.", 
                     qt: "2. اشرح الفرق بين **الحجم (Volume)** و **السرعة (Velocity)**.", 
-                    at: "• **الحجم (Volume):** ==الكمية الهائلة من البيانات== التي يتم إنشاؤها وتخزينها (من تيرابايت إلى زيتابايت).\n\n• **السرعة (Velocity):** ==السرعة التي يتم بها إنشاء البيانات وجمعها ومعالجتها== (مثل تدفقات البيانات في الوقت الفعلي)." 
+                    at: "• **الحجم (Volume)**: يمثل ==الكمية والحجم الفعلي الهائل للبيانات== التي يتم إنشاؤها وتخزينها (تتراوح من تيرابايت إلى زيتابايت).\n• **السرعة (Velocity)**: تمثل ==السرعة العالية التي يتم بها إنشاء البيانات وجمعها ومعالجتها== في الوقت الفعلي أو شبه الفعلي." 
                 },
                 { 
                     q: "Why do **traditional systems** struggle with Big Data?", 
-                    a: "Traditional systems rely on ==vertical scaling (upgrading a single server)== which becomes ==extremely expensive and insufficient== for handling the massive volume and velocity of Big Data, leading to critical ==single-node bottlenecks==.", 
+                    a: "Traditional systems rely on **vertical scaling** (adding resources to a single server). This approach becomes ==prohibitively expensive== and is architecturally ==insufficient== to process the immense volume and speed of Big Data, resulting in severe ==single-node bottlenecks==.", 
                     qt: "3. لماذا تواجه **الأنظمة التقليدية** صعوبة في التعامل مع البيانات الضخمة؟", 
-                    at: "تعتمد الأنظمة التقليدية على ==التوسع الرأسي (ترقية خادم واحد)== والذي يصبح ==مكلفًا للغاية وغير كافٍ== للتعامل مع الحجم الهائل والسرعة العالية للبيانات الضخمة، مما يتسبب في حدوث ==اختناقات خطيرة في العقدة المفردة==." 
+                    at: "تعتمن الأنظمة التقليدية على **التوسع الرأسي** (زيادة موارد خادم واحد). هذا الأسلوب يصبح ==مكلفًا للغاية== وغير ==كافٍ== من الناحية الهيكلية لمعالجة الحجم الهائل والسرعة العالية للبيانات الضخمة، مما يؤدي إلى ==اختناقات حادة في الخادم الفردي==." 
                 },
                 { 
                     q: "List the main components of the **Big Data technology stack**.", 
-                    a: "• **1. Ingestion:** ==Collecting raw data== from multiple sources.\n• **2. Storage:** ==Distributed filesystems== to hold data.\n• **3. Processing:** ==Batch and stream computing== engines.\n• **4. Analytics:** ==BI tools and ML modeling==.", 
+                    a: "1. **==Ingestion==**: Collecting data from various raw sources.\n2. **==Storage==**: Storing data in distributed systems (like HDFS or cloud buckets).\n3. **==Processing==**: Transforming, cleaning, and computing data (like Spark or MapReduce).\n4. **==Analytics==**: Querying, visualising, and applying machine learning to extract value.", 
                     qt: "4. اذكر المكونات الرئيسية لـ **حزمة تقنيات البيانات الضخمة (Big Data technology stack)**.", 
-                    at: "• **1. الاستيعاب (Ingestion):** ==جمع البيانات الخام== من مصادر متعددة.\n• **2. التخزين (Storage):** ==أنظمة الملفات الموزعة== للاحتفاظ بالبيانات.\n• **3. المعالجة (Processing):** محركات ==حوسبة الدفعات والتدفق الحقيقي==.\n• **4. التحليلات (Analytics):** أدوات ==ذكاء الأعمال ونمذجة تعلم الآلة==." 
+                    at: "1. **==الاستيعاب (Ingestion)==**: تجميع وجلب البيانات من مصادرها الخام المختلفة.\n2. **==التخزين (Storage)==**: حفظ البيانات في أنظمة موزعة (مثل HDFS أو السحابة).\n3. **==المعالجة (Processing)==**: تحويل وتنظيف وحوسبة البيانات (مثل Spark أو MapReduce).\n4. **==التحليلات (Analytics)==**: استعلام وتصوير البيانات وتطبيق تعلم الآلة لاستخلاص القيمة." 
                 },
                 { 
                     q: "Mention two Big Data **use cases** in healthcare or e-commerce.", 
-                    a: "• **Healthcare:** Leveraging patient records and wearable data to ==improve diagnostic accuracy, personalize treatments, and predict disease outbreaks==.\n\n• **E-commerce:** Enhancing customer experience through ==personalized recommendations, optimizing supply chains, and forecasting demand==.", 
-                    qt: "5. اذكر **حالتي استخدام (Use cases)** للبيانات الضخمة في الرعاية الصحية أو التجارة الإلكترونية.", 
-                    at: "• **الرعاية الصحية:** الاستفادة من سجلات المرضى وبيانات الأجهزة القابلة للارتداء لـ ==تحسين دقة التشخيص، وتخصيص العلاجات، والتنبؤ بتفشي الأمراض==.\n\n• **التجارة الإلكترونية:** تحسين تجربة العملاء من خلال ==التوصيات المخصصة، وتحسين سلاسل التوريد، والتنبؤ بالطلب==." 
+                    a: "• **Healthcare**: Analyzing electronic health records and wearable sensor data to ==predict disease outbreaks== and create ==personalized treatment plans==.\n• **E-commerce**: Tracking customer browsing patterns and purchase history to provide ==personalized product recommendations== and ==optimize supply chain demand forecasting==.", 
+                    qt: "5. اذكر **حالتَي استخدام (Use cases)** للبيانات الضخمة في مجالات الرعاية الصحية أو التجارة الإلكترونية.", 
+                    at: "• **الرعاية الصحية**: تحليل السجلات الصحية الرقمية وبيانات الأجهزة القابلة للارتداء لـ ==التنبؤ بتفشي الأمراض== ووضع ==خطط علاج مخصصة للمرضى==.\n• **التجارة الإلكترونية**: تتبع سلوك تصفح العملاء وسجل الشراء لتقديم ==توصيات مخصصة للمنتجات== و==تحسين التنبؤ بالطلب في سلاسل التوريد==." 
                 }
             ]
         },
@@ -631,33 +621,33 @@
             written: [
                 { 
                     q: "Explain the main components of **Big Data Architecture**.", 
-                    a: "• **Ingestion:** ==Capture raw data== from sources (streaming and batch) and deliver to storage or processing systems.\n\n• **Storage:** ==Durable, distributed storage== optimized for cost and access patterns (cold vs hot data).\n\n• **Processing:** ==Transformations, enrichment, aggregations, and model training== using batch or stream compute frameworks.\n\n• **Analytics:** ==Serving results to BI tools, dashboards, or ML inference endpoints==; support for ad-hoc queries and exploratory analysis.", 
+                    a: "• **Ingestion Layer**: ==Captures raw data== from streaming sources (Kafka) or batch transfers.\n• **Storage Layer**: Scalable repository like a ==Data Lake== or distributed file system for cold, warm, or hot data.\n• **Processing Layer**: Converts raw data into structured insights using ==batch processing or stream processing==.\n• **Analytics Layer**: Serves processed data to ==BI dashboards, ad-hoc query tools, or ML model endpoints==.", 
                     qt: "1. اشرح المكونات الرئيسية لـ **بنية البيانات الضخمة (Big Data Architecture)**.", 
-                    at: "• **الاستيعاب (Ingestion):** ==التقاط البيانات الخام== من المصادر (التدفق والدفعات) وتوصيلها إلى أنظمة التخزين أو المعالجة.\n\n• **التخزين (Storage):** ==تخزين متين وموزع غالباً== مُحسّن من حيث التكلفة وأنماط الوصول (البيانات الباردة مقابل الساخنة).\n\n• **المعالجة (Processing):** ==التحويلات، والإثراء، والتجميعات، وتدريب النماذج== باستخدام أطر عمل الحوسبة بالدفعات أو التدفق.\n\n• **التحليلات (Analytics):** ==تقديم النتائج لأدوات ذكاء الأعمال، لوحات المعلومات، أو نقاط نهاية استدلال تعلم الآلة==؛ ودعم الاستعلامات المخصصة والتحليل الاستكشافي." 
+                    at: "• **طبقة الاستيعاب (Ingestion)**: ==تلتقط البيانات الخام== من مصادر التدفق الفوري (Kafka) أو النقل على دفعات.\n• **طبقة التخزين (Storage)**: مستودع مرن وقابل للتوسع مثل ==بحيرة البيانات== أو أنظمة الملفات الموزعة للبيانات الباردة أو الدافئة أو الساخنة.\n• **طبقة المعالجة (Processing)**: تحول البيانات الخام إلى رؤى منظمة باستخدام ==المعالجة بالدفعة أو المعالجة بالتدفق==.\n• **طبقة التحليلات (Analytics)**: تقدم البيانات المعالجة إلى ==لوحات معلومات ذكاء الأعمال، أدوات الاستعلام المخصصة، أو نماذج تعلم الآلة==." 
                 },
                 { 
                     q: "What is the difference between **ETL** and **ELT**?", 
-                    a: "• **ETL (Extract, Transform, Load):** ==Transform data before loading==. Typically used in traditional data warehouses, requiring a ==predefined schema==.\n\n• **ELT (Extract, Load, Transform):** ==Load raw data first into a data lake, then transform==. Used in modern Big Data systems with a ==schema-on-read== strategy, speeding up ad-hoc analytics and ML.", 
+                    a: "• **ETL (Extract, Transform, Load)**: Data is transformed ==before loading== into a target warehouse. Ideal for highly structured data with a ==predefined schema==.\n• **ELT (Extract, Load, Transform)**: Raw data is loaded directly into a database or data lake, and transformation happens ==after loading==. This offers high ==schema-on-read flexibility== and is faster for raw analytical processing.", 
                     qt: "2. ما الفرق بين **ETL** و **ELT**؟", 
-                    at: "• **ETL (استخراج، تحويل، تحميل):** ==تحويل البيانات قبل التحميل==. وهو تقليدي لمستودعات البيانات، وله ==مخطط محدد مسبقاً==.\n\n• **ELT (استخراج، تحميل، تحويل):** ==تحميل البيانات الخام أولاً في بحيرة بيانات، ثم تحويلها==. وهو حديث للبيانات الضخمة، ويعتمد على ==المخطط عند القراءة==، ويعد أسرع للتحليلات الفورية وتعلم الآلة." 
+                    at: "• **ETL (استخراج، تحويل، تحميل)**: يتم تحويل البيانات ==قبل تحميلها== في المستودع المستهدف. ممتاز للبيانات المنظمة ذات ==المخطط المحدد مسبقًا==.\n• **ELT (استخراج، تحميل، تحويل)**: يتم تحميل البيانات الخام مباشرة في قاعدة البيانات أو بحيرة البيانات، وتحدث عملية التحويل ==بعد التحميل==. هذا يوفر ==مرونة عالية للمخطط عند القراءة== وهو أسرع للمعالجة التحلية للبيانات الخام." 
                 },
                 { 
                     q: "Define **fault tolerance** and give one **replication strategy** example.", 
-                    a: "• **Fault tolerance:** The ==ability of the system to continue working when some components fail==, ensuring high availability and no data loss.\n\n• **Example:** ==Geo-replication== (copying data across multiple geographical regions for active disaster recovery).", 
-                    qt: "3. عرف **التسامح مع الأخطاء (fault tolerance)** واذكر مثالاً على **استراتيجية النسخ المتماثل (replication strategy)**.", 
-                    at: "• **التسامح مع الأخطاء:** ==قدرة النظام على الاستمرار في العمل عند فشل بعض المكونات==، مما يضمن التوافر العالي والحد من فقدان البيانات.\n\n• **مثال:** ==النسخ المتماثل الجغرافي (Geo-replication)== (نسخ البيانات عبر مناطق جغرافية مختلفة لضمان التعافي الفعّال من الكوارث)." 
+                    a: "• **Fault Tolerance**: The ability of a distributed system to ==continue functioning seamlessly== even if one or more hardware/software components fail.\n• **Example**: ==Geo-replication==, where identical copies of data are written to different geographic regions, preventing data loss during datacenter outages.", 
+                    qt: "3. عرّف **التسامح مع الأخطاء (Fault Tolerance)** واذكر مثالاً على **استراتيجية النسخ المتماثل (Replication Strategy)**.", 
+                    at: "• **التسامح مع الأخطاء**: قدرة النظام الموزع على ==الاستمرار في العمل بسلاسة== حتى في حال فشل جزء أو أكثر من الأجهزة أو البرمجيات.\n• **مثال**: ==النسخ المتماثل الجغرافي==، حيث يتم كتابة نسخ متطابقة من البيانات في مناطق جغرافية مختلفة، مما يمنع فقدان البيانات عند تعطل مراكز البيانات بالكامل." 
                 },
                 { 
                     q: "What are the benefits of a **Data Lake**?", 
-                    a: "• ==Cost-efficient storage== for large volumes of multi-format data.\n• ==Schema-on-read agility== allows flexible exploration without rigid, predefined schemes.\n• ==Machine learning readiness== due to raw data access for feature engineering.\n• Supports ==structured, semi-structured, and unstructured data== simultaneously.", 
+                    a: "1. Offers ==highly cost-efficient storage== for storing vast volumes of raw data.\n2. Provides high flexibility through ==schema-on-read agility==.\n3. Enables ==machine learning readiness== by preserving unprocessed data for feature engineering.\n4. Supports raw ==structured, semi-structured, and unstructured data formats== simultaneously.", 
                     qt: "4. ما هي فوائد **بحيرة البيانات (Data Lake)**؟", 
-                    at: "• ==تخزين فعال من حيث التكلفة== للأحجام الكبيرة والبيانات متعددة التنسيقات.\n• ==مرونة المخطط عند القراءة== تتيح استكشافاً مرناً للبيانات دون قيود المخططات المحددة مسبقاً.\n• ==الجاهزية لتعلم الآلة== بفضل إتاحة البيانات الخام لهندسة الميزات.\n• يدعم ==البيانات المهيكلة، شبه المهيكلة، وغير المهيكلة== في نفس الوقت." 
+                    at: "1. تقدم ==تخزينًا عالي الكفاءة من حيث التكلفة== لحفظ كميات ضخمة من البيانات الخام.\n2. توفر مرونة عالية عبر ==مخطط مرن عند القراءة (schema-on-read)==.\n3. تتيح ==الجاهزية لتطبيقات تعلم الآلة== بالاحتفاظ بالبيانات غير المعالجة لخدمة هندسة الميزات.\n4. تدعم ==البيانات المهيكلة، شبه المهيكلة، وغير المهيكلة== في نفس الوقت." 
                 },
                 { 
                     q: "Explain the importance of **monitoring** in distributed systems.", 
-                    a: "• Provides ==operational visibility== into the health, capacity planning, and efficiency of the cluster.\n• Combines metrics, logs, and traces for ==rapid and proactive incident response==.\n• Powered by tools like ==Ambari, Prometheus, and Grafana==.", 
-                    qt: "5. اشرح أهمية **المراقبة (monitoring)** في الأنظمة الموزعة.", 
-                    at: "• يوفر ==رؤية تشغيلية== لمتابعة صحة النظام، تخطيط السعة، وكفاءة عمل العناقيد.\n• يدمج المقاييس، السجلات، والتتبعات لضمان ==الاستجابة السريعة والاستباقية للمشكلات==.\n• يعتمد على أدوات قوية مثل ==Ambari, Prometheus, Grafana==." 
+                    a: "Monitoring provides essential ==operational visibility== into system health, resource consumption, and query performance. By collecting metrics, logs, and traces, it allows engineers to perform ==rapid incident response== and plan cluster expansions before bottlenecks occur.", 
+                    qt: "5. اشرح أهمية **المراقبة (Monitoring)** في الأنظمة الموزعة.", 
+                    at: "توفر المراقبة ==رؤية تشغيلية ضرورية== لصحة النظام، واستهلاك الموارد، وأداء الاستعلامات. من خلال جمع المقاييس واللوغات والتتبعات، فإنها تتيح للمهندسين القيام بـ ==استجابة سريعة للمشاكل والحوادث== وتخطيط توسعة المجموعات البرمجية قبل حدوث الاختناقات." 
                 }
             ]
         },
@@ -690,33 +680,33 @@
             written: [
                 { 
                     q: "Why is **RDBMS** not suitable for Big Data workloads?", 
-                    a: "RDBMS is designed for structured, small datasets. Key limits include:\n\n• **Scalability:** ==Vertical scaling only== (limited by single-node power).\n• **Size:** ==Inadequate for petabyte-scale datasets==.\n• **Data types:** ==Cannot store unstructured or semi-structured data== efficiently.\n• **Velocity:** ==Cannot process high-speed real-time ingestion==.\n• **Cost:** ==Licensing and scaling become extremely expensive==.", 
+                    a: "Traditional relational databases are constrained by:\n• **Scalability Limits**: They rely on ==expensive vertical scaling== (bigger servers) rather than horizontal scaling.\n• **Data Variety**: RDBMS requires a rigid structure and cannot easily store ==unstructured or semi-structured data==.\n• **Velocity & Volume**: They fail to maintain write speed and struggle to index ==petabyte-scale data== efficiently, causing database lockups.", 
                     qt: "1. لماذا لا يعد نظام **RDBMS** مناسباً لأحمال عمل البيانات الضخمة؟", 
-                    at: "تم تصميم RDBMS للبيانات المهيكلة والصغيرة. حدوده الرئيسية هي:\n\n• **قابليّة التوسع:** ==التوسع الرأسي فقط== (محدود بقدرة خادم واحد).\n• **الحجم:** ==غير كافٍ للبيانات التي تبلغ حجم البيتابايت==.\n• **أنواع البيانات:** ==لا يمكنه تخزين البيانات غير المهيكلة أو شبه المهيكلة== بكفاءة.\n• **السرعة:** ==لا يستطيع معالجة تدفق البيانات عالي السرعة==.\n• **التكلفة:** ==تراخيص الاستخدام والتوسع تصبح مكلفة للغاية==." 
+                    at: "قواعد البيانات العلاجية التقليدية مقيدة بـ:\n• **حدود قابلية التوسع**: تعتمد على ==التوسع الرأسي المكلف== (خوادم أكبر) بدلاً من التوسع الأفقي الموزع.\n• **تنوع البيانات**: تتطلب RDBMS هيكلاً صارماً مسبقاً ولا يمكنها تخزين ==البيانات غير المهيكلة أو شبه المهيكلة== بسهولة.\n• **السرعة والحجم**: تفشل في مجاراة سرعات الكتابة العالية وتواجه صعوبة في فهرسة ==البيانات بمقياس البيتابايت== بشكل فعال، مما يتسبب في توقف قاعدة البيانات." 
                 },
                 { 
                     q: "What are the main advantages of **Hadoop**?", 
-                    a: "Hadoop stores and processes massive data sets rapidly. Its key advantages are:\n\n• **Scalability:** ==Scales linearly== across thousands of nodes.\n• **Flexibility:** ==Handles structured, semi-structured, and unstructured data== easily.\n• **Fault tolerance:** ==Built-in data replication== ensures zero loss on failure.\n• **Low cost:** ==Runs on inexpensive, commodity hardware==.\n• **Computing power:** ==High distributed parallel processing==.", 
+                    a: "• **Horizontal Scalability**: Allows scaling out by adding ==commodity hardware nodes== to a cluster.\n• **Data Flexibility**: Can store and process any data type without needing a ==predefined schema==.\n• **High Fault Tolerance**: Automatically duplicates and replicates data across different nodes.\n• **Cost Efficiency**: Runs on relatively inexpensive, non-proprietary commodity servers.", 
                     qt: "2. ما هي المزايا الرئيسية لـ **Hadoop**؟", 
-                    at: "يقوم هادوب بتخزين ومعالجة مجموعات البيانات الضخمة بسرعة وسهولة. أهم مزاياه:\n\n• **قابلية التوسع:** ==يتوسع خطياً== عبر آلاف العقد البرمجية.\n• **المرونة:** ==يتعامل مع البيانات المهيكلة وشبه المهيكلة وغير المهيكلة== بسهولة.\n• **تحمل الأخطاء:** ==النسخ المتماثل المدمج للبيانات== يمنع فقدانها عند حدوث الأعطال.\n• **تكلفة منخفضة:** ==يعمل على أجهزة عادية وغير مكلفة==.\n• **قوة الحوسبة:** ==معالجة متوازية وموزعة عالية القوة==." 
+                    at: "• **قابلية التوسع الأفقي**: تتيح توسيع النظام بإضافة ==أجهزة عادية غير مكلفة (commodity hardware)== إلى المجموعة.\n• **مرونة البيانات**: يمكنها تخزين ومعالجة أي نوع من البيانات دون الحاجة إلى ==مخطط صارم محدد مسبقاً==.\n• **تسامح عالٍ مع الأخطاء**: تقوم تلقائيًا بنسخ وتوزيع البيانات عبر عقد مختلفة بالمجموعة.\n• **كفاءة التكلفة**: تعمل على خوادم تجارية عادية غير مكلفة نسبيًا وغير احتكارية." 
                 },
                 { 
                     q: "Explain the difference between **HDFS** and **HBase**.", 
-                    a: "• **HDFS:** Hadoop Distributed File System → The underlying ==distributed storage layer for massive files==. Optimized for batch, sequential file reads.\n\n• **HBase:** A NoSQL wide-column database running on top of HDFS. It enables ==fast, random read/write access== and real-time point queries on Big Data.", 
+                    a: "• **HDFS**: The core ==distributed file system== of Hadoop. It is optimized for streaming access of large, sequential files but is restricted to ==write-once, read-many patterns==.\n• **HBase**: A distributed, ==NoSQL wide-column database== built on top of HDFS. It provides ==random, real-time read/write access== and is designed for low-latency row lookups.", 
                     qt: "3. اشرح الفرق بين **HDFS** و **HBase**.", 
-                    at: "• **HDFS:** نظام ملفات هادوب الموزع ← هو ==طبقة التخزين الموزعة الأساسية للملفات الضخمة==، ومصمم للقراءات المتتالية على شكل دفعات.\n\n• **HBase:** قاعدة بيانات NoSQL واسعة الأعمدة تعمل فوق HDFS، وتتيح ==وصولاً عشوائياً سريعاً للقراءة والكتابة== والاستعلامات اللحظية على البيانات الضخمة." 
+                    at: "• **HDFS**: نظام الملفات ==الموزع الأساسي== لهادوب. وهو مُحسَّن للوصول المتدفق للملفات الكبيرة والمتتالية ولكنه مقيد بنموذج ==الكتابة مرة واحدة والقراءة المتعددة==.\n• **HBase**: قاعدة بيانات ==NoSQL واسعة الأعمدة== موزعة تعمل فوق نظام HDFS. وهي توفر ==إمكانية الوصول العشوائي للقراءة والكتابة في الوقت الفعلي== ومصممة للاستعلامات ذات زمن الوصول المنخفض جداً." 
                 },
                 { 
                     q: "Compare **MapReduce** and **Spark**.", 
-                    a: "• **MapReduce:** A distributed ==batch processing engine== that writes intermediate results onto ==disk storage==, making it slower due to heavy I/O overhead.\n\n• **Spark:** An advanced ==in-memory processing engine== that holds data in RAM, making it ==much faster (up to 100x)== for iterative algorithms, ML, and real-time streams.", 
+                    a: "• **MapReduce**: A legacy framework that processes data in sequential batches. It writes intermediate results to ==physical disks==, making it ==significantly slower==.\n• **Spark**: A modern framework that performs ==in-memory processing==. It holds intermediate datasets in memory (RAM), rendering it ==up to 100x faster== for iterative algorithms, machine learning, and interactive queries.", 
                     qt: "4. قارن بين **MapReduce** و **Spark**.", 
-                    at: "• **MapReduce:** محرك ==معالجة دفعات موزع== يقوم بكتابة النتائج الوسيطة على ==أقراص التخزين الصلبة==، مما يجعله أبطأ بسبب عمليات القراءة والكتابة المستمرة.\n\n• **Spark:** محرك ==معالجة متقدم داخل الذاكرة (RAM)==، مما يجعله ==أسرع بكثير (حتى 100 ضعف)== لمعالجة الخوارزميات التكرارية، تعلم الآلة، والتدفقات اللحظية." 
+                    at: "• **MapReduce**: إطار عمل قديم يعالج البيانات في دفعات متتالية. يكتب النتائج الوسيطة على ==الأقراص المادية== مما يجعله ==أبطأ بشكل ملحوظ==.\n• **Spark**: إطار عمل حديث يعتمد على ==المعالج داخل الذاكرة (In-memory)==. يحتفظ بالبيانات الوسيطة في الذاكرة العشوائية (RAM) مما يجعله ==أسرع حتى 100 ضعف== في الخوارزميات التكرارية وتعلم الآلة والاستعلامات التفاعلية." 
                 },
                 { 
                     q: "What is the role of **Apache Ambari** in Hadoop?", 
-                    a: "Apache Ambari provides a unified, ==easy-to-use web UI== for administrative operations, including:\n\n• ==Automated provisioning== of Hadoop clusters.\n• ==Centralized configuration management== of ecosystem services.\n• ==Continuous health monitoring== and performance metrics visualizer.", 
+                    a: "Apache Ambari provides an ==interactive web UI== and a set of REST APIs that simplify cluster administration. It is used for:\n• **Provisioning**: Installing and configuring Hadoop services automatically across nodes.\n• **Monitoring**: Visualizing cluster health, memory metrics, and host alerts.\n• **Management**: Starting, stopping, and updating configuration values across the Hadoop ecosystem.", 
                     qt: "5. ما هو دور **Apache Ambari** في نظام Hadoop؟", 
-                    at: "يوفر Apache Ambari ==واجهة مستخدم ويب سهلة الاستخدام== وموحدة للعمليات الإدارية، بما في ذلك:\n\n• ==التهيئة التلقائية== لمجموعات Hadoop.\n• ==الإدارة المركزية للتكوينات== والخدمات البيئية.\n• ==المراقبة المستمرة للصحة== وتصوير مؤشرات الأداء." 
+                    at: "يوفر Apache Ambari ==واجهة مستخدم ويب تفاعلية== ومجموعة واجهات برمجية REST تسهل إدارة مجموعات هادوب. ويستخدم في:\n• **التهيئة والتنصيب**: تثبيت وتكوين خدمات هادوب تلقائيًا عبر العقد المختلفة.\n• **المراقبة**: تصوير صحة المجموعة، مقاييس استهلاك الذاكرة، وتنبيهات الأجهزة.\n• **الإدارة التشغيلية**: تشغيل وإيقاف وتحديث إعدادات التكوين عبر بيئة هادوب بالكامل." 
                 }
             ]
         },
@@ -749,15 +739,15 @@
             written: [
                 { 
                     q: "Define **Exploratory Data Analysis (EDA)**.", 
-                    a: "Exploratory Data Analysis (EDA) using data visualization is a critical, ==iterative process of examining datasets== to ==identify hidden patterns, spot anomalies, and test hypotheses== using visual instruments such as ==scatter plots, histograms, and heatmaps==.", 
-                    qt: "عرف **تحليل البيانات الاستكشافي (EDA)**.", 
-                    at: "تحليل البيانات الاستكشافي (EDA) باستخدام تصوير البيانات هو ==عملية تكرارية حاسمة لفحص مجموعات البيانات== بهدف ==تحديد الأنماط الخفية، واكتشاف القيم الشاذة، واختبار الفرضيات== باستخدام أدوات مرئية كالمخططات المبعثرة، المدرجات التكرارية، والخرائط الحرارية." 
+                    a: "Exploratory Data Analysis (EDA) is an ==iterative, investigative process== where data analysts use statistical summaries and graphical representations to ==understand data distributions, detect anomalies/outliers, and test underlying hypotheses== before building predictive models.", 
+                    qt: "1. عرّف **تحليل البيانات الاستكشافي (EDA)**.", 
+                    at: "تحليل البيانات الاستكشافي (EDA) هو ==عملية استقصائية تكرارية== يستخدم فيها محللو البيانات الملخصات الإحصائية والتمثيلات الرسومية لـ ==فهم توزيعات البيانات، واكتشاف القيم الشاذة والمتطرفة، واختبار الفرضيات الأساسية== قبل بناء أي نماذج تنبؤية." 
                 },
                 { 
                     q: "Explain the difference between **univariate** and **multivariate** plots.", 
-                    a: "• **Univariate Analysis:** ==Analyzing and visualizing one variable at a time== to understand its range and frequency distribution (e.g., using histograms, box plots).\n\n• **Bivariate/Multivariate Analysis:** ==Analyzing relationships between two or more variables== simultaneously to check for correlations (e.g., using scatter matrices, correlation heatmaps).", 
-                    qt: "اشرح الفرق بين المخططات **أحادية المتغير (univariate)** و **متعددة المتغيرات (multivariate)**.", 
-                    at: "• **التحليل أحادي المتغير:** ==تحليل وتصوير متغير واحد فقط في كل مرة== لفهم نطاق توزيعه وتكراره (على سبيل المثال، باستخدام المدرجات التكرارية ومخططات الصندوق).\n\n• **التحليل ثنائي أو متعدد المتغيرات:** ==تحليل العلاقات والترابطات بين متغيرين أو أكثر== في نفس الوقت للتحقق من علاقات الارتباط والارتباط المشترك (مثل مصفوفات التشتت والخرائط الحرارية للارتباط)." 
+                    a: "• **Univariate Plots**: Analyze and visualize ==a single variable at a time== (e.g., Histograms to see distributions, Box Plots to see outliers of a single feature).\n• **Multivariate Plots**: Analyze and visualize the ==relationships and correlations among multiple variables== simultaneously (e.g., Scatter Plots for two continuous variables, Correlation Heatmaps for entire datasets).", 
+                    qt: "2. اشرح الفرق بين المخططات **أحادية المتغير (univariate)** و **متعددة المتغيرات (multivariate)**.", 
+                    at: "• **مخططات أحادية المتغير**: تحلل وتصور ==متغيرًا واحدًا فقط في كل مرة== (مثل المدرجات التكرارية لرؤية التوزيع، أو مخطط الصندوق لرؤية القيم المتطرفة لسمة واحدة).\n• **مخططات متعددة المتغيرات**: تحلل وتصور ==العلاقات والارتباطات بين متغيرات متعددة== في نفس الوقت (مثل مخططات التشتت لمتغيرين مستمرين، أو الخرائط الحرارية للارتباط لمجموعات البيانات بالكامل)." 
                 }
             ]
         }
@@ -775,6 +765,7 @@
         lastLocalActionTime = Date.now();
     }
 
+    // دالة التمرير السريع المخصصة لأعلى الصفحة
     function scrollToTop() {
         const startTime = performance.now();
         const startY = window.pageYOffset;
@@ -791,6 +782,7 @@
         requestAnimationFrame(step);
     }
 
+    // دالة التمرير الرياضي السلس وفائق السرعة للكروت
     function fastScrollTo(element) {
         if (!element) return;
         const elementRect = element.getBoundingClientRect();
@@ -1004,7 +996,7 @@
 
                         <div class="expected-answer-box">
                             <div style="color:var(--gold); font-weight:900; font-size:1.1rem; border-bottom:1px solid rgba(245,158,11,0.2); padding-bottom:6px; margin-bottom:10px; text-shadow: 0 0 12px var(--gold-glow); letter-spacing:1px;"><i class="fa-solid fa-gem"></i> ⚜️ ROYAL ANSWER VAULT</div>
-                            <div style="font-weight:700; color:#fff; font-size:1.3rem; line-height:1.8;">${formatText(exactCorrectText)}</div>
+                            <div style="font-weight:700; color:#fff; font-size:1.15rem; line-height:1.8;">${formatText(exactCorrectText)}</div>
                         </div>
 
                         <div class="ar-translation-vault" id="${vaultId}">
@@ -1264,6 +1256,9 @@
 </script>
 
 <script>
+    // =========================================================================
+    // --- محرك الاستقبال التكيفي ذو الكفاءة العالية الموفر للسيرفر ---
+    // =========================================================================
     let urlParams = new URLSearchParams(window.location.search);
     let roomName = urlParams.get('room');
     const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost:5000' ? 'http://127.0.0.1:5000/api' : '/api';
@@ -1413,6 +1408,9 @@
         sendStateToBackend(cardId, optionIndex, 'selected', "", { active_card_id: cardId });
     };
 
+    // =========================================================================
+    // --- محادثات الصوت الجماعية الحية المستقرة وسرعة انتقال البيانات ---
+    // =========================================================================
     let localAudioStream = null; let peerInstance = null; let connectedVoicePeersList = new Set();
     let activeCallsList = {};
     let dataConnections = {}; 
