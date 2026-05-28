@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Big Data & Analytics Workspace - Premium & Active Sync</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Cairo:wght@400;600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght=300;400;500;600;700;800;900&family=Cairo:wght=400;600;700;900&display=swap');
 
         :root {
             --bg-dark: #060814;
@@ -24,6 +24,7 @@
             --danger: #f43f5e; 
             --danger-dim: rgba(244, 63, 94, 0.15);
             --danger-glow: rgba(244, 63, 94, 0.4);
+            --warning: #fbbf24;
             --gold: #fbbf24;
             --gold-glow: rgba(251, 191, 36, 0.35);
             --focus-blue: #00f0ff;
@@ -43,7 +44,7 @@
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
-            padding-top: 200px; 
+            padding-top: 220px; 
             padding-bottom: 80px;
         }
 
@@ -89,7 +90,7 @@
         }
 
         header.hide-nav {
-            transform: translateX(-50%) translateY(-120%);
+            transform: translateX(-50%) translateY(-140%);
             opacity: 0;
             pointer-events: none;
         }
@@ -98,6 +99,7 @@
             padding: 14px 24px;
             display: flex; justify-content: space-between; align-items: center; gap: 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            flex-wrap: wrap;
         }
 
         .brand-title {
@@ -108,41 +110,109 @@
         }
 
         .header-badges-group {
-            display: flex; align-items: center; gap: 12px;
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
         }
 
-        .stats-badge {
-            display: flex; align-items: center; gap: 8px;
-            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border);
-            padding: 8px 16px; border-radius: 14px; font-weight: 800; font-size: 0.85rem;
-            letter-spacing: 0.5px;
+        /* دمج الكنترول الصوتي والأعضاء بشكل مبسط جداً بدون نصوص إنجليزية */
+        .voice-hub {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .stats-badge span { color: var(--primary-hover); text-shadow: 0 0 10px var(--primary-glow); }
 
         .voice-mic-btn {
             background: var(--danger-dim); border: 1px solid rgba(244, 63, 94, 0.3);
-            color: var(--danger); padding: 8px 16px; border-radius: 14px;
-            font-weight: 800; font-size: 0.8rem; cursor: pointer;
-            display: flex; align-items: center; gap: 8px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            color: var(--danger); width: 38px; height: 38px; border-radius: 12px;
+            font-size: 1.05rem; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             text-shadow: 0 0 5px var(--danger-glow);
-            letter-spacing: 0.5px;
-        }
-        .voice-mic-btn::before {
-            content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--danger);
-            display: inline-block; animation: pulseMic 1.5s infinite;
-        }
-        @keyframes pulseMic {
-            0% { transform: scale(0.9); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.4; }
-            100% { transform: scale(0.9); opacity: 1; }
+            box-shadow: 0 0 10px rgba(244, 63, 94, 0.15);
         }
 
         .voice-mic-btn.active-streaming {
             background: var(--success-dim); border-color: rgba(16, 185, 129, 0.3);
             color: var(--success); text-shadow: 0 0 5px var(--success-glow);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
         }
-        .voice-mic-btn.active-streaming::before {
-            background: var(--success);
+
+        .members-toggle-btn {
+            border-color: rgba(0, 240, 255, 0.35); 
+            color: var(--focus-blue); 
+            font-weight: 800;
+            height: 38px;
+            padding: 0 14px;
+            border-radius: 12px;
+            background: rgba(0, 240, 255, 0.03);
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .stats-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border);
+            padding: 0 16px; border-radius: 12px; font-weight: 800; font-size: 0.9rem;
+            letter-spacing: 0.5px; height: 38px;
+            color: var(--primary-hover);
+            text-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        /* تصميم الكبسولة العائمة المبسطة عند النزول بالصفحة واختفاء المنيو */
+        .floating-minimal-capsule {
+            position: fixed;
+            top: 15px;
+            right: 24px;
+            background: rgba(10, 14, 31, 0.9);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 4px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(139, 92, 246, 0.15);
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .floating-minimal-capsule.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .float-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+        .float-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .float-divider {
+            width: 1px;
+            height: 16px;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .float-score-box {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--primary-hover);
+            text-shadow: 0 0 8px var(--primary-glow);
+            padding: 0 4px;
         }
 
         .controls-header-row {
@@ -175,6 +245,58 @@
         .action-btn.retry:hover {
             transform: translateY(-2px); box-shadow: 0 6px 20px rgba(251, 191, 36, 0.35);
         }
+
+        /* نافذة لوحة الأعضاء الجانبية المتطورة */
+        .members-panel {
+            position: fixed;
+            top: 145px;
+            right: 24px;
+            width: 320px;
+            max-height: 400px;
+            background: rgba(10, 14, 31, 0.95);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--focus-blue);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 20px rgba(0, 240, 255, 0.15);
+            z-index: 120;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: slideDownPanel 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideDownPanel {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .members-panel .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .members-panel .panel-header h3 {
+            font-size: 0.85rem; font-weight: 900; letter-spacing: 1px; color: var(--focus-blue);
+            font-family: var(--font-outfit), sans-serif;
+        }
+        .members-panel .panel-header button {
+            background: transparent; border: none; color: var(--text-muted); font-size: 1.1rem; cursor: pointer;
+        }
+        .members-panel .panel-body {
+            padding: 10px; overflow-y: auto; max-height: 320px;
+        }
+        .member-item {
+            display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; transition: background 0.2s;
+        }
+        .member-item:hover { background: rgba(255,255,255,0.02); }
+        .member-status-dot {
+            width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success-glow);
+        }
+        .member-details { display: flex; flex-direction: column; gap: 2px; text-align: left; }
+        .member-name { font-size: 0.9rem; font-weight: 700; color: #fff; font-family: var(--font-cairo), sans-serif; }
+        .member-name .me-tag { font-size: 0.7rem; color: var(--primary-hover); margin-left: 4px; font-weight: 500; }
+        .member-peer-id { font-size: 0.7rem; color: var(--text-muted); }
 
         .sheet-navigator, .bottom-navigator-deck {
             background: rgba(255, 255, 255, 0.01);
@@ -266,7 +388,6 @@
             box-shadow: 0 20px 45px rgba(0,0,0,0.5); 
         }
         
-        /* تأثير الإزرقاق السحري والناري للحواف عندما يتفاعل معه الزميل */
         .card.focused-by-peer {
             border-color: var(--focus-blue) !important;
             box-shadow: 0 0 35px var(--focus-blue-glow) !important;
@@ -276,7 +397,6 @@
             background: linear-gradient(to right, var(--focus-blue), var(--primary));
         }
 
-        /* شارة تفاعلية نيون تظهر للزملاء لتمييز المربع النشط */
         .peer-focus-badge {
             display: none;
             position: absolute;
@@ -289,10 +409,10 @@
             font-weight: 900;
             padding: 4px 10px;
             border-radius: 20px;
-            font-family: var(--font-outfit), sans-serif;
+            font-family: var(--font-cairo), sans-serif;
             align-items: center;
             gap: 4px;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
             box-shadow: 0 0 10px rgba(0, 240, 255, 0.15);
             animation: pulseBlueFocus 1.5s infinite;
@@ -535,17 +655,49 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
 </button>
 
+<!-- الكبسولة العائمة البسيطة جداً التي تظهر عند اختفاء المنيو (فقط الرموز بدون نصوص) -->
+<div class="floating-minimal-capsule" id="floatingCapsule">
+    <button class="float-btn" onclick="toggleMembersPanel()">
+        👥 <span id="float-members-count">1</span>
+    </button>
+    <div class="float-divider"></div>
+    <button class="float-btn" id="floatMicBtn" onclick="toggleLocalMicrophone()">
+        🔇
+    </button>
+    <div class="float-divider"></div>
+    <div class="float-score-box">
+        <span id="float-live-score">00 / 00</span>
+    </div>
+</div>
+
+<div id="membersPanel" class="members-panel">
+    <div class="panel-header">
+        <h3>ACTIVE MEMBERS</h3>
+        <button onclick="toggleMembersPanel()">✕</button>
+    </div>
+    <div class="panel-body" id="membersListContainer">
+    </div>
+</div>
+
 <header id="mainHeader">
     <div class="header-content">
         <div class="brand-title" onclick="window.location.href='index.html' + window.location.search">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"></polyline></svg>
             BIG DATA SUITE CRADLE
         </div>
+        
+        <!-- الهيدر المحدث بأسلوب رمزي مبسط بدون نصوص إنجليزية زائدة والنتيجة الرقمية فقط -->
         <div class="header-badges-group">
-            <button class="voice-mic-btn" id="micToggleBtn" onclick="toggleLocalMicrophone()">
-                🎤 INITIALIZING AUDIO...
-            </button>
-            <div class="stats-badge">EVALUATED: <span id="live-score">00 / 00</span></div>
+            <div class="stats-badge" id="live-score">00 / 00</div>
+            
+            <div class="voice-hub" id="voiceControlHub">
+                <button class="action-btn members-toggle-btn" onclick="toggleMembersPanel()">
+                    👥 <span id="active-members-count">1</span>
+                </button>
+                <button class="voice-mic-btn" id="micToggleBtn" onclick="toggleLocalMicrophone()">
+                    🎙️
+                </button>
+            </div>
         </div>
     </div>
     
@@ -619,6 +771,9 @@
 </div>
 
 <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const localUsername = urlParams.get('username') || localStorage.getItem('study_hub_user_realname') || 'Anonymous';
+
     const assignmentsConfig = [
         {
             id: 0,
@@ -773,7 +928,7 @@
                     q: "What are the main advantages of **Hadoop**?", 
                     a: "It stores and processes huge amounts of any kind of data quickly. Advantages:\n• **==Scalability==**: Scales linearly.\n• **==Flexibility==**: Handles structured, semi-structured, and unstructured data.\n• **==Fault tolerance==**: Built-in data replication.\n• **==Low cost==**: Uses commodity hardware.\n• **==Computing power==**: High distributed processing power.", 
                     qt: "2. ما هي المزايا الرئيسية لـ **Hadoop**؟", 
-                    at: "يقوم بتخزين ومعالجة كميات ضخمة من أي نوع من البيانات بسرعة. المزايا تشمل:\n• **==قابلية التوسع==**: يتوسع بشكل خطي.\n• **==المرونة==**: يتعامل مع البيانات المهيكلة، شبه المهيكلة، وغير المهيكلة.\n• **==التسامح مع الأخطاء==**: نسخ متماثل مدمج للبيانات.\n• **==تكلفة منخفضة==**: يستخدم أجهزة عادية غير مكلفة.\n• **==قوة الحوسبة==**: قوة معالجة موزعة وعالية." 
+                    at: "يقوم بتخزين ومعالجة كميات ضخمة من أي نوع من البيانات بسرعة. المزايا تشمل:\n• **==قابلية التوسع==**: يتوسع بشكل خطي.\n• **==المرونة==**: يتعامل مع البيانات المهيكلة، شبه المهيكلة، والبيانات غير المهيكلة.\n• **==التسامح مع الأخطاء==**: نسخ متماثل مدمج للبيانات.\n• **==تكلفة منخفضة==**: يستخدم أجهزة عادية غير مكلفة.\n• **==قوة الحوسبة==**: قوة معالجة موزعة وعالية." 
                 },
                 { 
                     q: "Explain the difference between **HDFS** and **HBase**.", 
@@ -810,7 +965,7 @@
                 { q: "Scatter plots are used for visualizing relationships between two variables.", options: ["True", "False"], ans: 0 }
             ],
             mcq: [
-                { q: "What is the main goal of EDA?", options: ["a) Data storage", "b) Data exploration and understanding", "c) Data deletion", "d) Data encryption"], ans: 1 },
+                { q: "Which of the main goal of EDA?", options: ["a) Data storage", "b) Data exploration and understanding", "c) Data deletion", "d) Data encryption"], ans: 1 },
                 { q: "Which measure represents central tendency?", options: ["a) Variance", "b) Mean", "c) Range", "d) Standard deviation"], ans: 1 },
                 { q: "Which plot is used for distribution analysis?", options: ["a) Histogram", "b) Pie chart", "c) Line chart", "d) Bar chart"], ans: 0 },
                 { q: "Which plot is used to detect outliers?", options: ["a) Scatter plot", "b) Box plot", "c) Heatmap", "d) Line chart"], ans: 1 },
@@ -845,12 +1000,18 @@
     let lastRenderedSheet = null;
     let lastRenderedMode = null;
 
+    let isProgrammaticScrolling = false;
+    let programmaticScrollTimeout = null;
+
     let lastLocalActionTime = 0;
     function recordLocalAction() {
         lastLocalActionTime = Date.now();
     }
 
     function scrollToTop() {
+        isProgrammaticScrolling = true;
+        if (programmaticScrollTimeout) clearTimeout(programmaticScrollTimeout);
+
         const startTime = performance.now();
         const startY = window.pageYOffset;
         const duration = 250; 
@@ -861,6 +1022,10 @@
             window.scrollTo(0, startY * (1 - ease));
             if (progress < 1) {
                 requestAnimationFrame(step);
+            } else {
+                programmaticScrollTimeout = setTimeout(() => {
+                    isProgrammaticScrolling = false;
+                }, 100);
             }
         }
         requestAnimationFrame(step);
@@ -868,6 +1033,9 @@
 
     function fastScrollTo(element) {
         if (!element) return;
+        isProgrammaticScrolling = true;
+        if (programmaticScrollTimeout) clearTimeout(programmaticScrollTimeout);
+
         const elementRect = element.getBoundingClientRect();
         const absoluteElementTop = elementRect.top + window.pageYOffset;
         const middle = absoluteElementTop - (window.innerHeight / 2) + (elementRect.height / 2);
@@ -883,6 +1051,10 @@
             window.scrollTo(0, startY + difference * ease);
             if (progress < 1) {
                 requestAnimationFrame(step);
+            } else {
+                programmaticScrollTimeout = setTimeout(() => {
+                    isProgrammaticScrolling = false;
+                }, 100);
             }
         }
         requestAnimationFrame(step);
@@ -907,6 +1079,18 @@
         } else {
             vault.classList.add('visible');
             btn.classList.add('active-state');
+        }
+    }
+
+    function toggleMembersPanel() {
+        const panel = document.getElementById('membersPanel');
+        if (!panel) return;
+        if (panel.style.display === 'none' || panel.style.display === '') {
+            panel.style.display = 'flex';
+            const headerHidden = document.getElementById('mainHeader').classList.contains('hide-nav');
+            panel.style.top = headerHidden ? '75px' : '145px';
+        } else {
+            panel.style.display = 'none';
         }
     }
 
@@ -1052,19 +1236,22 @@
             
             card.addEventListener('click', () => {
                 recordLocalAction(); triggerUserActionBurst();
-                // تنظيف الفوكس القديم من على جهازي عند الضغط على كارت جديد
-                document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
+                document.querySelectorAll('.card').forEach(c => {
+                    c.classList.remove('focused-by-peer');
+                    const badge = c.querySelector('.peer-focus-badge');
+                    if (badge) badge.style.display = 'none';
+                });
                 sendStateToBackend(null, null, null, "", { active_card_id: cardId });
                 
                 broadcastP2PState({
                     type: 'focus',
-                    cardId: cardId
+                    cardId: cardId,
+                    username: localUsername
                 });
             });
             
             let html = `
-                <!-- شارة الزميل النشط -->
-                <div class="peer-focus-badge">👤 PEER ACTIVE</div>
+                <div class="peer-focus-badge" id="${cardId}-peer-badge">👤 PEER ACTIVE</div>
                 
                 <div class="question-header">
                     <button class="trans-trigger-btn" onclick="toggleArabicTranslation(this, '${vaultId}')">🌐 AR</button>
@@ -1128,7 +1315,8 @@
         broadcastP2PState({
             type: 'select',
             cardId: cardId,
-            optionIdx: optionIndex
+            optionIdx: optionIndex,
+            username: localUsername
         });
     }
 
@@ -1163,7 +1351,8 @@
                 type: 'freeze',
                 cardId: cardId,
                 status: 'correct',
-                selectedIdx: selectedVal
+                selectedIdx: selectedVal,
+                username: localUsername
             });
         } else {
             card.classList.add('wrong');
@@ -1176,7 +1365,8 @@
                 type: 'freeze',
                 cardId: cardId,
                 status: 'wrong',
-                selectedIdx: selectedVal
+                selectedIdx: selectedVal,
+                username: localUsername
             });
         }
         updateProgress();
@@ -1200,7 +1390,8 @@
             broadcastP2PState({
                 type: 'freeze',
                 cardId: cardId,
-                status: 'correct'
+                status: 'correct',
+                username: localUsername
             });
         } else {
             card.classList.add('wrong');
@@ -1211,7 +1402,8 @@
             broadcastP2PState({
                 type: 'freeze',
                 cardId: cardId,
-                status: 'wrong'
+                status: 'wrong',
+                username: localUsername
             });
         }
         updateProgress();
@@ -1230,14 +1422,19 @@
         setTimeout(() => {
             if (nextCardExists) {
                 fastScrollTo(nextCardExists);
-                document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
+                document.querySelectorAll('.card').forEach(c => {
+                    c.classList.remove('focused-by-peer');
+                    const badge = c.querySelector('.peer-focus-badge');
+                    if (badge) badge.style.display = 'none';
+                });
                 nextCardExists.classList.add('focused-by-peer');
 
                 sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', "", { active_card_id: nextCardId });
                 
                 broadcastP2PState({
                     type: 'focus',
-                    cardId: nextCardId
+                    cardId: nextCardId,
+                    username: localUsername
                 });
             } else {
                 sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', "");
@@ -1255,8 +1452,13 @@
         const wrong = cards.filter(c => c.classList.contains('wrong')).length;
         const solved = correct + wrong;
         
+        const scoreStr = `${formatNumber(correct)} / ${total}`;
         document.getElementById('progressBar').style.width = `${(solved / total) * 100}%`;
-        document.getElementById('live-score').innerText = `${formatNumber(correct)} / ${total}`;
+        
+        // تحديث العداد في الهيدر والعداد العائم بنفس اللحظة
+        document.getElementById('live-score').innerText = scoreStr;
+        const floatScore = document.getElementById('float-live-score');
+        if (floatScore) floatScore.innerText = scoreStr;
         
         const pct = total === 0 ? 0 : Math.round((correct / total) * 100);
         const scoreCircle = document.getElementById('score-circle');
@@ -1344,7 +1546,6 @@
 </script>
 
 <script>
-    let urlParams = new URLSearchParams(window.location.search);
     let roomName = urlParams.get('room');
     const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost:5000' ? 'http://127.0.0.1:5000/api' : '/api';
 
@@ -1375,7 +1576,7 @@
         if (!roomName || isSyncingFromServer) return;
         try {
             isSyncingFromServer = true;
-            const url = `${BACKEND_URL}/state?room=${roomName}&peer_id=${localVoicePeerId}`;
+            const url = `${BACKEND_URL}/state?room=${roomName}&peer_id=${localVoicePeerId}&username=${encodeURIComponent(localUsername)}`;
             const response = await fetch(url);
             if (!response.ok) { isSyncingFromServer = false; return; }
             const data = await response.json();
@@ -1434,12 +1635,35 @@
 
                 if (data.voice_peers && data.voice_peers.length > 0) { handleAudioMeshSignaling(data.voice_peers); }
 
+                if (data.active_users) {
+                    updateActiveMembersList(data.active_users);
+                }
+
                 if (data.active_card_id && (data.active_card_id !== lastActiveCardId || structuralChanged)) {
                     lastActiveCardId = data.active_card_id;
-                    document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
+                    document.querySelectorAll('.card').forEach(c => {
+                        c.classList.remove('focused-by-peer');
+                        const badge = c.querySelector('.peer-focus-badge');
+                        if (badge) badge.style.display = 'none';
+                    });
                     const t = document.getElementById(data.active_card_id); 
                     if (t) { 
                         t.classList.add('focused-by-peer'); 
+                        
+                        let focusUser = 'Peer';
+                        if (data.active_users) {
+                            const otherPeers = Object.keys(data.active_users).filter(id => id !== localVoicePeerId);
+                            if (otherPeers.length > 0) {
+                                focusUser = data.active_users[otherPeers[0]] || 'Peer';
+                            }
+                        }
+                        
+                        const badge = document.getElementById(`${data.active_card_id}-peer-badge`);
+                        if (badge) {
+                            badge.innerHTML = `👤 <b>${focusUser}</b>`;
+                            badge.style.display = 'inline-flex';
+                        }
+
                         if (!isCooldownActive && data.active_card_id !== lastSentState.activeCardId) {
                             setTimeout(() => { fastScrollTo(t); }, 50); 
                         }
@@ -1449,6 +1673,36 @@
             }
             isSyncingFromServer = false;
         } catch (error) { isSyncingFromServer = false; }
+    }
+
+    function updateActiveMembersList(activeUsers) {
+        const container = document.getElementById('membersListContainer');
+        const countBadge = document.getElementById('active-members-count');
+        const floatCountBadge = document.getElementById('float-members-count');
+        if (!container || !activeUsers) return;
+
+        container.innerHTML = '';
+        const userIds = Object.keys(activeUsers);
+        
+        // تحديث العداد في الهيدر والعداد العائم بنفس اللحظة
+        if (countBadge) countBadge.innerText = userIds.length;
+        if (floatCountBadge) floatCountBadge.innerText = userIds.length;
+
+        userIds.forEach(peerId => {
+            const name = activeUsers[peerId];
+            const isMe = peerId === localVoicePeerId;
+            
+            const item = document.createElement('div');
+            item.className = 'member-item';
+            item.innerHTML = `
+                <div class="member-status-dot"></div>
+                <div class="member-details">
+                    <span class="member-name">${name} ${isMe ? '<span class="me-tag">(You)</span>' : ''}</span>
+                    <span class="member-peer-id">${peerId}</span>
+                </div>
+            `;
+            container.appendChild(item);
+        });
     }
 
     function executeRemoteFreeze(card, cardId, isCorrect) {
@@ -1499,6 +1753,8 @@
 
     function initializeVoiceEngine() {
         const btn = document.getElementById('micToggleBtn');
+        const floatBtn = document.getElementById('floatMicBtn');
+        
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
             .then(stream => {
                 localAudioStream = stream;
@@ -1506,7 +1762,12 @@
                 peerInstance = new Peer(localVoicePeerId, { debug: 1 });
 
                 peerInstance.on('open', (id) => {
-                    btn.classList.add('active-streaming'); btn.innerText = "🎙️ MIC ACTIVE (LIVE)";
+                    btn.classList.add('active-streaming'); 
+                    btn.innerHTML = "🎙️";
+                    if (floatBtn) {
+                        floatBtn.innerHTML = "🎙️";
+                        floatBtn.style.color = "var(--success)";
+                    }
                     if (roomName) startAdaptiveSyncLoop();
                 });
 
@@ -1524,7 +1785,12 @@
                 });
             })
             .catch(err => {
-                btn.style.background = "var(--danger)"; btn.innerText = "⚠️ MIC BLOCKED (GRANT PERMISSION)";
+                btn.style.background = "var(--danger)"; 
+                btn.innerHTML = "⚠️";
+                if (floatBtn) {
+                    floatBtn.innerHTML = "⚠️";
+                    floatBtn.style.color = "var(--danger)";
+                }
                 if (roomName) startAdaptiveSyncLoop();
             });
     }
@@ -1620,10 +1886,19 @@
                 globalSwitchMode(data.mode, false);
             }
         } else if (data.type === 'focus') {
-            document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
+            document.querySelectorAll('.card').forEach(c => {
+                c.classList.remove('focused-by-peer');
+                const badge = c.querySelector('.peer-focus-badge');
+                if (badge) badge.style.display = 'none';
+            });
             const t = document.getElementById(data.cardId);
             if (t) {
                 t.classList.add('focused-by-peer');
+                const badge = document.getElementById(`${data.cardId}-peer-badge`);
+                if (badge) {
+                    badge.innerHTML = `👤 <b>${data.username || 'Peer'}</b>`;
+                    badge.style.display = 'inline-flex';
+                }
                 fastScrollTo(t); 
             }
         }
@@ -1662,22 +1937,62 @@
     function toggleLocalMicrophone() {
         if (!localAudioStream) return;
         const btn = document.getElementById('micToggleBtn');
+        const floatBtn = document.getElementById('floatMicBtn');
         const audioTrack = localAudioStream.getAudioTracks()[0];
+        
         if (audioTrack.enabled) {
-            audioTrack.enabled = false; btn.classList.remove('active-streaming');
-            btn.style.background = "var(--glass-bg)"; btn.style.borderColor = "var(--warning)"; btn.style.color = "var(--warning)"; btn.innerText = "🔇 MIC MUTED";
+            audioTrack.enabled = false; 
+            btn.classList.remove('active-streaming');
+            btn.style.background = "var(--glass-bg)"; 
+            btn.style.borderColor = "var(--warning)"; 
+            btn.style.color = "var(--warning)"; 
+            btn.innerHTML = "🔇";
+            
+            if (floatBtn) {
+                floatBtn.innerHTML = "🔇";
+                floatBtn.style.color = "var(--warning)";
+            }
         } else {
-            audioTrack.enabled = true; btn.classList.add('active-streaming');
-            btn.style.background = ""; btn.style.borderColor = ""; btn.style.color = ""; btn.innerText = "🎙️ MIC ACTIVE (LIVE)";
+            audioTrack.enabled = true; 
+            btn.classList.add('active-streaming');
+            btn.style.background = ""; 
+            btn.style.borderColor = ""; 
+            btn.style.color = ""; 
+            btn.innerHTML = "🎙️";
+            
+            if (floatBtn) {
+                floatBtn.innerHTML = "🎙️";
+                floatBtn.style.color = "var(--success)";
+            }
         }
     }
 
     let lastScrollY = window.scrollY;
     window.addEventListener('scroll', () => {
-        const header = document.getElementById('mainHeader'); const scrollBtn = document.getElementById('scrollTopBtn');
+        const header = document.getElementById('mainHeader'); 
+        const scrollBtn = document.getElementById('scrollTopBtn');
+        const membersPanel = document.getElementById('membersPanel');
+        const floatingCapsule = document.getElementById('floatingCapsule');
+
         if (!header) return;
-        if (window.scrollY > 250) { if(scrollBtn) scrollBtn.classList.add('visible'); } else { if(scrollBtn) scrollBtn.classList.remove('visible'); }
-        if (window.scrollY > lastScrollY && window.scrollY > 80) { header.classList.add('hide-nav'); } else if (window.scrollY < lastScrollY) { header.classList.remove('hide-nav'); }
+        
+        if (window.scrollY > 250) { 
+            if(scrollBtn) scrollBtn.classList.add('visible'); 
+        } else { 
+            if(scrollBtn) scrollBtn.classList.remove('visible'); 
+        }
+        
+        if (!isProgrammaticScrolling) {
+            if (window.scrollY > lastScrollY && window.scrollY > 80) { 
+                header.classList.add('hide-nav'); 
+                if (membersPanel) membersPanel.style.top = '75px';
+                if (floatingCapsule) floatingCapsule.classList.add('visible');
+            } else if (window.scrollY < lastScrollY) { 
+                header.classList.remove('hide-nav'); 
+                if (membersPanel) membersPanel.style.top = '145px';
+                if (floatingCapsule) floatingCapsule.classList.remove('visible');
+            }
+        }
         lastScrollY = window.scrollY;
     });
 
