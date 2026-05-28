@@ -1,34 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Study Hub - Select Workspace</title>
+    <title>Study Hub - Premium Select Portal</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&family=Cairo:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Cairo:wght@400;600;700;900&display=swap');
 
         :root {
-            --bg-dark: #030712;
-            --glass-bg: rgba(17, 24, 39, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.05);
+            --bg-dark: #02040a;
+            --glass-bg: rgba(6, 10, 20, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.06);
             --primary: #00f2fe;
             --accent: #3b82f6;
             --purple: #a855f7;
             --pink: #f43f5e;
-            --text-main: #f9fafb;
-            --text-muted: #9ca3af;
+            --success: #10b981;
+            --text-main: #f3f4f6;
+            --text-muted: #8e9bb0;
             --font-outfit: 'Outfit', sans-serif;
             --font-cairo: 'Cairo', sans-serif;
+            --glow-primary: rgba(0, 242, 254, 0.45);
+            --glow-purple: rgba(168, 85, 247, 0.45);
         }
 
-        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #131b2e; border-radius: 6px; }
 
-        * { box-sizing: border-box; outline: none; margin: 0; padding: 0; }
+        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
 
         body {
-            font-family: var(--font-outfit), var(--font-cairo), sans-serif;
+            font-family: var(--font-cairo), var(--font-outfit), sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
             min-height: 100vh;
@@ -38,80 +41,116 @@
             align-items: center;
             overflow-x: hidden;
             position: relative;
-            padding: 15px;
+            padding: 20px;
+            perspective: 1500px;
+        }
+
+        /* حاوية الخلفية العصبية الحية التفاعلية */
+        #particlesCanvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -3; pointer-events: auto;
         }
 
         .bg-grid {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
             background-image: 
-                linear-gradient(to right, rgba(255,255,255,0.015) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255,255,255,0.015) 1px, transparent 1px);
-            background-size: 30px 30px;
-            mask-image: radial-gradient(circle at center, black, transparent 90%);
+                linear-gradient(to right, rgba(255,255,255,0.01) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.01) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at center, black, transparent 85%);
+            -webkit-mask-image: radial-gradient(circle at center, black, transparent 85%);
+            pointer-events: none;
         }
 
         .bg-glow-1, .bg-glow-2 {
-            position: fixed; width: 250px; height: 250px; border-radius: 50%; z-index: -1; opacity: 0.12; filter: blur(70px); pointer-events: none; animation: floatGlow 10s infinite alternate;
+            position: fixed; width: 350px; height: 350px; border-radius: 50%; z-index: -1; opacity: 0.12; filter: blur(100px); pointer-events: none; animation: floatGlow 14s infinite alternate ease-in-out;
         }
-        .bg-glow-1 { top: -5%; left: 5%; background: var(--primary); }
-        .bg-glow-2 { bottom: -5%; right: 5%; background: var(--purple); animation-delay: 3s; }
+        .bg-glow-1 { top: -10%; left: 5%; background: var(--primary); }
+        .bg-glow-2 { bottom: -10%; right: 5%; background: var(--purple); animation-delay: 4s; }
 
         @keyframes floatGlow {
             0% { transform: translateY(0) scale(1); }
-            100% { transform: translateY(15px) scale(1.1); }
+            100% { transform: translateY(40px) scale(1.2); }
         }
 
         .container {
             width: 100%; max-width: 900px; padding: 20px 5px; text-align: center; z-index: 5;
         }
 
-        /* شريط عرض وتحرير الاسم بالأعلى */
         .user-profile-header {
             display: none;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.02);
+            gap: 12px;
+            margin-bottom: 25px;
+            background: rgba(10, 15, 30, 0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
-            padding: 8px 18px;
-            border-radius: 50px;
+            padding: 10px 24px;
+            border-radius: 100px;
             display: inline-flex;
-            animation: fadeIn 0.4s ease-out;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            animation: slideDownFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideDownFade {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .user-profile-header .welcome {
             color: var(--text-muted);
-            font-size: 0.85rem;
-            font-weight: 500;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
         }
         .user-profile-header .username {
             color: #fff;
             font-weight: 800;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             border-bottom: 2px solid var(--primary);
-            font-family: var(--font-cairo), var(--font-outfit), sans-serif;
+            padding-bottom: 2px;
+            text-shadow: 0 0 10px var(--glow-primary);
         }
         .user-profile-header .edit-btn {
-            background: transparent;
-            border: none;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--primary);
             cursor: pointer;
+            width: 28px; height: 28px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2px;
-            transition: transform 0.2s;
+            transition: all 0.25s ease;
         }
         .user-profile-header .edit-btn:hover {
-            transform: scale(1.15);
+            background: var(--primary);
+            color: #030712;
+            box-shadow: 0 0 12px var(--primary);
+            transform: scale(1.1);
         }
 
         h1 {
-            font-size: calc(1.8rem + 1.5vw); font-weight: 900; letter-spacing: 1px; margin-bottom: 8px;
+            font-size: calc(2.2rem + 1.8vw); font-weight: 900; letter-spacing: 2px; margin-bottom: 12px;
             background: linear-gradient(90deg, var(--primary), var(--purple), var(--pink), var(--primary));
             background-size: 300% auto;
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: textFlow 8s linear infinite;
+            animation: textFlow 6s linear infinite;
+            font-family: var(--font-outfit), sans-serif;
+        }
+
+        p.subtitle {
+            color: var(--text-muted); font-size: calc(0.85rem + 0.2vw); margin-bottom: 30px; text-transform: uppercase; letter-spacing: 4px; font-weight: 800;
+            font-family: var(--font-outfit), sans-serif;
+        }
+
+        .room-badge {
+            display: inline-block; background: rgba(10, 15, 30, 0.85); 
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            padding: 10px 24px; border-radius: 50px; font-weight: 800; color: var(--primary);
+            margin-bottom: 40px; font-size: 0.85rem; letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.05);
+            animation: pulseGlow 2.5s infinite alternate ease-in-out;
+            font-family: var(--font-outfit), sans-serif;
         }
 
         @keyframes textFlow {
@@ -119,166 +158,415 @@
             100% { background-position: 300% 50%; }
         }
 
-        p.subtitle {
-            color: var(--text-muted); font-size: calc(0.85rem + 0.2vw); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600;
-        }
-
-        .room-badge {
-            display: inline-block; background: rgba(17, 24, 39, 0.8); 
-            border: 1px solid rgba(0, 242, 254, 0.2);
-            padding: 8px 20px; border-radius: 50px; font-weight: 700; color: var(--primary);
-            margin-bottom: 35px; font-size: 0.8rem; letter-spacing: 0.5px;
-            animation: pulseGlow 2s infinite alternate;
-        }
-
         @keyframes pulseGlow {
             0% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.05); border-color: rgba(0, 242, 254, 0.2); }
-            100% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.2); border-color: rgba(0, 242, 254, 0.5); }
+            100% { box-shadow: 0 0 35px rgba(0, 242, 254, 0.3); border-color: rgba(0, 242, 254, 0.6); }
         }
 
         .workspace-deck {
-            display: flex; flex-direction: row; flex-wrap: nowrap; gap: 15px; justify-content: center; width: 100%;
+            display: flex; flex-direction: row-reverse; flex-wrap: nowrap; gap: 20px; justify-content: center; width: 100%;
         }
 
+        /* بطاقات مساحات العمل */
         .engine-card {
             background: var(--glass-bg); border: 1px solid var(--glass-border);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border-radius: 20px; padding: 30px 20px; text-align: left;
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border-radius: 24px; padding: 35px 25px; text-align: right;
             cursor: pointer; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
             width: 50%; max-width: 380px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        /* طبقة الوهج المتفاعلة بدقة مع تتبع الفأرة */
+        .engine-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(300px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(0, 242, 254, 0.12), transparent 45%);
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .engine-card.bd::after {
+            background: radial-gradient(300px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(168, 85, 247, 0.15), transparent 45%);
+        }
+        .engine-card:hover::after {
+            opacity: 1;
         }
 
         .engine-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: all 0.3s;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3.5px; background: transparent; transition: all 0.3s; z-index: 2;
         }
         .engine-card.ml:hover::before { background: linear-gradient(90deg, var(--primary), var(--accent)); }
         .engine-card.bd:hover::before { background: linear-gradient(90deg, var(--purple), var(--pink)); }
 
         @media (hover: hover) {
-            .engine-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5); }
-            .engine-card.ml:hover { border-color: rgba(0, 242, 254, 0.25); }
-            .engine-card.bd:hover { border-color: rgba(168, 85, 247, 0.25); }
-            .engine-card:hover .engine-icon { transform: scale(1.05); }
+            .engine-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6); }
+            .engine-card.ml:hover { border-color: rgba(0, 242, 254, 0.35); }
+            .engine-card.bd:hover { border-color: rgba(168, 85, 247, 0.35); }
+            .engine-card:hover .engine-icon { transform: scale(1.08) rotate(3deg); }
         }
 
         .engine-icon {
-            width: 70px; height: 70px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; transition: all 0.4s;
+            width: 70px; height: 70px; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative; z-index: 2;
         }
-        .ml .engine-icon { background: rgba(0, 242, 254, 0.06); color: var(--primary); border: 1px solid rgba(0, 242, 254, 0.1); }
-        .bd .engine-icon { background: rgba(168, 85, 247, 0.06); color: var(--purple); border: 1px solid rgba(168, 85, 247, 0.1); }
+        .ml .engine-icon { background: rgba(0, 242, 254, 0.05); color: var(--primary); border: 1px solid rgba(0, 242, 254, 0.15); box-shadow: 0 0 15px rgba(0, 242, 254, 0.05); }
+        .bd .engine-icon { background: rgba(168, 85, 247, 0.05); color: var(--purple); border: 1px solid rgba(168, 85, 247, 0.15); box-shadow: 0 0 15px rgba(168, 85, 247, 0.05); }
 
-        .engine-title { font-size: 1.35rem; font-weight: 800; margin-bottom: 6px; color: #fff; letter-spacing: 0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .engine-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.4; margin-bottom: 20px; font-weight: 400; }
+        .engine-title { font-size: 1.45rem; font-weight: 800; margin-bottom: 8px; color: #fff; letter-spacing: 0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative; z-index: 2; font-family: var(--font-outfit), sans-serif; }
+        .engine-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 25px; font-weight: 400; position: relative; z-index: 2; font-family: var(--font-outfit), sans-serif; }
 
         .enter-btn {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border);
-            padding: 10px; border-radius: 10px; width: 100%; text-align: center;
-            font-weight: 700; font-size: 0.85rem; letter-spacing: 0.5px; text-transform: uppercase;
-            transition: all 0.3s; color: var(--text-main); cursor: pointer;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.08);
+            padding: 12px; border-radius: 12px; width: 100%; text-align: center;
+            font-weight: 800; font-size: 0.85rem; letter-spacing: 0.8px; text-transform: uppercase;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); color: var(--text-main); cursor: pointer;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative; z-index: 2;
+            font-family: var(--font-outfit), sans-serif;
         }
         
-        .ml:hover .enter-btn, .ml:active .enter-btn { background: linear-gradient(90deg, var(--primary), var(--accent)); color: #000; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); border-color: transparent; }
-        .bd:hover .enter-btn, .bd:active .enter-btn { background: linear-gradient(90deg, var(--purple), var(--pink)); color: #fff; box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); border-color: transparent; }
+        .ml:hover .enter-btn, .ml:active .enter-btn { background: linear-gradient(90deg, var(--primary), var(--accent)); color: #030712; box-shadow: 0 0 20px var(--glow-primary); border-color: transparent; }
+        .bd:hover .enter-btn, .bd:active .enter-btn { background: linear-gradient(90deg, var(--purple), var(--pink)); color: #fff; box-shadow: 0 0 20px var(--glow-purple); border-color: transparent; }
 
-        /* شاشة إدخال الاسم المنبثقة والزجاجية الفاخرة */
+
+        /* ==================== شاشة تسجيل الدخول المتطورة الفاخرة ==================== */
         .name-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(3, 7, 18, 0.95); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            background: rgba(2, 3, 6, 0.96); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             z-index: 1000; display: none; align-items: center; justify-content: center;
-            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .name-modal-card {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            padding: 40px 30px; border-radius: 28px; width: 90%; max-width: 420px;
-            text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+            background: linear-gradient(135deg, rgba(10, 18, 35, 0.7) 0%, rgba(5, 8, 16, 0.85) 100%);
+            border: 1px solid rgba(0, 242, 254, 0.18);
+            padding: 45px 35px; border-radius: 28px; width: 92%; max-width: 440px;
+            text-align: center; box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255,255,255,0.05);
             position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out, border-color 0.3s ease;
+            overflow: hidden;
         }
 
+        /* زوايا نيونية محيطة مستوحاة من الواجهات التكنولوجية الراقية */
+        .name-modal-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 15px; height: 15px;
+            border-top: 2px solid var(--primary); border-left: 2px solid var(--primary);
+            pointer-events: none;
+        }
+        .name-modal-card::after {
+            content: ''; position: absolute; bottom: 0; right: 0; width: 15px; height: 15px;
+            border-bottom: 2px solid var(--purple); border-right: 2px solid var(--purple);
+            pointer-events: none;
+        }
+
+        /* خط ليزر المسح الدقيق */
+        .scanline {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(to right, transparent, rgba(0, 242, 254, 0.6), transparent);
+            opacity: 0.25;
+            animation: laserScan 5s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        @keyframes laserScan {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
+
+        /* نصوص تفاصيل النظام المصغرة */
+        .corner-tag {
+            position: absolute; font-family: var(--font-outfit), sans-serif; font-size: 0.55rem; color: var(--primary); opacity: 0.4; font-weight: 700; pointer-events: none; letter-spacing: 0.5px;
+        }
+        .tag-tl { top: 12px; left: 18px; }
+        .tag-tr { top: 12px; right: 18px; }
+        .tag-bl { bottom: 12px; left: 18px; }
+        .tag-br { bottom: 12px; right: 18px; }
+
+        /* منطقة الهولوغرام الفاخرة */
+        .hologram-container {
+            position: relative;
+            width: 130px; height: 130px;
+            margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            perspective: 1000px;
+        }
+
+        .holo-ring {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .holo-ring-1 {
+            width: 120px; height: 120px;
+            border: 1px dashed rgba(0, 242, 254, 0.3);
+            animation: holoSpinClockwise 12s linear infinite;
+        }
+        .holo-ring-2 {
+            width: 102px; height: 102px;
+            border: 1px dotted rgba(168, 85, 247, 0.35);
+            animation: holoSpinCounter 8s linear infinite;
+        }
+        .holo-ring-3 {
+            width: 84px; height: 84px;
+            border: 1.5px solid rgba(0, 242, 254, 0.1);
+            animation: pulseCircle 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes holoSpinClockwise {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes holoSpinCounter {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+        @keyframes pulseCircle {
+            0% { transform: scale(0.95); opacity: 0.3; }
+            100% { transform: scale(1.05); opacity: 0.7; }
+        }
+
+        .hologram-container.active .holo-ring-1 {
+            border-style: dashed;
+            border-color: var(--primary);
+            opacity: 0.9;
+            box-shadow: 0 0 15px var(--glow-primary);
+            animation-duration: 5s;
+        }
+        .hologram-container.active .holo-ring-2 {
+            border-color: var(--purple);
+            opacity: 0.9;
+            box-shadow: 0 0 15px var(--glow-purple);
+            animation-duration: 4s;
+        }
+
+        /* حلقة الرمز البيومترية المعززة بصرياً */
+        .avatar-initial-ring {
+            width: 70px; height: 70px; border-radius: 50%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 800; color: var(--primary);
+            text-shadow: 0 0 10px var(--glow-primary);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 5;
+        }
+        .avatar-initial-ring.active-name {
+            border-color: var(--primary);
+            background: rgba(0, 242, 254, 0.06);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.3), inset 0 0 10px rgba(0, 242, 254, 0.2);
+            transform: scale(1.08);
+        }
+        .avatar-initial-ring svg {
+            transition: transform 0.4s ease, opacity 0.3s ease;
+        }
+
+        /* نصوص لوحة الدخول */
         .name-modal-card h2 {
-            font-size: 1.5rem; font-weight: 900; margin-bottom: 8px; letter-spacing: 1px;
-            background: linear-gradient(135deg, var(--primary), var(--purple));
+            font-size: 1.45rem; font-weight: 900; margin-bottom: 8px; letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--primary), #ffffff, var(--purple));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-family: var(--font-outfit), sans-serif;
         }
 
         .name-modal-card p {
-            color: var(--text-muted); font-size: 0.85rem; margin-bottom: 25px; font-family: var(--font-cairo), sans-serif;
+            color: var(--text-muted); font-size: 0.85rem; margin-bottom: 25px;
+            line-height: 1.6; font-weight: 600;
         }
 
+        /* صندوق الإدخال التفاعلي المتطور */
         .name-input-wrapper {
-            position: relative; margin-bottom: 22px; width: 100%;
+            position: relative; margin-bottom: 20px; width: 100%;
         }
+
+        /* الأقواس الجانبية النيونية التفاعلية */
+        .name-input-wrapper::before, .name-input-wrapper::after {
+            content: ''; position: absolute; top: 10px; width: 6px; height: calc(100% - 20px);
+            border-color: var(--primary); border-style: solid; opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none;
+            box-shadow: 0 0 8px var(--glow-primary);
+        }
+        .name-input-wrapper::before { left: -6px; border-width: 1.5px 0 1.5px 1.5px; border-radius: 4px 0 0 4px; transform: translateX(5px); }
+        .name-input-wrapper::after { right: -6px; border-width: 1.5px 1.5px 1.5px 0; border-radius: 0 4px 4px 0; transform: translateX(-5px); }
+
+        .name-input-wrapper:focus-within::before { opacity: 1; transform: translateX(0); left: -10px; }
+        .name-input-wrapper:focus-within::after { opacity: 1; transform: translateX(0); right: -10px; }
 
         .name-input {
-            width: 100%; padding: 16px 20px; background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px;
+            width: 100%; padding: 15px 20px; background: rgba(255,255,255,0.02);
+            border: 1.5px solid rgba(255, 255, 255, 0.08); border-radius: 14px;
             color: #fff; font-size: 1rem; text-align: center;
-            font-family: var(--font-cairo), var(--font-outfit), sans-serif;
-            transition: all 0.3s ease;
+            font-family: var(--font-cairo), sans-serif;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .name-input:focus {
             border-color: var(--primary);
-            background: rgba(255,255,255,0.04);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+            background: rgba(255,255,255,0.03);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
         }
 
+        /* مقياس التقدير الرقمي المقسم (Segmented Telemetry) */
+        .telemetry-bar-container {
+            width: 100%;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+        }
+        .telemetry-bar-bg {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .telemetry-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            transition: width 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
+        }
+        .telemetry-text {
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            font-family: var(--font-outfit), sans-serif;
+            transition: color 0.3s;
+        }
+        .telemetry-bar.complete {
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        /* زر الإدخال الفاخر */
         .name-submit-btn {
-            width: 100%; padding: 16px; border: none; border-radius: 16px;
-            font-weight: 900; font-size: 0.9rem; letter-spacing: 1px;
-            text-transform: uppercase; cursor: pointer;
+            width: 100%; padding: 15px; border: none; border-radius: 14px;
+            font-weight: 800; font-size: 0.95rem; letter-spacing: 1px;
+            cursor: pointer;
             background: linear-gradient(90deg, var(--primary), var(--purple));
-            color: #030712; font-family: var(--font-cairo), var(--font-outfit), sans-serif;
+            color: #030712; font-family: var(--font-cairo), sans-serif;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.15);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .name-submit-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s;
+        }
+        .name-submit-btn:hover::before {
+            left: 100%;
+            transition: 0.8s ease;
         }
         .name-submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 242, 254, 0.35);
+            box-shadow: 0 8px 25px rgba(0, 242, 254, 0.25);
         }
         .name-submit-btn:active {
             transform: translateY(0);
         }
 
-        .modal-close-x {
-            position: absolute; top: 18px; right: 22px;
-            background: transparent; border: none; color: var(--text-muted);
-            font-size: 1.2rem; cursor: pointer; display: none; transition: color 0.2s;
+        .btn-spinner {
+            display: none;
+            width: 18px; height: 18px;
+            border: 2.5px solid #030712;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
         }
-        .modal-close-x:hover { color: #fff; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .modal-close-x {
+            position: absolute; top: 18px; right: 18px;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); color: var(--text-muted);
+            width: 28px; height: 28px; border-radius: 50%;
+            font-size: 0.85rem; cursor: pointer; display: none; transition: all 0.25s ease;
+            align-items: center; justify-content: center; z-index: 10;
+        }
+        .modal-close-x:hover { color: #fff; background: rgba(255,255,255,0.08); }
 
         @keyframes fadeIn {
             from { opacity: 0; } to { opacity: 1; }
         }
 
         @media (max-width: 600px) {
-            .workspace-deck { gap: 10px; padding: 0 5px; }
-            .engine-card { padding: 20px 12px; border-radius: 16px; }
-            .engine-icon { width: 50px; height: 50px; border-radius: 12px; margin-bottom: 15px; }
-            .engine-icon svg { width: 28px; height: 28px; }
-            .engine-title { font-size: 1.05rem; }
-            .engine-desc { font-size: 0.8rem; margin-bottom: 15px; }
-            .enter-btn { font-size: 0.75rem; padding: 8px 5px; letter-spacing: 0px; }
+            .workspace-deck { gap: 12px; padding: 0 5px; flex-direction: column-reverse; align-items: center; }
+            .engine-card { width: 100%; max-width: 100%; padding: 25px 20px; border-radius: 20px; }
+            .engine-icon { width: 55px; height: 55px; border-radius: 14px; margin-bottom: 18px; }
+            .engine-icon svg { width: 30px; height: 30px; }
+            .engine-title { font-size: 1.15rem; }
+            .engine-desc { font-size: 0.8rem; margin-bottom: 18px; }
+            .enter-btn { font-size: 0.75rem; padding: 10px 6px; letter-spacing: 0px; }
         }
     </style>
 </head>
 <body>
 
+<!-- لوحة الرسم العصبية النشطة بالخلفية -->
+<canvas id="particlesCanvas"></canvas>
+
 <div class="bg-grid"></div>
 <div class="bg-glow-1"></div>
 <div class="bg-glow-2"></div>
 
-<!-- واجهة تسجيل الاسم المنبثقة والمحمية -->
+<!-- واجهة تسجيل الدخول الهولوغرافية ثلاثية الأبعاد المعززة -->
 <div class="name-modal-overlay" id="nameModalOverlay">
-    <div class="name-modal-card">
+    <div class="name-modal-card" id="modalCard">
+        <div class="scanline"></div>
+        
+        <!-- ملصقات النظام لمحاكاة حاسب متطور -->
+        <span class="corner-tag tag-tl">HOST: 9021</span>
+        <span class="corner-tag tag-tr">NET: WSS//SECURE</span>
+        <span class="corner-tag tag-bl">STATE: ARMED</span>
+        <span class="corner-tag tag-br">LATENCY: 12ms</span>
+
         <button class="modal-close-x" id="modalCloseBtn" onclick="closeNameModal()">✕</button>
-        <h2>ENTER YOUR NAME</h2>
-        <p>يرجى إدخال اسمك الحقيقي للانضمام لزملائك في الغرفة</p>
+        
+        <!-- الهولوغرام البيومتري التفاعلي -->
+        <div class="hologram-container" id="holoContainer">
+            <div class="holo-ring holo-ring-1"></div>
+            <div class="holo-ring holo-ring-2"></div>
+            <div class="holo-ring holo-ring-3"></div>
+            <div class="avatar-initial-ring" id="avatarRing">
+                <!-- أيقونة مستشعر الهوية الافتراضي SVG -->
+                <svg id="fingerprintSvg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.85;">
+                    <path d="M2 12a10 10 0 0 1 18-6M22 12A10 10 0 0 0 4 18M12 2a10 10 0 0 1 10 10c0 5.5-4.5 10-10 10S2 17.5 2 12M12 12a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/>
+                    <path d="M12 8a6 6 0 0 1 6 6M6 14a6 6 0 0 1 6-6"/>
+                </svg>
+            </div>
+        </div>
+        
+        <h2>BIOMETRIC ENROLL</h2>
+        <p>يرجى إدخال هويتك لفتح مسارات الاتصال الآمنة والمزامنة الفورية</p>
+        
+        <!-- صندوق إدخال الاسم ذو الأقواس النيونية التفاعلية -->
         <div class="name-input-wrapper">
             <input type="text" id="usernameInput" class="name-input" placeholder="اكتب اسمك هنا..." autocomplete="off">
         </div>
-        <button class="name-submit-btn" onclick="saveUsernameAndContinue()">انضمام للجلسة</button>
+
+        <!-- مؤشر الفحص والتحليل الرقمي -->
+        <div class="telemetry-bar-container">
+            <div class="telemetry-bar-bg">
+                <div class="telemetry-bar" id="telemetryBar"></div>
+            </div>
+            <span class="telemetry-text" id="telemetryText">TELEMETRY: OFFLINE</span>
+        </div>
+
+        <button class="name-submit-btn" id="submitNameBtn" onclick="saveUsernameAndContinue()">
+            <span class="btn-spinner" id="btnSpinner"></span>
+            <span id="btnText">انضمام للجلسة</span>
+        </button>
     </div>
 </div>
 
@@ -288,7 +576,7 @@
         <span class="welcome">مرحباً بك،</span>
         <span class="username" id="displayUsername">...</span>
         <button class="edit-btn" onclick="openNameEditModal()" title="تعديل الاسم">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
         </button>
     </div>
 
@@ -323,6 +611,176 @@
 </div>
 
 <script>
+    // تفعيل الخلفية العصبية التفاعلية النشطة
+    const canvas = document.getElementById('particlesCanvas');
+    const ctx = canvas.getContext('2d');
+    let particlesArray = [];
+    const maxParticles = 65;
+
+    let mouse = { x: null, y: null, radius: 130 };
+
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+    });
+
+    window.addEventListener('mouseout', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = Math.random() * 0.6 - 0.3;
+            this.speedY = Math.random() * 0.6 - 0.3;
+            this.baseSize = this.size;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+
+            if (this.x < 0 || this.x > canvas.width) this.speedX = -this.speedX;
+            if (this.y < 0 || this.y > canvas.height) this.speedY = -this.speedY;
+
+            // تفاعل فريد مع الماوس عن قرب (دفع خفيف ونبض بصرى)
+            if (mouse.x != null && mouse.y != null) {
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.hypot(dx, dy);
+                if (distance < mouse.radius) {
+                    const force = (mouse.radius - distance) / mouse.radius;
+                    this.x -= (dx / distance) * force * 3;
+                    this.y -= (dy / distance) * force * 3;
+                    this.size = this.baseSize + force * 1.5;
+                } else {
+                    if (this.size > this.baseSize) this.size -= 0.1;
+                }
+            }
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(0, 242, 254, 0.45)';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function initParticles() {
+        particlesArray = [];
+        for (let i = 0; i < maxParticles; i++) {
+            particlesArray.push(new Particle());
+        }
+    }
+
+    function connectParticles() {
+        for (let a = 0; a < particlesArray.length; a++) {
+            for (let b = a; b < particlesArray.length; b++) {
+                let distance = Math.hypot(
+                    particlesArray[a].x - particlesArray[b].x,
+                    particlesArray[a].y - particlesArray[b].y
+                );
+                if (distance < 115) {
+                    // جعل خطوط الارتباط ناعمة وخافتة بناءً على المسافة
+                    let alpha = (115 - distance) / 115 * 0.15;
+                    ctx.strokeStyle = `rgba(0, 242, 254, ${alpha})`;
+                    ctx.lineWidth = 0.8;
+                    ctx.beginPath();
+                    ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                    ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particlesArray.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        connectParticles();
+        requestAnimationFrame(animateParticles);
+    }
+
+    initParticles();
+    animateParticles();
+</script>
+
+<script>
+    // تفعيل ميكانيزم الصوت الفائق الفخامة عن طريق Web Audio API المدمج بالمتصفح
+    let audioCtx = null;
+
+    function initAudioContext() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
+
+    // صوت طقطقة هادئة جداً وسريعة تعطي تجربة كتابة لا توصف
+    function playTypingSound() {
+        try {
+            initAudioContext();
+            if (!audioCtx || audioCtx.state === 'suspended') return;
+            
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1400 + Math.random() * 600, audioCtx.currentTime);
+            
+            gainNode.gain.setValueAtTime(0.005, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.015);
+            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.015);
+        } catch (e) {}
+    }
+
+    // تطلق لحناً إلكترونياً صاعداً ومبشراً بالنجاح عند الانتهاء من الاتصال
+    function playSuccessSound() {
+        try {
+            initAudioContext();
+            if (!audioCtx || audioCtx.state === 'suspended') return;
+
+            const now = audioCtx.currentTime;
+            // عزف سلم نوتات متصاعد هولوغرافي متناسق
+            const freqs = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            
+            freqs.forEach((freq, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                
+                gainNode.gain.setValueAtTime(0.02, now + idx * 0.08);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.08 + 0.25);
+                
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                osc.start(now + idx * 0.08);
+                osc.stop(now + idx * 0.08 + 0.25);
+            });
+        } catch (e) {}
+    }
+</script>
+
+<script>
     let urlParams = new URLSearchParams(window.location.search);
     let roomName = urlParams.get('room');
 
@@ -335,17 +793,94 @@
 
     document.getElementById('roomDisplay').innerText = `ACTIVE ROOM: ${roomName.toUpperCase()}`;
 
-    // تفعيل ومراقبة تسجيل اسم المستخدم
+    const usernameInput = document.getElementById('usernameInput');
+    const avatarRing = document.getElementById('avatarRing');
+    const holoContainer = document.getElementById('holoContainer');
+    const telemetryBar = document.getElementById('telemetryBar');
+    const telemetryText = document.getElementById('telemetryText');
+
+    // حفظ كود SVG البصمة الأساسي لإعادة استخدامه عند التفريغ
+    const defaultFingerprintSvg = `
+        <svg id="fingerprintSvg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.85;">
+            <path d="M2 12a10 10 0 0 1 18-6M22 12A10 10 0 0 0 4 18M12 2a10 10 0 0 1 10 10c0 5.5-4.5 10-10 10S2 17.5 2 12M12 12a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/>
+            <path d="M12 8a6 6 0 0 1 6 6M6 14a6 6 0 0 1 6-6"/>
+        </svg>
+    `;
+
+    // مراقبة الكتابة لتعديل الهولوغرام وتشغيل الموسيقى
+    usernameInput.addEventListener('input', (e) => {
+        const name = e.target.value.trim();
+        playTypingSound(); // تشغيل صوت النقر التفاعلي
+        
+        if (name.length > 0) {
+            const firstLetter = name.charAt(0).toUpperCase();
+            avatarRing.innerHTML = `<span>${firstLetter}</span>`;
+            avatarRing.classList.add('active-name');
+            holoContainer.classList.add('active');
+            
+            const pct = Math.min((name.length / 3) * 100, 100);
+            telemetryBar.style.width = `${pct}%`;
+            
+            if (pct >= 100) {
+                telemetryBar.classList.add('complete');
+                telemetryText.innerText = "TELEMETRY: SECURE LINK READY";
+                telemetryText.style.color = "var(--success)";
+            } else {
+                telemetryBar.classList.remove('complete');
+                telemetryText.innerText = "TELEMETRY: ANALYZING STRUCT...";
+                telemetryText.style.color = "var(--primary)";
+            }
+        } else {
+            avatarRing.innerHTML = defaultFingerprintSvg;
+            avatarRing.classList.remove('active-name');
+            holoContainer.classList.remove('active');
+            telemetryBar.style.width = "0%";
+            telemetryBar.classList.remove('complete');
+            telemetryText.innerText = "TELEMETRY: OFFLINE";
+            telemetryText.style.color = "var(--text-muted)";
+        }
+    });
+
+    usernameInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            saveUsernameAndContinue();
+        }
+    });
+
+    // الـ 3D Parallax Tilt المطور للبطاقة
+    const modalCard = document.getElementById('modalCard');
+    const modalOverlay = document.getElementById('nameModalOverlay');
+
+    document.addEventListener('mousemove', (e) => {
+        if (window.getComputedStyle(modalOverlay).display === 'none') return;
+        const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+        const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+        modalCard.style.transform = `rotateY(${xAxis}deg) rotateX(${-yAxis}deg)`;
+    });
+
+    document.addEventListener('mouseleave', () => {
+        modalCard.style.transform = `rotateY(0deg) rotateX(0deg)`;
+    });
+
+    // تتبع الفأرة بالبكسل لحساب موقع بريق الضوء الداخلي بالبطاقات
+    document.querySelectorAll('.engine-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
     function initializeUserAuthentication() {
         const storedUsername = localStorage.getItem('study_hub_user_realname');
         
         if (!storedUsername || storedUsername.trim() === '') {
-            // أول دخول: إجبار المستخدم على تسجيل الاسم ولا يمكن إغلاق النافذة
             document.getElementById('modalCloseBtn').style.display = 'none';
             document.getElementById('nameModalOverlay').style.display = 'flex';
             document.getElementById('userProfileHeader').style.display = 'none';
         } else {
-            // الاسم موجود مسبقاً: عرضه بالأعلى مباشرة
             showProfileHeader(storedUsername);
         }
     }
@@ -357,20 +892,54 @@
     }
 
     function saveUsernameAndContinue() {
-        const nameVal = document.getElementById('usernameInput').value.trim();
+        const nameVal = usernameInput.value.trim();
         if (nameVal === '') {
             alert('يرجى كتابة اسم صحيح للاستمرار.');
             return;
         }
-        localStorage.setItem('study_hub_user_realname', nameVal);
-        showProfileHeader(nameVal);
+
+        const btn = document.getElementById('submitNameBtn');
+        const spinner = document.getElementById('btnSpinner');
+        const btnText = document.getElementById('btnText');
+
+        btn.style.pointerEvents = 'none';
+        spinner.style.display = 'inline-block';
+        btnText.innerText = 'SYNCING BIOMETRICS...';
+
+        setTimeout(() => {
+            playSuccessSound(); // إطلاق النغمة الكهرومغناطيسية الصاعدة للاتصال الناجح
+            localStorage.setItem('study_hub_user_realname', nameVal);
+            showProfileHeader(nameVal);
+            
+            btn.style.pointerEvents = 'auto';
+            spinner.style.display = 'none';
+            btnText.innerText = 'انضمام للجلسة';
+        }, 1200); 
     }
 
     function openNameEditModal() {
         const currentName = localStorage.getItem('study_hub_user_realname') || '';
-        document.getElementById('usernameInput').value = currentName;
-        // السماح بإغلاق النافذة عند تعديل الاسم الاختياري
-        document.getElementById('modalCloseBtn').style.display = 'block';
+        usernameInput.value = currentName;
+        
+        if (currentName.length > 0) {
+            avatarRing.innerHTML = `<span>${currentName.charAt(0).toUpperCase()}</span>`;
+            avatarRing.classList.add('active-name');
+            holoContainer.classList.add('active');
+            telemetryBar.style.width = "100%";
+            telemetryBar.classList.add('complete');
+            telemetryText.innerText = "TELEMETRY: SECURE LINK READY";
+            telemetryText.style.color = "var(--success)";
+        } else {
+            avatarRing.innerHTML = defaultFingerprintSvg;
+            avatarRing.classList.remove('active-name');
+            holoContainer.classList.remove('active');
+            telemetryBar.style.width = "0%";
+            telemetryBar.classList.remove('complete');
+            telemetryText.innerText = "TELEMETRY: OFFLINE";
+            telemetryText.style.color = "var(--text-muted)";
+        }
+
+        document.getElementById('modalCloseBtn').style.display = 'flex';
         document.getElementById('nameModalOverlay').style.display = 'flex';
     }
 
@@ -386,7 +955,6 @@
         window.location.href = `${targetSuiteFile}?room=${roomName}&username=${encodeURIComponent(username)}`;
     }
 
-    // تفعيل النظام بمجرد تحميل الصفحة
     initializeUserAuthentication();
 </script>
 </body>
