@@ -17,6 +17,8 @@
             --pink: #f43f5e;
             --text-main: #f9fafb;
             --text-muted: #9ca3af;
+            --font-outfit: 'Outfit', sans-serif;
+            --font-cairo: 'Cairo', sans-serif;
         }
 
         ::-webkit-scrollbar { width: 4px; }
@@ -26,7 +28,7 @@
         * { box-sizing: border-box; outline: none; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Outfit', 'Cairo', sans-serif;
+            font-family: var(--font-outfit), var(--font-cairo), sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
             min-height: 100vh;
@@ -63,6 +65,47 @@
             width: 100%; max-width: 900px; padding: 20px 5px; text-align: center; z-index: 5;
         }
 
+        /* شريط عرض وتحرير الاسم بالأعلى */
+        .user-profile-header {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            padding: 8px 18px;
+            border-radius: 50px;
+            display: inline-flex;
+            animation: fadeIn 0.4s ease-out;
+        }
+        .user-profile-header .welcome {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .user-profile-header .username {
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.9rem;
+            border-bottom: 2px solid var(--primary);
+            font-family: var(--font-cairo), var(--font-outfit), sans-serif;
+        }
+        .user-profile-header .edit-btn {
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+            transition: transform 0.2s;
+        }
+        .user-profile-header .edit-btn:hover {
+            transform: scale(1.15);
+        }
+
         h1 {
             font-size: calc(1.8rem + 1.5vw); font-weight: 900; letter-spacing: 1px; margin-bottom: 8px;
             background: linear-gradient(90deg, var(--primary), var(--purple), var(--pink), var(--primary));
@@ -93,7 +136,6 @@
             100% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.2); border-color: rgba(0, 242, 254, 0.5); }
         }
 
-        /* جعل الكروت دائماً جنب بعضها (حتى في الموبايل) */
         .workspace-deck {
             display: flex; flex-direction: row; flex-wrap: nowrap; gap: 15px; justify-content: center; width: 100%;
         }
@@ -104,7 +146,7 @@
             border-radius: 20px; padding: 30px 20px; text-align: left;
             cursor: pointer; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
-            width: 50%; max-width: 380px; /* ليأخذ كل كارت نصف الشاشة بالظبط */
+            width: 50%; max-width: 380px; 
         }
 
         .engine-card::before {
@@ -120,7 +162,6 @@
             .engine-card:hover .engine-icon { transform: scale(1.05); }
         }
 
-        /* صندوق الأيقونة الفخم للكاشات الكبيرة */
         .engine-icon {
             width: 70px; height: 70px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; transition: all 0.4s;
         }
@@ -141,7 +182,76 @@
         .ml:hover .enter-btn, .ml:active .enter-btn { background: linear-gradient(90deg, var(--primary), var(--accent)); color: #000; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); border-color: transparent; }
         .bd:hover .enter-btn, .bd:active .enter-btn { background: linear-gradient(90deg, var(--purple), var(--pink)); color: #fff; box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); border-color: transparent; }
 
-        /* الاستعلامات المخصصة للهواتف الذكية لضمان ظهور الكرتين جنب بعض بشكل مثالي وعظمة */
+        /* شاشة إدخال الاسم المنبثقة والزجاجية الفاخرة */
+        .name-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(3, 7, 18, 0.95); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            z-index: 1000; display: none; align-items: center; justify-content: center;
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .name-modal-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            padding: 40px 30px; border-radius: 28px; width: 90%; max-width: 420px;
+            text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+            position: relative;
+        }
+
+        .name-modal-card h2 {
+            font-size: 1.5rem; font-weight: 900; margin-bottom: 8px; letter-spacing: 1px;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .name-modal-card p {
+            color: var(--text-muted); font-size: 0.85rem; margin-bottom: 25px; font-family: var(--font-cairo), sans-serif;
+        }
+
+        .name-input-wrapper {
+            position: relative; margin-bottom: 22px; width: 100%;
+        }
+
+        .name-input {
+            width: 100%; padding: 16px 20px; background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px;
+            color: #fff; font-size: 1rem; text-align: center;
+            font-family: var(--font-cairo), var(--font-outfit), sans-serif;
+            transition: all 0.3s ease;
+        }
+        .name-input:focus {
+            border-color: var(--primary);
+            background: rgba(255,255,255,0.04);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+        }
+
+        .name-submit-btn {
+            width: 100%; padding: 16px; border: none; border-radius: 16px;
+            font-weight: 900; font-size: 0.9rem; letter-spacing: 1px;
+            text-transform: uppercase; cursor: pointer;
+            background: linear-gradient(90deg, var(--primary), var(--purple));
+            color: #030712; font-family: var(--font-cairo), var(--font-outfit), sans-serif;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.2);
+        }
+        .name-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 242, 254, 0.35);
+        }
+        .name-submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .modal-close-x {
+            position: absolute; top: 18px; right: 22px;
+            background: transparent; border: none; color: var(--text-muted);
+            font-size: 1.2rem; cursor: pointer; display: none; transition: color 0.2s;
+        }
+        .modal-close-x:hover { color: #fff; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+
         @media (max-width: 600px) {
             .workspace-deck { gap: 10px; padding: 0 5px; }
             .engine-card { padding: 20px 12px; border-radius: 16px; }
@@ -159,15 +269,35 @@
 <div class="bg-glow-1"></div>
 <div class="bg-glow-2"></div>
 
+<!-- واجهة تسجيل الاسم المنبثقة والمحمية -->
+<div class="name-modal-overlay" id="nameModalOverlay">
+    <div class="name-modal-card">
+        <button class="modal-close-x" id="modalCloseBtn" onclick="closeNameModal()">✕</button>
+        <h2>ENTER YOUR NAME</h2>
+        <p>يرجى إدخال اسمك الحقيقي للانضمام لزملائك في الغرفة</p>
+        <div class="name-input-wrapper">
+            <input type="text" id="usernameInput" class="name-input" placeholder="اكتب اسمك هنا..." autocomplete="off">
+        </div>
+        <button class="name-submit-btn" onclick="saveUsernameAndContinue()">انضمام للجلسة</button>
+    </div>
+</div>
+
 <div class="container">
+    <!-- شريط ترحيب باسم الطالب بالأعلى -->
+    <div class="user-profile-header" id="userProfileHeader">
+        <span class="welcome">مرحباً بك،</span>
+        <span class="username" id="displayUsername">...</span>
+        <button class="edit-btn" onclick="openNameEditModal()" title="تعديل الاسم">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+        </button>
+    </div>
+
     <h1>STUDY HUB</h1>
-    <!-- التعديل المطلوب: فقط اسم الدفعة -->
     <p class="subtitle">4th Year IT</p>
     
     <div class="room-badge" id="roomDisplay">CONNECTING TO NETWORK...</div>
 
     <div class="workspace-deck">
-        <!-- كارت الـ Machine Learning -->
         <div class="engine-card ml" onclick="launchWorkspace('ml_suite.html')">
             <div>
                 <div class="engine-icon">
@@ -179,7 +309,6 @@
             <button class="enter-btn">Open Hub</button>
         </div>
 
-        <!-- كارت الـ Big Data -->
         <div class="engine-card bd" onclick="launchWorkspace('bigdata_suite.html')">
             <div>
                 <div class="engine-icon">
@@ -206,9 +335,59 @@
 
     document.getElementById('roomDisplay').innerText = `ACTIVE ROOM: ${roomName.toUpperCase()}`;
 
-    function launchWorkspace(targetSuiteFile) {
-        window.location.href = `${targetSuiteFile}?room=${roomName}`;
+    // تفعيل ومراقبة تسجيل اسم المستخدم
+    function initializeUserAuthentication() {
+        const storedUsername = localStorage.getItem('study_hub_user_realname');
+        
+        if (!storedUsername || storedUsername.trim() === '') {
+            // أول دخول: إجبار المستخدم على تسجيل الاسم ولا يمكن إغلاق النافذة
+            document.getElementById('modalCloseBtn').style.display = 'none';
+            document.getElementById('nameModalOverlay').style.display = 'flex';
+            document.getElementById('userProfileHeader').style.display = 'none';
+        } else {
+            // الاسم موجود مسبقاً: عرضه بالأعلى مباشرة
+            showProfileHeader(storedUsername);
+        }
     }
+
+    function showProfileHeader(username) {
+        document.getElementById('nameModalOverlay').style.display = 'none';
+        document.getElementById('userProfileHeader').style.display = 'inline-flex';
+        document.getElementById('displayUsername').innerText = username;
+    }
+
+    function saveUsernameAndContinue() {
+        const nameVal = document.getElementById('usernameInput').value.trim();
+        if (nameVal === '') {
+            alert('يرجى كتابة اسم صحيح للاستمرار.');
+            return;
+        }
+        localStorage.setItem('study_hub_user_realname', nameVal);
+        showProfileHeader(nameVal);
+    }
+
+    function openNameEditModal() {
+        const currentName = localStorage.getItem('study_hub_user_realname') || '';
+        document.getElementById('usernameInput').value = currentName;
+        // السماح بإغلاق النافذة عند تعديل الاسم الاختياري
+        document.getElementById('modalCloseBtn').style.display = 'block';
+        document.getElementById('nameModalOverlay').style.display = 'flex';
+    }
+
+    function closeNameModal() {
+        const storedUsername = localStorage.getItem('study_hub_user_realname');
+        if (storedUsername && storedUsername.trim() !== '') {
+            document.getElementById('nameModalOverlay').style.display = 'none';
+        }
+    }
+
+    function launchWorkspace(targetSuiteFile) {
+        const username = localStorage.getItem('study_hub_user_realname') || 'Anonymous';
+        window.location.href = `${targetSuiteFile}?room=${roomName}&username=${encodeURIComponent(username)}`;
+    }
+
+    // تفعيل النظام بمجرد تحميل الصفحة
+    initializeUserAuthentication();
 </script>
 </body>
 </html>
