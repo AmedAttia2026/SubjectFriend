@@ -25,6 +25,7 @@ def create_room(room_id):
         "active_card_id": "sheet-0-tf-q-0",
         "answers": {},
         "voice_peers": [],  # مصفوفة لتخزين معرفات الصوت النشطة للجروب
+        "active_users": {},  # تخزين أسماء المستخدمين النشطين وتوقيت تواجدهم { peer_id: { "username": username, "last_seen": timestamp } }
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
 
@@ -60,6 +61,7 @@ def serve_index(path):
 def get_state():
     room = request.args.get('room')
     peer_id = request.args.get('peer_id')  # استقبال معرف الصوت للجهاز الحالي
+    username = request.args.get('username')  # استقبال اسم الطالب النشط للربط والمزامنة
 
     if not room:
         return jsonify({"error": "Room required"}), 400
@@ -71,13 +73,54 @@ def get_state():
             GLOBAL_ROOMS_DATA[room] = create_room(room)
 
         room_ref = GLOBAL_ROOMS_DATA[room]
+        now_ts = datetime.now(timezone.utc).timestamp()
         
         # تسجيل معرف الصوت للجهاز الحالي إذا لم يكن مسجلاً مسبقاً
         if peer_id and peer_id not in room_ref["voice_peers"]:
             room_ref["voice_peers"].append(peer_id)
             room_ref["updated_at"] = datetime.now(timezone.utc).isoformat()
 
-        return jsonify(room_ref)
+        # مزامنة وتسجيل اسم الطالب النشط المرتبط بالـ peer_id مع تحديث وقت التواجد (Heartbeat)
+        if peer_id and username:
+            if "active_users" not in room_ref or not isinstance(room_ref["active_users"], dict):
+                room_ref["active_users"] = {}
+            room_ref["active_users"][peer_id] = {
+                "username": username,
+                "last_seen": now_ts
+            }
+            room_ref["updated_at"] = datetime.now(timezone.utc).isoformat()
+
+        # تنظيف المستخدمين الذين غادروا ولم يرسلوا نبضات حية خلال 15 ثانية
+        if "active_users" in room_ref and isinstance(room_ref["active_users"], dict):
+            expired_peers = []
+            for pid, user_info in list(room_ref["active_users"].items()):
+                if isinstance(user_info, dict):
+                    last_seen = user_info.get("last_seen", 0)
+                    if now_ts - last_seen > 15.0:  # 15 ثانية حد أقصى للغياب
+                        expired_peers.append(pid)
+                else:
+                    expired_peers.append(pid)
+            
+            for pid in expired_peers:
+                del room_ref["active_users"][pid]
+                if pid in room_ref["voice_peers"]:
+                    room_ref["voice_peers"].remove(pid)
+                room_ref["updated_at"] = datetime.now(timezone.utc).isoformat()
+
+        # تحويل بيانات الأعضاء النشطين لبنية مبسطة متوافقة مع واجهة العميل { peer_id: username }
+        client_active_users = {}
+        if "active_users" in room_ref and isinstance(room_ref["active_users"], dict):
+            for pid, user_info in room_ref["active_users"].items():
+                if isinstance(user_info, dict):
+                    client_active_users[pid] = user_info.get("username", "Anonymous")
+                else:
+                    client_active_users[pid] = user_info
+
+        # إنشاء نسخة لإرسالها للعميل مع الحفاظ على البيانات الأصلية بالخادم
+        response_data = dict(room_ref)
+        response_data["active_users"] = client_active_users
+
+        return jsonify(response_data)
 
 
 @app.route('/api/update', methods=['POST'])
