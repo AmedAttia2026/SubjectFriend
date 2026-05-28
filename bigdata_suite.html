@@ -113,7 +113,6 @@
             display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
         }
 
-        /* دمج الكنترول الصوتي والأعضاء بشكل مبسط جداً بدون نصوص إنجليزية */
         .voice-hub {
             display: flex;
             align-items: center;
@@ -160,7 +159,6 @@
             text-shadow: 0 0 10px var(--primary-glow);
         }
 
-        /* تصميم الكبسولة العائمة المبسطة عند النزول بالصفحة واختفاء المنيو */
         .floating-minimal-capsule {
             position: fixed;
             top: 15px;
@@ -246,7 +244,6 @@
             transform: translateY(-2px); box-shadow: 0 6px 20px rgba(251, 191, 36, 0.35);
         }
 
-        /* نافذة لوحة الأعضاء الجانبية المتطورة */
         .members-panel {
             position: fixed;
             top: 145px;
@@ -655,7 +652,6 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
 </button>
 
-<!-- الكبسولة العائمة البسيطة جداً التي تظهر عند اختفاء المنيو (فقط الرموز بدون نصوص) -->
 <div class="floating-minimal-capsule" id="floatingCapsule">
     <button class="float-btn" onclick="toggleMembersPanel()">
         👥 <span id="float-members-count">1</span>
@@ -686,7 +682,6 @@
             BIG DATA SUITE CRADLE
         </div>
         
-        <!-- الهيدر المحدث بأسلوب رمزي مبسط بدون نصوص إنجليزية زائدة والنتيجة الرقمية فقط -->
         <div class="header-badges-group">
             <div class="stats-badge" id="live-score">00 / 00</div>
             
@@ -851,7 +846,7 @@
                 { q: "Which of the following is an example of streaming ingestion tool?", options: ["a) Power BI", "b) Apache Kafka", "c) MySQL", "d) Excel"], ans: 1 },
                 { q: "Which storage option is commonly used in Hadoop ecosystems?", options: ["a) HDFS", "b) FTP", "c) HTML", "d) SMTP"], ans: 0 },
                 { q: "ELT differs from ETL because transformation happens:", options: ["a) Before loading", "b) During ingestion", "c) After loading", "d) Outside the system"], ans: 2 },
-                { q: "Sharding is mainly used for:", options: ["a) Backup", "b) Partitioning data", "c) Encryption", "d) Visualization"], ans: 1 },
+                { q: "Sharding is mainly used for:", options: ["a) Partitioning data", "b) Encryption", "c) Visualization"], ans: 1 },
                 { q: "Geo-replication improves:", options: ["a) Data formatting", "b) Geographic availability", "c) Dashboard design", "d) Programming speed"], ans: 1 },
                 { q: "Which tool is commonly used for monitoring cluster metrics?", options: ["a) Kafka", "b) Prometheus", "c) HDFS", "d) SQL Server"], ans: 1 },
                 { q: "Data lakes are beneficial because they:", options: ["a) Reduce flexibility", "b) Store only structured data", "c) Support machine learning readiness", "d) Eliminate scalability"], ans: 2 },
@@ -1455,7 +1450,6 @@
         const scoreStr = `${formatNumber(correct)} / ${total}`;
         document.getElementById('progressBar').style.width = `${(solved / total) * 100}%`;
         
-        // تحديث العداد في الهيدر والعداد العائم بنفس اللحظة
         document.getElementById('live-score').innerText = scoreStr;
         const floatScore = document.getElementById('float-live-score');
         if (floatScore) floatScore.innerText = scoreStr;
@@ -1684,7 +1678,6 @@
         container.innerHTML = '';
         const userIds = Object.keys(activeUsers);
         
-        // تحديث العداد في الهيدر والعداد العائم بنفس اللحظة
         if (countBadge) countBadge.innerText = userIds.length;
         if (floatCountBadge) floatCountBadge.innerText = userIds.length;
 
@@ -1755,11 +1748,37 @@
         const btn = document.getElementById('micToggleBtn');
         const floatBtn = document.getElementById('floatMicBtn');
         
-        navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+        // إعدادات مخصصة لتحسين الصوت وإلغاء الصدى والضوضاء والتحكم التلقائي بالصوت
+        const audioConstraints = {
+            audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true,
+                channelCount: 1, // أحادي القناة لتقليل حجم البيانات المستهلكة بالشبكة
+                sampleRate: 48000
+            },
+            video: false
+        };
+
+        navigator.mediaDevices.getUserMedia(audioConstraints)
             .then(stream => {
                 localAudioStream = stream;
                 localVoicePeerId = `peer-${roomName}-${Math.floor(100000 + Math.random() * 900000)}`;
-                peerInstance = new Peer(localVoicePeerId, { debug: 1 });
+                
+                // تزويد PeerJS بخوادم STUN لضمان سهولة وثبات الاتصال عبر الشبكات المختلفة
+                peerInstance = new Peer(localVoicePeerId, { 
+                    debug: 1,
+                    config: {
+                        iceServers: [
+                            { urls: 'stun:stun.l.google.com:19302' },
+                            { urls: 'stun:stun1.l.google.com:19302' },
+                            { urls: 'stun:stun2.l.google.com:19302' },
+                            { urls: 'stun:stun3.l.google.com:19302' },
+                            { urls: 'stun:stun4.l.google.com:19302' }
+                        ],
+                        sdpSemantics: 'unified-plan'
+                    }
+                });
 
                 peerInstance.on('open', (id) => {
                     btn.classList.add('active-streaming'); 
@@ -1785,6 +1804,7 @@
                 });
             })
             .catch(err => {
+                console.error("Microphone access failed: ", err);
                 btn.style.background = "var(--danger)"; 
                 btn.innerHTML = "⚠️";
                 if (floatBtn) {
@@ -1930,8 +1950,26 @@
     function handleRemoteAudioPlayback(peerId, remoteStream) {
         if (document.getElementById(`audio_${peerId}`)) return;
         const audioNode = document.createElement('audio');
-        audioNode.id = `audio_${peerId}`; audioNode.srcObject = remoteStream; audioNode.autoplay = true;
+        audioNode.id = `audio_${peerId}`; 
+        audioNode.srcObject = remoteStream; 
+        audioNode.autoplay = true;
+        audioNode.playsInline = true; // دعم تشغيل الصوت على أجهزة iOS/Safari بشكل مستقر
+        audioNode.controls = false;
+        audioNode.style.display = 'none';
         document.body.appendChild(audioNode);
+
+        // محاولة التشغيل المباشر وتجنب قيود المتصفح الصارمة لبث الصوت تلقائيًا
+        const startPlayback = () => {
+            audioNode.play().catch(err => {
+                console.warn("Autoplay was prevented by browser, waiting for user interaction: ", err);
+                const playOnInteraction = () => {
+                    audioNode.play().catch(() => {});
+                    document.removeEventListener('click', playOnInteraction);
+                };
+                document.addEventListener('click', playOnInteraction);
+            });
+        };
+        startPlayback();
     }
 
     function toggleLocalMicrophone() {
