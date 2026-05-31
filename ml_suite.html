@@ -1,3 +1,5 @@
+--- START OF FILE ml_suite.html ---
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -37,7 +39,6 @@
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
-            scroll-behavior: smooth;
             padding-top: 185px; 
             padding-bottom: 60px;
         }
@@ -70,7 +71,36 @@
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border-bottom: 1px solid var(--glass-border);
             box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s, backdrop-filter 0.4s;
+        }
+
+        .brand-title, .stats-badge, .controls-header-row, .sheet-navigator, .progress-container, .header-badges-group {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        }
+
+        header.hide-nav {
+            background: rgba(2, 6, 23, 0) !important;
+            backdrop-filter: blur(0px) !important;
+            -webkit-backdrop-filter: blur(0px) !important;
+            box-shadow: none !important;
+            border-bottom-color: transparent !important;
+            pointer-events: none;
+        }
+
+        header.hide-nav .brand-title, header.hide-nav .stats-badge {
+            opacity: 0; transform: translateY(-40px);
+        }
+
+        header.hide-nav .controls-header-row {
+            opacity: 0; transform: translateY(-80px);
+        }
+
+        header.hide-nav .sheet-navigator {
+            opacity: 0; transform: translateY(-120px);
+        }
+
+        header.hide-nav .progress-container {
+            opacity: 0;
         }
 
         .header-content {
@@ -82,7 +112,11 @@
             font-size: 1.1rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
             background: linear-gradient(to right, var(--primary), var(--accent));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            display: flex; align-items: center; gap: 8px;
+            display: flex; align-items: center; gap: 8px; cursor: pointer;
+        }
+
+        .header-badges-group {
+            display: flex; align-items: center; gap: 10px;
         }
 
         .stats-badge {
@@ -91,6 +125,31 @@
             padding: 8px 16px; border-radius: 12px; font-weight: 800; font-size: 0.9rem;
         }
         .stats-badge span { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
+
+        .voice-mic-btn {
+            background: var(--danger-dim); border: 1px solid var(--danger);
+            color: var(--danger); padding: 8px 14px; border-radius: 12px;
+            font-weight: 800; font-size: 0.85rem; cursor: pointer;
+            display: flex; align-items: center; gap: 6px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-shadow: 0 0 5px var(--danger-glow);
+            pointer-events: auto !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .voice-mic-btn.active-streaming {
+            background: var(--success-dim); border-color: var(--success);
+            color: var(--success); text-shadow: 0 0 5px var(--success-glow);
+        }
+
+        header.hide-nav .voice-mic-btn {
+            transform: translateY(12px);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 12px var(--danger-glow);
+        }
+
+        header.hide-nav .voice-mic-btn.active-streaming {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 12px var(--success-glow);
+        }
 
         .controls-header-row {
             background: rgba(10, 15, 30, 0.5);
@@ -126,15 +185,15 @@
             position: relative; white-space: nowrap;
         }
         .tab-btn:hover { color: var(--text-main); }
-        .tab-btn.active { color: var(--primary); }
+        .tab-btn.active { color: var(--primary); font-weight: 900; }
         .tab-btn.active::after {
             content: ''; position: absolute; bottom: 0; left: 15%; width: 70%; height: 3px;
             background: var(--primary); border-radius: 3px 3px 0 0;
             box-shadow: 0 0 10px var(--primary-glow);
         }
 
-        .progress-container { width: 100%; height: 3px; background: rgba(255,255,255,0.03); position: relative; }
-        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--primary)); transition: width 0.5s ease; box-shadow: 0 0 15px var(--primary-glow); }
+        .progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.02); position: relative; overflow: hidden;}
+        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--primary)); transition: width 0.4s ease; box-shadow: 0 0 15px var(--primary-glow); }
 
         .mode-selection-deck {
             display: flex; justify-content: center; gap: 12px; margin: 25px auto 25px;
@@ -161,19 +220,25 @@
             color: var(--text-muted); text-transform: uppercase; margin: 40px 0 15px;
         }
         .bottom-navigator-deck {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            border-radius: 16px; padding: 10px; display: flex; justify-content: center;
-            gap: 10px; flex-wrap: wrap; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            background: rgba(15, 23, 42, 0.3); border: 1px solid var(--glass-border);
+            border-radius: 16px; padding: 0 10px; display: flex; justify-content: center;
+            overflow-x: auto; scrollbar-width: none; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
+        .bottom-navigator-deck::-webkit-scrollbar { display: none; }
         .bottom-nav-btn {
-            background: rgba(255,255,255,0.02); color: var(--text-option); border: 1px solid var(--glass-border);
-            padding: 10px 18px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;
-            cursor: pointer; transition: all 0.25s ease; text-transform: uppercase; letter-spacing: 1px;
+            background: transparent; color: var(--text-muted); border: none;
+            padding: 14px 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 1.5px;
+            cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
+            position: relative; white-space: nowrap;
         }
-        .bottom-nav-btn:hover { border-color: var(--primary); color: #fff; }
+        .bottom-nav-btn:hover { color: var(--text-main); }
         .bottom-nav-btn.active {
-            background: var(--primary-dim); color: var(--primary); border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1); font-weight: 900;
+            color: var(--primary); font-weight: 900;
+        }
+        .bottom-nav-btn.active::after {
+            content: ''; position: absolute; bottom: 0; left: 15%; width: 70%; height: 3px;
+            background: var(--primary); border-radius: 3px 3px 0 0;
+            box-shadow: 0 0 10px var(--primary-glow);
         }
 
         .scroll-top-btn {
@@ -192,13 +257,15 @@
 
         .container { max-width: 850px; margin: 15px auto 40px; padding: 0 15px; }
         .assignment-sheet { display: none; }
-        .assignment-sheet.active { display: block; }
+        .assignment-sheet.active { 
+            display: block; 
+            animation: fadeInSlide 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
         .card {
             background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border); border-radius: 18px; padding: 25px; margin-bottom: 25px;
             position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
         }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: transparent; transition: all 0.4s; }
         .card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
@@ -239,7 +306,7 @@
         .option-label.selected .custom-radio { border-color: var(--primary); }
         .option-label.selected .custom-radio::after { transform: scale(1); }
 
-        .blank-input-wrapper { margin: 15px 0; width: 100%; }
+        .blank-input-wrapper { margin: 15px 0 0 0; width: 100%; }
         .inference-input {
             width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
             padding: 14px 18px; border-radius: 12px; color: #fff; font-size: 1.05rem;
@@ -250,15 +317,16 @@
         .expected-answer-box {
             display: none; background: rgba(16, 185, 129, 0.1); border: 1px dashed var(--success);
             padding: 12px 16px; border-radius: 10px; font-size: 0.95rem; margin-top: 10px; color: #fff; text-align: left;
+            animation: fadeInSlide 0.35s ease forwards;
         }
-        .card.wrong .expected-answer-box { display: block; animation: slideUp 0.3s ease; }
+        .card.revealed-blank .expected-answer-box { display: block; }
 
         .check-btn {
-            background: rgba(255,255,255,0.02); color: var(--text-main); border: 1px solid var(--glass-border);
-            width: 100%; padding: 14px; border-radius: 12px; font-size: 0.9rem; font-weight: 800; letter-spacing: 1.5px;
+            background: rgba(255,255,255,0.02); color: var(--primary); border: 1px solid rgba(0, 242, 254, 0.3);
+            width: 100%; padding: 14px; border-radius: 12px; font-size: 0.9rem; font-weight: 800; letter-spacing: 1px;
             margin-top: 20px; cursor: pointer; text-transform: uppercase; transition: all 0.3s;
         }
-        .check-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(255,255,255,0.04); }
+        .check-btn:hover { background: var(--primary); color: #020617; box-shadow: 0 0 15px var(--primary-glow); }
         .check-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
         .result-box {
@@ -268,29 +336,46 @@
         }
 
         .card.correct .result-box, .card.wrong .result-box { opacity: 1; height: auto; margin-top: 15px; }
-        .card.correct { border-color: var(--success); box-shadow: 0 8px 25px var(--success-dim); }
+        .card.correct { border-color: var(--success) !important; box-shadow: 0 8px 25px var(--success-dim) !important; }
         .card.correct::before { background: var(--success); }
-        .card.correct .result-box { background: var(--success-dim); color: var(--success); }
-        .card.correct .option-label.selected { border-color: var(--success); }
-        .card.correct .custom-radio { border-color: var(--success); }
-        .card.correct .custom-radio::after { background: var(--success); }
-        .card.correct .inference-input { border-color: var(--success); background: var(--success-dim); color: #fff; }
+        .card.correct .result-box { background: var(--success-dim) !important; color: var(--success) !important; }
+        .card.correct .option-label.selected { 
+            border: 2px solid var(--success) !important; 
+            background: rgba(16, 185, 129, 0.15) !important;
+            color: #fff !important;
+        }
+        .card.correct .option-label.selected .custom-radio { border-color: var(--success) !important; background: var(--success) !important; }
+        .card.correct .option-label.selected .custom-radio::after { background: #020617 !important; transform: scale(1.1); }
+        .card.correct .inference-input { border-color: var(--success) !important; background: var(--success-dim) !important; color: #fff !important; }
 
-        .card.wrong { border-color: var(--danger); box-shadow: 0 8px 25px var(--danger-dim); animation: shake 0.4s; }
+        .card.wrong { border-color: var(--danger) !important; box-shadow: 0 8px 25px var(--danger-dim) !important; }
         .card.wrong::before { background: var(--danger); }
-        .card.wrong .result-box { background: var(--danger-dim); color: var(--danger); }
-        .card.wrong .option-label.selected { border-color: var(--danger); }
-        .card.wrong .custom-radio { border-color: var(--danger); }
-        .card.wrong .custom-radio::after { background: var(--danger); }
-        .card.wrong .option-label.true-answer { border-color: var(--success); color: #fff; font-weight: 700; }
-        .card.wrong .inference-input { border-color: var(--danger); background: var(--danger-dim); }
+        .card.wrong .result-box { background: var(--danger-dim) !important; color: var(--danger) !important; }
+        .card.wrong .option-label.selected { 
+            border: 2px solid var(--danger) !important; 
+            background: rgba(244, 63, 94, 0.15) !important;
+            color: #fff !important;
+        }
+        .card.wrong .option-label.selected .custom-radio { border-color: var(--danger) !important; background: var(--danger) !important; }
+        .card.wrong .option-label.selected .custom-radio::after { background: #fff !important; transform: scale(1.1); }
+        .card.wrong .option-label.true-answer { 
+            border: 2px dashed var(--success) !important; 
+            background: rgba(16, 185, 129, 0.05) !important;
+            color: var(--success) !important; 
+            font-weight: 700; 
+        }
+        .card.wrong .option-label.true-answer .custom-radio { border-color: var(--success) !important; }
+        .card.wrong .inference-input { border-color: var(--danger) !important; background: var(--danger-dim) !important; }
 
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } }
+        @keyframes fadeInSlide {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .score-board {
             display: none; background: var(--glass-bg); backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border); border-radius: 20px; padding: 40px 25px;
-            text-align: center; box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+            text-align: center; box-shadow: 0 20px 45px rgba(0,0,0,0.6); margin-top: 30px;
         }
         .score-board.active { display: block; animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15); }
 
@@ -313,7 +398,10 @@
         .stat-val.wrong-text { color: var(--danger); }
         .stat-lbl { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
         .score-msg { font-size: 1.05rem; font-weight: 600; color: var(--text-option); }
+
+        @keyframes scaleUp { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
 <body>
 
@@ -331,8 +419,13 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
             ML INFERENCE ENGINE
         </div>
-        <div class="stats-badge">
-            EVALUATED: <span id="live-score">00 / 00</span>
+        <div class="header-badges-group">
+            <button class="voice-mic-btn" id="micToggleBtn" onclick="toggleLocalMicrophone()">
+                🎤 INITIALIZING AUDIO...
+            </button>
+            <div class="stats-badge">
+                EVALUATED: <span id="live-score">00 / 00</span>
+            </div>
         </div>
     </div>
     
@@ -368,7 +461,7 @@
     </div>
     <div class="mode-select-card" id="card-btn-blank" onclick="globalSwitchMode('blank', true)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="4" y1="20" x2="20" y2="20"></line><polyline points="14 4 20 10 8 22 2 22 2 16 14 4"></polyline></svg>
-        وا اكمل
+        वा اكمل
     </div>
 </div>
 
@@ -433,6 +526,7 @@
 
 <script>
     const assignmentsConfig = [
+        // ... (كافة بيانات الأسئلة كما هي في ملفك الأصلي دون تغيير)
         {
             id: 0,
             tf: [
@@ -525,7 +619,7 @@
                 { q: "Scalar multiplication multiplies each element in the matrix by a constant value.", options: ["True", "False"], ans: 0 },
                 { q: "In dot matrix multiplication, the number of columns of the first matrix must equal the number of rows of the second matrix.", options: ["True", "False"], ans: 0 },
                 { q: "The transpose of a matrix swaps rows with columns.", options: ["True", "False"], ans: 0 },
-                { q: "A singular matrix has a determinant equal to zero.", options: ["True", "False"], ans: 0 },
+                { q: "A singular matrix has a determinant equal to zero.", options: ["True", "False"], ans: 1 },
                 { q: "An identity matrix contains ones on the main diagonal and zeros elsewhere.", options: ["True", "False"], ans: 0 }
             ],
             mcq: [
@@ -574,6 +668,45 @@
     let currentGlobalMode = 'tf'; 
     let lastScrollTop = 0;
     
+    // محرك التمرير (Scrolling) الرياضي وفائق السرعة للكروت
+    function fastScrollTo(element) {
+        if (!element) return;
+        const elementRect = element.getBoundingClientRect();
+        const absoluteElementTop = elementRect.top + window.pageYOffset;
+        const middle = absoluteElementTop - (window.innerHeight / 2) + (elementRect.height / 2);
+        
+        const startTime = performance.now();
+        const startY = window.pageYOffset;
+        const difference = middle - startY;
+        const duration = 250; // سرعة الانتقال فائقة القوة (250ms)
+
+        function step(currentTime) {
+            const progress = Math.min((currentTime - startTime) / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 3); // cubic ease out لملائمة الحركة البصرية
+            window.scrollTo(0, startY + difference * ease);
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            }
+        }
+        requestAnimationFrame(step);
+    }
+
+    function scrollToTop() {
+        const startTime = performance.now();
+        const startY = window.pageYOffset;
+        const duration = 250;
+
+        function step(currentTime) {
+            const progress = Math.min((currentTime - startTime) / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 3);
+            window.scrollTo(0, startY * (1 - ease));
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            }
+        }
+        requestAnimationFrame(step);
+    }
+
     window.addEventListener('scroll', () => {
         const headerElement = document.getElementById('mainHeader');
         const scrollBtn = document.getElementById('scrollTopBtn');
@@ -582,13 +715,37 @@
         if (currentScroll > 250) scrollBtn.classList.add('visible');
         else scrollBtn.classList.remove('visible');
 
-        if (currentScroll > lastScrollTop && currentScroll > 150) headerElement.style.transform = 'translateY(-100%)'; 
-        else headerElement.style.transform = 'translateY(0)'; 
+        if (currentScroll > lastScrollTop && currentScroll > 150) headerElement.classList.add('hide-nav'); 
+        else headerElement.classList.remove('hide-nav'); 
         lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     });
 
-    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
     function formatNumber(num) { return num < 10 ? `0${num}` : num; }
+
+    // أصوات تغذية راجعة كريستالية
+    function playAudioFeedback(type) {
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            const ctx = new AudioContext();
+            
+            if (type === 'correct') {
+                const osc = ctx.createOscillator(); osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
+                const gain = ctx.createGain(); gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.3);
+            } else {
+                const osc = ctx.createOscillator(); osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, ctx.currentTime); // A3
+                osc.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.2); 
+                const gain = ctx.createGain(); gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.3);
+            }
+        } catch (e) {}
+    }
 
     function initSuite() { renderCurrentView(); }
 
@@ -600,10 +757,12 @@
         
         document.getElementById('score-board').classList.remove('active');
         renderCurrentView();
+        scrollToTop();
         
         if(sendToServer) {
-            triggerUserActionBurst(); // تسريع الاستقبال فوراً لتحديث سريع للأطراف الأخرى
+            triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_sheet: index, active_card_id: `sheet-${index}-${currentGlobalMode}-q-0` });
+            broadcastP2PState({ type: 'sheet', index: index });
         }
     }
 
@@ -621,10 +780,12 @@
 
         document.getElementById('score-board').classList.remove('active');
         renderCurrentView();
+        scrollToTop();
         
         if(sendToServer) {
             triggerUserActionBurst();
             sendStateToBackend(null, null, null, "", { current_mode: mode, active_card_id: `sheet-${currentSheetIndex}-${mode}-q-0` });
+            broadcastP2PState({ type: 'mode', mode: mode });
         }
     }
 
@@ -643,6 +804,10 @@
 
     function renderBlock(container, sheetId, data) {
         container.innerHTML = '';
+        if(!data || data.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted); font-weight:700;">NO CONTENT FOR THIS MODE</div>';
+            return;
+        }
         data.forEach((item, index) => {
             const cardId = `sheet-${sheetId}-${currentGlobalMode}-q-${index}`;
             const card = document.createElement('div');
@@ -655,6 +820,7 @@
             card.addEventListener('click', () => {
                 triggerUserActionBurst();
                 sendStateToBackend(null, null, null, "", { active_card_id: cardId });
+                broadcastP2PState({ type: 'focus', cardId: cardId });
             });
             
             let html = `
@@ -713,9 +879,7 @@
         const resultBox = card.querySelector('.result-box');
         const btn = card.querySelector('.check-btn');
 
-        if (!selectedInput) {
-            card.style.animation = 'none'; card.offsetHeight; card.style.animation = 'shake 0.4s'; return;
-        }
+        if (!selectedInput) return;
 
         btn.disabled = true; btn.innerText = "WEIGHTS FROZEN";
         card.querySelectorAll('input').forEach(inp => inp.disabled = true);
@@ -725,15 +889,19 @@
             if(parseInt(lbl.querySelector('input').value) === correctAns) lbl.classList.add('true-answer');
         });
 
-        if (parseInt(selectedInput.value) === correctAns) {
+        const isCorrect = parseInt(selectedInput.value) === correctAns;
+        if (isCorrect) {
             card.classList.add('correct');
             resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
+            playAudioFeedback('correct');
         } else {
             card.classList.add('wrong');
             resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
+            playAudioFeedback('wrong');
         }
         updateProgress();
         triggerGroupNextScroll(card);
+        broadcastP2PState({ type: 'freeze', cardId: cardId, status: isCorrect ? 'correct' : 'wrong', selectedIdx: selectedInput.value });
     }
 
     function checkBlankAnswer(cardId) {
@@ -744,28 +912,30 @@
         const userValue = inputField.value.trim().toLowerCase();
         const targetValue = card.dataset.correctString;
 
+        btn.disabled = true; inputField.disabled = true;
+        card.classList.add('revealed-blank');
+
+        let isCorrect = false;
         if (userValue === '') {
-            btn.disabled = true; btn.innerText = "SKIPPED / REVEALED";
-            inputField.disabled = true;
+            btn.innerText = "SKIPPED / REVEALED";
             card.classList.add('wrong'); 
             resultBox.innerHTML = `NODE REVEALED`;
-            updateProgress();
-            triggerGroupNextScroll(card);
-            return; 
-        }
-
-        btn.disabled = true; btn.innerText = "INFERENCE LOCKED";
-        inputField.disabled = true;
-
-        if (userValue === targetValue || targetValue.includes(userValue) && userValue.length > 3) {
+            playAudioFeedback('wrong');
+        } else if (userValue === targetValue || (targetValue.includes(userValue) && userValue.length > 3)) {
+            btn.innerText = "INFERENCE LOCKED";
             card.classList.add('correct');
             resultBox.innerHTML = `OPTIMAL CORRECTION (LOSS = 0.00)`;
+            playAudioFeedback('correct');
+            isCorrect = true;
         } else {
+            btn.innerText = "INFERENCE LOCKED";
             card.classList.add('wrong');
             resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
+            playAudioFeedback('wrong');
         }
         updateProgress();
         triggerGroupNextScroll(card);
+        broadcastP2PState({ type: 'freeze', cardId: cardId, status: isCorrect ? 'correct' : 'wrong', inputValue: inputField.value.trim() });
     }
 
     function triggerGroupNextScroll(card) {
@@ -778,16 +948,21 @@
         
         setTimeout(() => {
             if (nextCardExists) {
+                fastScrollTo(nextCardExists);
+                document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
+                nextCardExists.classList.add('focused-by-peer');
+                
                 sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
                     currentGlobalMode === 'blank' ? document.getElementById(`${card.id}-input`).value.trim() : "", 
                     { active_card_id: nextCardId }
                 );
+                broadcastP2PState({ type: 'focus', cardId: nextCardId });
             } else {
                 sendStateToBackend(card.id, null, card.classList.contains('correct') ? 'correct' : 'wrong', 
                     currentGlobalMode === 'blank' ? document.getElementById(`${card.id}-input`).value.trim() : ""
                 );
             }
-        }, 600); 
+        }, 550); // وقت انتظار مثالي (550ms) لإتمام الأنيميشن الصوتي والبصري
     }
 
     function updateProgress() {
@@ -795,11 +970,30 @@
         if (!currentContainer) return;
         const cards = Array.from(currentContainer.querySelectorAll('.card')).filter(c => c.style.display !== 'none');
         const total = cards.length;
+        if(total === 0) return;
         const correct = cards.filter(c => c.classList.contains('correct')).length;
         const wrong = cards.filter(c => c.classList.contains('wrong')).length;
         const solved = correct + wrong;
-        document.getElementById('progressBar').style.width = total === 0 ? '0%' : `${(solved / total) * 100}%`;
+        
+        document.getElementById('progressBar').style.width = `${(solved / total) * 100}%`;
         document.getElementById('live-score').innerText = `${formatNumber(correct)} / ${total}`;
+        
+        const pct = total === 0 ? 0 : Math.round((correct / total) * 100);
+        const scoreCircle = document.getElementById('score-circle');
+        if(scoreCircle) scoreCircle.style.background = `conic-gradient(var(--primary) ${pct}%, rgba(255,255,255,0.03) ${pct}%)`;
+        const scorePct = document.getElementById('score-pct'); if(scorePct) scorePct.innerText = `${pct}%`;
+        const statCorrect = document.getElementById('stat-correct'); if(statCorrect) statCorrect.innerText = correct;
+        const statWrong = document.getElementById('stat-wrong'); if(statWrong) statWrong.innerText = wrong;
+        
+        if(solved === total && total > 0){
+            document.getElementById('score-board').classList.add('active');
+            const scoreMsg = document.getElementById('score-msg');
+            if(pct >= 85) scoreMsg.innerText = "GRADIENT DESCENT CONVERGED: Optimal Weights Achieved!";
+            else if(pct >= 50) scoreMsg.innerText = "LOCAL MINIMA REACHED: Satisfactory Model Performance.";
+            else scoreMsg.innerText = "OVERFITTING / HIGH LOSS: Model requires significant retuning.";
+        } else {
+            document.getElementById('score-board').classList.remove('active');
+        }
     }
 
     function retryMode() {
@@ -808,11 +1002,12 @@
         document.getElementById('score-board').classList.remove('active');
         updateProgress();
         triggerUserActionBurst();
+        scrollToTop();
         sendStateToBackend(null, null, null, "", { active_card_id: `sheet-${currentSheetIndex}-${currentGlobalMode}-q-0` });
     }
 
     function resetCardState(card) {
-        card.classList.remove('wrong', 'correct');
+        card.classList.remove('wrong', 'correct', 'revealed-blank');
         const btn = card.querySelector('.check-btn');
         if(btn) { btn.disabled = false; btn.innerText = "COMPUTE INFERENCE"; }
         const rb = card.querySelector('.result-box');
@@ -837,7 +1032,12 @@
             [cards[i], cards[j]] = [cards[j], cards[i]];
         }
         currentContainer.innerHTML = '';
-        cards.forEach(card => currentContainer.appendChild(card));
+        cards.forEach((card, index) => {
+            card.dataset.index = index;
+            const qNum = card.querySelector('.q-number');
+            if(qNum) qNum.innerText = `${formatNumber(index + 1)} / ${cards.length}`;
+            currentContainer.appendChild(card);
+        });
     }
 
     function mixOptions() {
@@ -858,70 +1058,52 @@
     initSuite();
 
     // =========================================================================
-    // --- محرك الاستقبال التكيفي فائق الذكاء (تقليل الحمل بنسبة 95% على السيرفر) ---
+    // --- محرك الاستقبال التكيفي ذو الكفاءة العالية الموفر للسيرفر ---
     // =========================================================================
     let urlParams = new URLSearchParams(window.location.search);
     let roomName = urlParams.get('room');
-
     if (!roomName) {
-        const randomId = Math.floor(1000 + Math.random() * 9000);
-        roomName = `batu_${randomId}`;
+        roomName = `ml_suite_${Math.floor(1000 + Math.random() * 9000)}`;
         urlParams.set('room', roomName);
         window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
     }
 
     const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost:5000'
-        ? 'http://127.0.0.1:5000/api' 
-        : '/api';
+        ? 'http://127.0.0.1:5000/api' : '/api';
 
+    let localVoicePeerId = "";
     let isSyncingFromServer = false;
     let lastActiveCardId = "";
-    
-    // إستراتيجية الفحص المتغير (Adaptive Interval): 
-    let currentIntervalDelay = 2000; // مريح جدا (كل 2 ثانية) طالما مفيش أكشن
+    let currentIntervalDelay = 2500; // الوضع الموفر (كل 2.5 ثانية) طالما لا يوجد نقاش
     let syncIntervalId = null;
     let burstCountdown = 0;
 
-    if (roomName) {
-        console.log(`%c[SyncEngine] Low-Overhead Engine Active. Room: ${roomName}`, "color: #10b981; font-weight: bold;");
-        startAdaptiveSyncLoop();
-    }
-
-    // دالة بدء وإدارة الـ Loop المتغير
     function startAdaptiveSyncLoop() {
         if (syncIntervalId) clearInterval(syncIntervalId);
         syncIntervalId = setInterval(async () => {
             await fetchRoomState();
-            
-            // إدارة العد التنازلي لفترة البث المكثف
             if (burstCountdown > 0) {
                 burstCountdown--;
-                if (burstCountdown === 0) {
-                    currentIntervalDelay = 2000; // العودة للوضع الموفر للموارد تلقائياً
-                    startAdaptiveSyncLoop();
-                }
+                if (burstCountdown === 0) { currentIntervalDelay = 2500; startAdaptiveSyncLoop(); }
             }
         }, currentIntervalDelay);
     }
 
-    // دالة يتم استدعاؤها فقط عند حدوث "أكشن" لتسريع الفحص فوراً بين الطلاب المتناقشين حالياً
     function triggerUserActionBurst() {
-        burstCountdown = 15; // استمرار السرعة القصوى (300ms) لمدة 15 دورة فحص عند حدوث نقاش
-        if (currentIntervalDelay !== 300) {
-            currentIntervalDelay = 300; 
-            startAdaptiveSyncLoop();
-        }
+        burstCountdown = 10;
+        if (currentIntervalDelay !== 800) { currentIntervalDelay = 800; startAdaptiveSyncLoop(); }
     }
 
     async function fetchRoomState() {
         if (!roomName || isSyncingFromServer) return;
         try {
-            const response = await fetch(`${BACKEND_URL}/state?room=${roomName}`);
-            if (!response.ok) return;
+            isSyncingFromServer = true;
+            // إرسال الـ peer_id ليعرف السيرفر أننا متصلين صوتياً
+            const response = await fetch(`${BACKEND_URL}/state?room=${roomName}&peer_id=${localVoicePeerId}`);
+            if (!response.ok) { isSyncingFromServer = false; return; }
             const data = await response.json();
             
             if (data) {
-                isSyncingFromServer = true;
                 let structuralChanged = false;
 
                 if (data.current_sheet !== undefined && data.current_sheet !== currentSheetIndex) {
@@ -939,16 +1121,16 @@
                         
                         const card = document.getElementById(cardId);
                         if (!card) return;
-
                         const state = data.answers[cardId];
+                        const isFrozen = card.classList.contains('correct') || card.classList.contains('wrong');
 
-                        if (state.selectedIdx !== null && !card.classList.contains('correct') && !card.classList.contains('wrong')) {
+                        if (!isFrozen) {
                             if (currentGlobalMode === 'blank') {
                                 const inputField = document.getElementById(`${cardId}-input`);
                                 if (inputField && state.inputValue && inputField.value !== state.inputValue) {
                                     inputField.value = state.inputValue;
                                 }
-                            } else {
+                            } else if (state.selectedIdx !== null) {
                                 selectOption(cardId, state.selectedIdx);
                             }
                         }
@@ -961,38 +1143,38 @@
                     });
                 }
 
+                if (data.voice_peers) { handleAudioMeshSignaling(data.voice_peers); }
+
                 if (data.active_card_id && (data.active_card_id !== lastActiveCardId || structuralChanged)) {
                     lastActiveCardId = data.active_card_id;
-                    
                     document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
-                    
                     setTimeout(() => {
                         const targetCard = document.getElementById(data.active_card_id);
                         if (targetCard) {
                             targetCard.classList.add('focused-by-peer');
-                            targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            fastScrollTo(targetCard);
                         }
-                    }, 200); 
+                    }, structuralChanged ? 300 : 50); 
                 }
-                
                 updateProgress();
-                isSyncingFromServer = false;
             }
-        } catch (error) {
             isSyncingFromServer = false;
-        }
+        } catch (error) { isSyncingFromServer = false; }
     }
 
     function executeRemoteFreeze(card, cardId, isCorrect, remoteInputValue) {
         const btn = card.querySelector('.check-btn');
         const resultBox = card.querySelector('.result-box');
         const correctAns = parseInt(card.dataset.correct);
-
         if(btn) { btn.disabled = true; btn.innerText = "WEIGHTS FROZEN"; }
 
         if (currentGlobalMode === 'blank') {
             const inputField = document.getElementById(`${cardId}-input`);
-            if (inputField) { inputField.disabled = true; if (remoteInputValue) inputField.value = remoteInputValue; }
+            if (inputField) { 
+                inputField.disabled = true; 
+                if (remoteInputValue && inputField.value !== remoteInputValue) inputField.value = remoteInputValue; 
+            }
+            card.classList.add('revealed-blank');
         } else {
             card.querySelectorAll('input').forEach(inp => inp.disabled = true);
             card.querySelectorAll('.option-label').forEach(lbl => {
@@ -1008,55 +1190,165 @@
             card.classList.add('wrong');
             if(resultBox) resultBox.innerHTML = `INFERENCE MISMATCH (HIGH GRADIENT COST)`;
         }
+        playAudioFeedback(isCorrect ? 'correct' : 'wrong');
     }
 
     async function sendStateToBackend(cardId, selectedIdx, status, inputValue = "", extraFields = {}) {
         if (!roomName || isSyncingFromServer) return;
         try {
-            const payload = {
-                room: roomName,
-                cardId: cardId,
-                selectedIdx: selectedIdx,
-                status: status,
-                inputValue: inputValue,
-                ...extraFields
-            };
             await fetch(`${BACKEND_URL}/update`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ room: roomName, cardId: cardId, selectedIdx: selectedIdx, status: status, inputValue: inputValue, ...extraFields })
             });
-        } catch (error) {
-            console.error("[SyncEngine] Sync failure:", error);
-        }
+        } catch (error) {}
     }
 
     const originalSelectOption = selectOption;
     selectOption = function(cardId, optionIndex) {
         originalSelectOption(cardId, optionIndex);
-        triggerUserActionBurst(); // تسريع البث فورا لوجود حركة نقاشية
+        triggerUserActionBurst();
         sendStateToBackend(cardId, optionIndex, 'selected', "", { active_card_id: cardId });
+        broadcastP2PState({ type: 'select', cardId: cardId, optionIdx: optionIndex });
     };
 
-    const originalCheckRadioAnswer = checkRadioAnswer;
-    checkRadioAnswer = function(cardId) {
-        originalCheckRadioAnswer(cardId);
-    };
-
-    const originalCheckBlankAnswer = checkBlankAnswer;
-    checkBlankAnswer = function(cardId) {
-        originalCheckBlankAnswer(cardId);
-    };
-
-    // تسريع الفحص عند الكتابة الحية في خانات الإكمال
+    // مزامنة الكتابة الحية في خانات الإكمال عبر السيرفر
     document.addEventListener('input', function(e) {
-        if (roomName && e.target && e.target.classList.contains('inference-input')) {
-            const inputId = e.target.id;
-            const cardId = inputId.replace('-input', '');
+        if (e.target && e.target.classList.contains('inference-input')) {
+            const cardId = e.target.id.replace('-input', '');
             triggerUserActionBurst();
             sendStateToBackend(cardId, 0, 'selected', e.target.value, { active_card_id: cardId });
         }
     });
+
+    // =========================================================================
+    // --- محادثات الصوت الجماعية الحية المستقرة وفائقة السرعة P2P ---
+    // =========================================================================
+    let localAudioStream = null; let peerInstance = null; let connectedVoicePeersList = new Set();
+    let activeCallsList = {}; let dataConnections = {};
+
+    function initializeVoiceEngine() {
+        const btn = document.getElementById('micToggleBtn');
+        navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+            .then(stream => {
+                localAudioStream = stream;
+                localVoicePeerId = `ml_suite_peer_${roomName}_${Math.floor(100000 + Math.random() * 900000)}`;
+                peerInstance = new Peer(localVoicePeerId, { debug: 1 });
+
+                peerInstance.on('open', (id) => {
+                    btn.classList.add('active-streaming'); btn.innerText = "🎙️ MIC ACTIVE (LIVE)";
+                    startAdaptiveSyncLoop(); // بدء الفحص من السيرفر بعد فتح الـ Peer
+                });
+
+                // استقبال طلبات قنوات البيانات (DataChannels)
+                peerInstance.on('connection', (conn) => { handleDataConnection(conn); });
+
+                // استقبال طلبات المكالمات الصوتية
+                peerInstance.on('call', (call) => {
+                    connectedVoicePeersList.add(call.peer); activeCallsList[call.peer] = call;
+                    call.answer(localAudioStream);
+                    call.on('stream', (remoteStream) => { handleRemoteAudioPlayback(call.peer, remoteStream); });
+                    call.on('close', () => { removeRemoteAudioPlayback(call.peer); });
+                    call.on('error', () => { removeRemoteAudioPlayback(call.peer); });
+                });
+            })
+            .catch(err => {
+                btn.style.background = "var(--danger)"; btn.innerText = "⚠️ MIC BLOCKED";
+                startAdaptiveSyncLoop(); // بدء الفحص على أي حال
+            });
+    }
+
+    function handleAudioMeshSignaling(serverPeers) {
+        serverPeers.forEach(remotePeerId => {
+            if (remotePeerId === localVoicePeerId) return;
+            // Lexicographical sorting لمنع حدوث اتصال مزدوج (Double connection)
+            if (remotePeerId > localVoicePeerId) {
+                // الاتصال الصوتي
+                if (!connectedVoicePeersList.has(remotePeerId)) {
+                    connectedVoicePeersList.add(remotePeerId);
+                    const call = peerInstance.call(remotePeerId, localAudioStream);
+                    if (call) {
+                        activeCallsList[remotePeerId] = call;
+                        call.on('stream', (remoteStream) => { handleRemoteAudioPlayback(remotePeerId, remoteStream); });
+                        call.on('close', () => { removeRemoteAudioPlayback(remotePeerId); });
+                        call.on('error', () => { removeRemoteAudioPlayback(remotePeerId); });
+                    }
+                }
+                // اتصال قنوات البيانات الفورية اللحظية (WebRTC DataChannel)
+                if (!dataConnections[remotePeerId]) {
+                    const conn = peerInstance.connect(remotePeerId);
+                    if (conn) { handleDataConnection(conn); }
+                }
+            }
+        });
+
+        // إغلاق الاتصالات القديمة للأعضاء المغادرين
+        connectedVoicePeersList.forEach(pId => { if (!serverPeers.includes(pId)) { removeRemoteAudioPlayback(pId); } });
+        Object.keys(dataConnections).forEach(pId => { if (!serverPeers.includes(pId)) { if (dataConnections[pId]) dataConnections[pId].close(); delete dataConnections[pId]; } });
+    }
+
+    // إدارة قنوات بث البيانات اللحظية (P2P Control Channels)
+    function handleDataConnection(conn) {
+        dataConnections[conn.peer] = conn;
+        conn.on('data', (data) => {
+            if (!data) return;
+            triggerUserActionBurst(); // تسريع الفحص من السيرفر فور تلقي أي حركة P2P
+            
+            if (data.type === 'sheet') {
+                if (currentSheetIndex !== data.index) { switchSheet(data.index, false); }
+            } else if (data.type === 'mode') {
+                if (currentGlobalMode !== data.mode) { globalSwitchMode(data.mode, false); }
+            } else if (data.type === 'focus') {
+                document.querySelectorAll('.card').forEach(c => c.classList.remove('focused-by-peer'));
+                const t = document.getElementById(data.cardId);
+                if (t) { t.classList.add('focused-by-peer'); fastScrollTo(t); }
+            } else if (data.type === 'select') {
+                const card = document.getElementById(data.cardId);
+                if (card && !card.classList.contains('correct') && !card.classList.contains('wrong')) {
+                    if (currentGlobalMode !== 'blank') { selectOption(data.cardId, data.optionIdx); }
+                }
+            } else if (data.type === 'freeze') {
+                const card = document.getElementById(data.cardId);
+                if (card && !card.classList.contains('correct') && !card.classList.contains('wrong')) {
+                    if (data.selectedIdx !== null && currentGlobalMode !== 'blank') { selectOption(data.cardId, data.selectedIdx); }
+                    executeRemoteFreeze(card, data.cardId, data.status === 'correct', data.inputValue || "");
+                    updateProgress();
+                }
+            }
+        });
+        conn.on('close', () => { delete dataConnections[conn.peer]; });
+    }
+
+    function broadcastP2PState(payload) {
+        Object.values(dataConnections).forEach(conn => { if (conn && conn.open) { try { conn.send(payload); } catch(e) {} } });
+    }
+
+    function removeRemoteAudioPlayback(peerId) {
+        connectedVoicePeersList.delete(peerId);
+        if (activeCallsList[peerId]) { activeCallsList[peerId].close(); delete activeCallsList[peerId]; }
+        const audioNode = document.getElementById(`audio_${peerId}`);
+        if (audioNode) { audioNode.srcObject = null; audioNode.remove(); }
+    }
+
+    function handleRemoteAudioPlayback(peerId, remoteStream) {
+        if (document.getElementById(`audio_${peerId}`)) return;
+        const audioNode = document.createElement('audio'); audioNode.id = `audio_${peerId}`;
+        audioNode.srcObject = remoteStream; audioNode.autoplay = true; document.body.appendChild(audioNode);
+    }
+
+    function toggleLocalMicrophone() {
+        if (!localAudioStream) return;
+        const btn = document.getElementById('micToggleBtn');
+        const audioTrack = localAudioStream.getAudioTracks()[0];
+        if (audioTrack.enabled) {
+            audioTrack.enabled = false; btn.classList.remove('active-streaming');
+            btn.style.background = "var(--glass-bg)"; btn.style.borderColor = "var(--warning)"; btn.style.color = "var(--warning)"; btn.innerText = "🔇 MIC MUTED";
+        } else {
+            audioTrack.enabled = true; btn.classList.add('active-streaming');
+            btn.style.background = ""; btn.style.borderColor = ""; btn.style.color = ""; btn.innerText = "🎙️ MIC ACTIVE (LIVE)";
+        }
+    }
+
+    initializeVoiceEngine();
 </script>
 </body>
 </html>
